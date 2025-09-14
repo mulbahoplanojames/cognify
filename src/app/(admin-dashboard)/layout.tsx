@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/layout/navbar";
 
 export const metadata: Metadata = {
   title: "Authentication with Better Auth",
