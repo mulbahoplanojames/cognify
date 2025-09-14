@@ -1,6 +1,16 @@
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import React from "react";
 
-export default function DiscoverPage() {
+export default async function DiscoverPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/auth/login");
+  }
   return (
     <div className="relative pt-24 md:pt-28 container mx-auto px-4 py-8 max-w-6xl">
       <h1>This is the discover page</h1>

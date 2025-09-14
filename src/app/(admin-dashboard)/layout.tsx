@@ -14,7 +14,6 @@ export default function DashboardLayout({
 }>) {
   return (
     <div className="antialiased min-h-screen w-full flex flex-col ">
-      <Navbar />
       <main className="flex-1 p-6">{children}</main>
     </div>
   );
