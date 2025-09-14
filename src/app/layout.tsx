@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Authentication with Better Auth",
-  description: "Authentication with Next.js, Prisma, MongoDB and Tailwind CSS",
+  title: "Cognify Blog",
+  description:
+    "The premium platform for professionals who demand excellence in content and community.",
 };
 
 export default function RootLayout({

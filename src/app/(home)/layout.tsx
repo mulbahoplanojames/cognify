@@ -3,9 +3,9 @@ import Navbar from "@/components/layout/navbar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Cognify, the best and most trusted bloggin platform for students and professionals",
-  description: "The best",
+  title: "Cognify Blog",
+  description:
+    "The premium platform for professionals who demand excellence in content and community.",
 };
 
 export default function RootLayout({
