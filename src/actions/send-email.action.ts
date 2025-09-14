@@ -25,7 +25,7 @@ export async function sendEmailAction({
   const mailOptions = {
     from: process.env.NODEMAILER_USER,
     to,
-    subject: `Better Auth Prisma MongoDB Starter - ${subject}`,
+    subject: `Cognify, The best blog for students and  professional - ${subject}`,
     html: `
     <div style="${styles.container}">
       <h1 style="${styles.heading}">${subject}</h1>
