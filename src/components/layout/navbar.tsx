@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { menuItems } from "@/data/navbar-data";
 import { menuItemsType } from "@/types/types";
 import UserDropDown from "@/components/ui/user-dropdown";
+import Image from "next/image";
 
 export default function Navbar() {
   const [menuState, setMenuState] = useState(false);
@@ -45,7 +46,14 @@ export default function Navbar() {
                   aria-label="home"
                   className="flex items-center space-x-2"
                 >
-                  <span className="size-10 bg-red-500 rounded-full"></span>
+                  <span className="size-11 border-slate-900 border-2 rounded-full overflow-hidden relative">
+                    <Image
+                      src="/logo-01.png"
+                      alt="cognify-logo"
+                      className="w-full h-full"
+                      fill
+                    />
+                  </span>
                 </Link>
 
                 <div className="flex items-center gap-6">
@@ -97,7 +105,7 @@ export default function Navbar() {
 
                       <Button asChild size="sm">
                         <Link href="/auth/register">
-                          <span>Login</span>
+                          <span>Register</span>
                         </Link>
                       </Button>
                     </>
