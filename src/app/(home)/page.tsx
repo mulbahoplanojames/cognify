@@ -8,13 +8,11 @@ export default async function HomePage() {
     headers: await headers(),
   });
 
-  console.log(session);
-
   return (
     <>
       <HomeHeroSection />
 
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <pre className="mt-28">{JSON.stringify(session, null, 2)}</pre>
     </>
   );
 }

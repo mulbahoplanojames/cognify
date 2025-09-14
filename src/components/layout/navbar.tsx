@@ -1,77 +1,43 @@
-// import React from "react";
-// import Link from "next/link";
-// import { auth } from "@/lib/auth";
-// import SignOutButton from "./auth/signout-button";
-// import { headers } from "next/headers";
-
-// export default async function Navbar() {
-//   const session = await auth.api.getSession({
-//     headers: await headers(),
-//   });
-
-//   return (
-//     <nav className="py-2 px-10 flex justify-between items-center  shadow-xl">
-//       <h1 className="text-xl font-bold">Logo</h1>
-//       <ul className="flex gap-4 space-x-7">
-//         <li>
-//           <Link href="/">Home</Link>
-//         </li>
-//         <li>
-//           <Link href="/admin/dashboard">Dashboard</Link>
-//         </li>
-//         <li>
-//           <Link href="/admin/profile">Profile</Link>
-//         </li>
-//       </ul>
-//       {session ? (
-//         <div>
-//           <SignOutButton />
-//         </div>
-//       ) : (
-//         <>
-//           <div className="flex gap-6 py-4">
-//             <Link href="/auth/login" className="underline">
-//               Login
-//             </Link>
-//             <Link href="/auth/register" className="underline">
-//               Register
-//             </Link>
-//           </div>
-//         </>
-//       )}
-//     </nav>
-//   );
-// }
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeModeToggle } from "../ui/theme-toggle";
 import { useSession } from "@/lib/auth-client";
 import SignOutButton from "../auth/signout-button";
-
-const menuItems = [
-  { name: "Features", href: "#" },
-  { name: "Solution", href: "#" },
-  { name: "Pricing", href: "#" },
-  { name: "About", href: "#" },
-];
+import { cn } from "@/lib/utils";
+import { menuItems } from "@/data/navbar-data";
 
 export default function Navbar() {
   const [menuState, setMenuState] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const session = useSession();
-  console.log("Client", session);
+  // console.log("Client", session);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <>
       <header>
         <nav
           data-state={menuState && "active"}
-          className="fixed  w-full z-50 border-b border-dashed bg-white backdrop-blur md:relative dark:bg-zinc-950/50 lg:dark:bg-transparent"
+          className="fixed z-20 w-full px-2"
         >
-          <div className="m-auto max-w-6xl px-6">
-            <div className="flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
+          <div
+            className={cn(
+              "mx-auto mt-2 max-w-6xl px-6 transition-all duration-300 lg:px-12",
+              isScrolled &&
+                "bg-background/50 max-w-4xl rounded-2xl border backdrop-blur-lg lg:px-5"
+            )}
+          >
+            <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
               <div className="flex w-full justify-between lg:w-auto">
                 <Link
                   href="/"
