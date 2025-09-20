@@ -7,10 +7,12 @@ import HeroSection from "@/components/ui/hero-section";
 export default function AboutPage() {
   return (
     <>
-      {/* <div className="relative pt-24 md:pt-28 container mx-auto px-4 py-8 max-w-6xl"> */}
-
       <div className="container mx-auto px-4 max-w-6xl">
-        <HeroSection />
+        <HeroSection
+          title="About Cognify"
+          description="Cognify is your go-to open-source learning hub, loved by students, creators, and learners everywhere. Always free, always open—because knowledge belongs to all of us."
+          tab="100% Free & Open Source Platform"
+        />
         <OpenSourceMission />
         <WhatYouWillFindSection />
       </div>

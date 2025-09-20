@@ -1,5 +1,4 @@
 import Image from "next/image";
-import React from "react";
 import { Card, CardContent } from "../ui/card";
 import { LinkedinIcon, TwitterIcon } from "lucide-react";
 import { Button } from "../ui/button";
