@@ -10,6 +10,7 @@ import { Clock, Star, User } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { premiumLibrary } from "@/data/home-page";
+import Image from "next/image";
 
 export default function PremiumLibraryContentSection() {
   return (
@@ -34,7 +35,15 @@ export default function PremiumLibraryContentSection() {
                 className="lg:col-span-2"
               >
                 <Card className="premium-shadow p-0 hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-card to-muted/50">
-                  <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg"></div>
+                  <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
+                    <Image
+                      src={featuredArticle.imageUrl}
+                      alt={featuredArticle.title}
+                      layout="fill"
+                      objectFit="cover"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-2 mb-3">
                       {featuredArticle.featured && (
@@ -85,7 +94,15 @@ export default function PremiumLibraryContentSection() {
                   className="hover:shadow-lg transition-all duration-300 cursor-pointer"
                 >
                   <CardHeader className="pb-3">
-                    <div className="lg:h-36 md:h-56 h-44 bg-red-400"></div>
+                    <div className="lg:h-36 md:h-56 h-44 bg-red-400 rounded-md overflow-hidden relative">
+                      <Image
+                        src={article.imageUrl}
+                        alt={article.title}
+                        layout="fill"
+                        objectFit="cover"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
                     <CardTitle className="text-lg line-clamp-2">
                       {article.title}
                     </CardTitle>
@@ -105,7 +122,7 @@ export default function PremiumLibraryContentSection() {
           </div>
         </div>
         <div className="flex justify-center">
-          <Link href="/premium-content">
+          <Link href="/posts">
             <Button className="mt-6">Load More</Button>
           </Link>
         </div>

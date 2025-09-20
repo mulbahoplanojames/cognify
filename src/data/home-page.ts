@@ -46,7 +46,7 @@ export const premiumLibrary = [
     readTime: "12 min",
     rating: "4.9",
     tags: ["Featured", "Premium"],
-    imageUrl: "/images/premium-article-1.jpg",
+    imageUrl: "/img-1.jpg",
     featured: true,
   },
   {
@@ -58,7 +58,7 @@ export const premiumLibrary = [
     readTime: "10 min",
     rating: "4.8",
     tags: ["Premium"],
-    imageUrl: "/images/premium-article-2.jpg",
+    imageUrl: "/img-2.jpg",
     featured: false,
   },
   {
@@ -70,7 +70,7 @@ export const premiumLibrary = [
     readTime: "15 min",
     rating: "4.9",
     tags: ["Premium"],
-    imageUrl: "/images/premium-article-3.jpg",
+    imageUrl: "/img-3.jpg",
     featured: false,
   },
   {
