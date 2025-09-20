@@ -1,11 +1,19 @@
-import { icons } from "lucide-react";
+import { icons, LucideIcon } from "lucide-react";
 
-export const ourMissions = [
+interface Mission {
+  title: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  bgColor: string;
+}
+
+export const ourMissions: Mission[] = [
   {
     title: "For Students",
     description:
       "Access world-class educational content, tutorials, and resources completely free. Build your skills without financial barriers.",
-    icons: icons.Users,
+    icon: icons.Users,
     color: "text-green-600",
     bgColor: "bg-green-500/10",
   },
@@ -13,7 +21,7 @@ export const ourMissions = [
     title: "For Professionals",
     description:
       "Stay ahead with cutting-edge insights, industry trends, and expert knowledge shared by thought leaders worldwide.",
-    icons: icons.TrendingUp,
+    icon: icons.TrendingUp,
     color: "text-blue-600",
     bgColor: "bg-blue-500/10",
   },
@@ -21,7 +29,7 @@ export const ourMissions = [
     title: "For Visionaries",
     description:
       "Share your innovations, connect with like-minded individuals, and contribute to the global knowledge ecosystem.",
-    icons: icons.Globe,
+    icon: icons.Globe,
     color: "text-purple-600",
     bgColor: "bg-purple-500/10",
   },
@@ -29,6 +37,7 @@ export const ourMissions = [
 
 export const premiumLibrary = [
   {
+    id: 1,
     title: "Advanced AI Integration Strategies for Enterprise Success",
     description:
       " Discover how Fortune 500 companies are leveraging AI to transform their operations, increase efficiency by 300%, and drive unprecedented growth in competitive markets.",
@@ -40,6 +49,7 @@ export const premiumLibrary = [
     featured: true,
   },
   {
+    id: 2,
     title: "Blockchain Revolution in Finance",
     description:
       "Explore the transformative impact of blockchain technology on the financial sector, including real-world use cases and future trends.",
@@ -51,6 +61,7 @@ export const premiumLibrary = [
     featured: false,
   },
   {
+    id: 3,
     title: "Quantum Computing Breakthroughs",
     description:
       "Delve into the latest advancements in quantum computing and their potential to revolutionize industries from cryptography to drug discovery.",
@@ -62,6 +73,7 @@ export const premiumLibrary = [
     featured: false,
   },
   {
+    id: 4,
     title: "Sustainable Tech Innovation",
     description:
       "Explore the latest trends in sustainable technology and their potential to create a greener future.",

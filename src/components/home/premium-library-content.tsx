@@ -25,16 +25,19 @@ export default function PremiumLibraryContent() {
 
         <div className="grid lg:grid-cols-3 gap-8 mb-12">
           {/* Featured Premium Article */}
-          {premiumLibrary
-            .filter((a) => a.featured)
-            .slice(0, 1)
-            .map((article, i) => (
-              <div key={i} className="lg:col-span-2">
+          {(() => {
+            const featuredArticle = premiumLibrary.find((a) => a.featured);
+            if (!featuredArticle) return null;
+            return (
+              <div
+                key={featuredArticle.id || featuredArticle.title}
+                className="lg:col-span-2"
+              >
                 <Card className="premium-shadow p-0 hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-card to-muted/50">
                   <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg"></div>
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-2 mb-3">
-                      {article.tags.includes("Featured") && (
+                      {featuredArticle.featured && (
                         <Badge className="bg-primary text-primary-foreground">
                           Featured
                         </Badge>
@@ -42,10 +45,10 @@ export default function PremiumLibraryContent() {
                       <Badge variant="outline">Premium</Badge>
                     </div>
                     <CardTitle className="text-2xl mb-3">
-                      {article.title}
+                      {featuredArticle.title}
                     </CardTitle>
                     <CardDescription className="text-base leading-relaxed">
-                      {article.description}
+                      {featuredArticle.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pb-6">
@@ -53,31 +56,32 @@ export default function PremiumLibraryContent() {
                       <div className="flex items-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
                           <User className="h-4 w-4" />
-                          <span>{article.author}</span>
+                          <span>{featuredArticle.author}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Clock className="h-4 w-4" />
-                          <span>{article.readTime}</span>
+                          <span>{featuredArticle.readTime}</span>
                         </div>
                         <div className="flex items-center gap-1">
                           <Star className="h-4 w-4 fill-current text-yellow-500" />
-                          <span>{article.rating}</span>
+                          <span>{featuredArticle.rating}</span>
                         </div>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
-            ))}
+            );
+          })()}
 
           {/* Premium Articles List */}
           <div className="space-y-6">
             {premiumLibrary
               .filter((a) => !a.featured)
               .slice(0, 2)
-              .map((article, i) => (
+              .map((article) => (
                 <Card
-                  key={i}
+                  key={article.id}
                   className="hover:shadow-lg transition-all duration-300 cursor-pointer"
                 >
                   <CardHeader className="pb-3">

@@ -7,7 +7,7 @@ import {
 import { ourMissions } from "@/data/home-page";
 import { ourMissionType } from "@/types/types";
 
-export default function OurMissionPage() {
+export default function OurMissionSection() {
   return (
     <section className="py-24 px-4 bg-muted/20">
       <div className="container mx-auto">
@@ -22,7 +22,7 @@ export default function OurMissionPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {ourMissions.map((mission: ourMissionType) => (
+          {ourMissions.map((mission) => (
             <Card
               key={mission.title}
               className="text-center hover:shadow-lg transition-all duration-300 border-0 bg-card/50"
@@ -31,7 +31,7 @@ export default function OurMissionPage() {
                 <div
                   className={`mx-auto w-16 h-16 ${mission.bgColor} rounded-full flex items-center justify-center ${mission.color} mb-4`}
                 >
-                  <mission.icons className="h-8 w-8" />
+                  <mission.icon className="h-8 w-8" />
                 </div>
                 <CardTitle className="text-xl mb-3">{mission.title}</CardTitle>
                 <CardDescription className="leading-relaxed">
