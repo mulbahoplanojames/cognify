@@ -1,3 +1,4 @@
+import { whyChooseUsFeaturesType } from "@/types/types";
 import { icons, LucideIcon } from "lucide-react";
 
 interface Mission {
@@ -83,5 +84,50 @@ export const premiumLibrary = [
     tags: ["Premium"],
     imageUrl: "/images/premium-article-4.jpg",
     featured: false,
+  },
+];
+
+export const whyChooseUsFeatures: whyChooseUsFeaturesType[] = [
+  {
+    id: 1,
+    icon: icons.TrendingUp,
+    title: "Advanced Analytics",
+    description:
+      "Track what works, see how your content connects, and grow smarter—perfect for students and curious learners everywhere.",
+  },
+  {
+    id: 2,
+    icon: icons.Users,
+    title: "Expert Community",
+    description:
+      "Meet mentors, share ideas, and team up on projects—perfect for students and lifelong learners looking to grow together.",
+  },
+  {
+    id: 3,
+    icon: icons.Globe,
+    title: "Global Reach",
+    description:
+      "Learn, share, and grow from anywhere! With multi-language support and global content delivery, students and learners everywhere are connected.",
+  },
+  {
+    id: 4,
+    icon: icons.Award,
+    title: "Certification Programs",
+    description:
+      "Get certified, boost your skills, and show off what you’ve learned—perfect for students and lifelong learners aiming higher.",
+  },
+  {
+    id: 5,
+    icon: icons.Zap,
+    title: "AI-Powered Tools",
+    description:
+      "Get content suggestions, SEO tips, and smart recommendations—making learning and sharing easier for students and curious learners everywhere.",
+  },
+  {
+    id: 6,
+    icon: icons.BookOpen,
+    title: "Exclusive Content",
+    description:
+      "Get access to top courses, expert masterclasses, and insider tips—perfect for students and lifelong learners looking to level up.",
   },
 ];

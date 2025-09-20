@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { premiumLibrary } from "@/data/home-page";
 
-export default function PremiumLibraryContent() {
+export default function PremiumLibraryContentSection() {
   return (
     <section className="py-24 px-4">
       <div className="container mx-auto">

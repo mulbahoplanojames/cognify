@@ -5,7 +5,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ourMissions } from "@/data/home-page";
-import { ourMissionType } from "@/types/types";
 
 export default function OurMissionSection() {
   return (

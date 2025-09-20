@@ -21,3 +21,10 @@ export interface premiumLibraryType {
   imageUrl: string;
   featured: boolean;
 }
+
+export interface whyChooseUsFeaturesType {
+  id: number;
+  icon: React.ElementType;
+  title: string;
+  description: string;
+}
