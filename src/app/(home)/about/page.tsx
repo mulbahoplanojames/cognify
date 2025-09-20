@@ -1,17 +1,23 @@
+import JoinCommunity from "@/components/about/join-community";
+import OpenSourceMission from "@/components/about/open-source-mission";
+import TeamSection from "@/components/about/team-section";
+import WhatYouWillFindSection from "@/components/about/what-you-will-find-section";
+import HeroSection from "@/components/ui/hero-section";
+
 export default function AboutPage() {
   return (
     <>
-      <div className="relative pt-24 md:pt-28 container mx-auto px-4 py-8 max-w-6xl">
-        <h1>This is the about page</h1>
-        <h1 className="text-5xl">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti quis
-          cupiditate accusantium quod nesciunt explicabo sunt quidem veniam
-          dolor saepe perspiciatis magni repellendus vero corporis cum officiis
-          dolores, voluptatem reprehenderit rerum consequuntur rem? Perspiciatis
-          vel atque illum assumenda incidunt dicta tempora accusamus
-          voluptatibus adipisci qui quo accusantium, numquam quisquam nulla.
-        </h1>
+      <div className="container mx-auto px-4 max-w-6xl">
+        <HeroSection
+          title="About Cognify"
+          description="Cognify is your go-to open-source learning hub, loved by students, creators, and learners everywhere. Always free, always open—because knowledge belongs to all of us."
+          tab="100% Free & Open Source Platform"
+        />
+        <OpenSourceMission />
+        <WhatYouWillFindSection />
       </div>
+      <TeamSection />
+      <JoinCommunity />
     </>
   );
 }

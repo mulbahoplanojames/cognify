@@ -1,7 +1,5 @@
-import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
@@ -26,7 +24,15 @@ const transitionVariants = {
   },
 };
 
-export default function HomeHeroSection() {
+export default function HeroSection({
+  title,
+  description,
+  tab,
+}: {
+  title: string;
+  description: string;
+  tab?: string;
+}) {
   return (
     <>
       <section className="overflow-hidden">
@@ -88,9 +94,7 @@ export default function HomeHeroSection() {
                     href="#link"
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
-                    <span className="text-foreground text-sm">
-                      Introducing Support for AI Models Soon
-                    </span>
+                    <span className="text-foreground text-sm">{tab}</span>
                     <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
                     <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
@@ -110,9 +114,9 @@ export default function HomeHeroSection() {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-semibold md:text-7xl lg:mt-10 xl:text-[5.25rem]"
                 >
-                  Where Knowledge Meets Innovation
+                  {title}
                 </TextEffect>
                 <TextEffect
                   per="line"
@@ -120,54 +124,10 @@ export default function HomeHeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-2xl text-balance text-lg"
+                  className="mx-auto mt-8 max-w-3xl text-balance text-lg"
                 >
-                  Join a thriving community of students, thought leaders,
-                  industry experts, and visionaries. Access premium insights,
-                  advanced tutorials, and cutting-edge strategies - completely
-                  free and open source for everyone.
+                  {description}
                 </TextEffect>
-
-                <AnimatedGroup
-                  variants={{
-                    container: {
-                      visible: {
-                        transition: {
-                          staggerChildren: 0.05,
-                          delayChildren: 0.75,
-                        },
-                      },
-                    },
-                    ...transitionVariants,
-                  }}
-                  className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
-                >
-                  <div
-                    key={1}
-                    className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
-                  >
-                    <Button
-                      asChild
-                      size="lg"
-                      className="rounded-xl px-5 text-base"
-                    >
-                      <Link href="#link">
-                        <span className="text-nowrap">Start Learning Free</span>
-                      </Link>
-                    </Button>
-                  </div>
-                  <Button
-                    key={2}
-                    asChild
-                    size="lg"
-                    variant="ghost"
-                    className="h-10.5 rounded-xl px-5"
-                  >
-                    <Link href="#link">
-                      <span className="text-nowrap">Explore Open Source</span>
-                    </Link>
-                  </Button>
-                </AnimatedGroup>
               </div>
             </div>
           </div>
