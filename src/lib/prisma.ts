@@ -11,3 +11,13 @@ export const prisma =
   });
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+export type {
+  User,
+  Comment,
+  Post,
+  Reaction,
+  Bookmark,
+  Account,
+  Session,
+} from "../../generated/prisma";
