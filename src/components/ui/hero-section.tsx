@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Filter, Search } from "lucide-react";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const transitionVariants = {
   item: {
@@ -28,10 +30,12 @@ export default function HeroSection({
   title,
   description,
   tab,
+  postSearch,
 }: {
   title: string;
   description: string;
   tab?: string;
+  postSearch: boolean;
 }) {
   return (
     <>
@@ -128,6 +132,33 @@ export default function HeroSection({
                 >
                   {description}
                 </TextEffect>
+
+                <AnimatedGroup variants={transitionVariants}>
+                  {postSearch && (
+                    <div className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto mb-12 mt-8 ">
+                      <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search articles, topics, or authors..."
+                          className="pl-10 h-12 bg-background/80 backdrop-blur-sm border-border/50"
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="h-12 px-6 bg-background/80 backdrop-blur-sm"
+                      >
+                        <Filter className="h-4 w-4 mr-2" />
+                        Filters
+                      </Button>
+                      <Button asChild className="h-12 px-6">
+                        <Link href="/write">
+                          <span className="mr-2">✍️</span>
+                          Write Article
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
+                </AnimatedGroup>
               </div>
             </div>
           </div>
