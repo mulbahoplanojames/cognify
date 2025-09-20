@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import posts from "@/data/sample-posts.json";
 import HeroSection from "@/components/ui/hero-section";
+import Image from "next/image";
 
 export default async function PostsPage() {
   const featuredPost = posts[0];
@@ -151,12 +152,21 @@ export default async function PostsPage() {
                     </div>
 
                     <div className="md:w-1/3">
-                      <div className="h-64 md:h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center">
-                        <div className="text-center p-6">
+                      <div className="h-64 relative md:h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 flex items-center justify-center">
+                        <div className="text-center p-6 z-10">
                           <Star className="h-16 w-16 text-primary/60 mx-auto mb-4" />
                           <p className="text-sm text-muted-foreground">
                             Featured Content
                           </p>
+                        </div>
+
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <img
+                            src={featuredPost.coverImage}
+                            alt={featuredPost.title}
+                            // layout="fill"
+                            // objectFit="cover"
+                          />
                         </div>
                       </div>
                     </div>
@@ -179,7 +189,7 @@ export default async function PostsPage() {
                   {regularPosts.map((post) => (
                     <Card
                       key={post.id}
-                      className="group hover:shadow-xl transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm overflow-hidden"
+                      className="group pt-0 hover:shadow-xl transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm overflow-hidden"
                     >
                       <div className="h-48 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -189,6 +199,15 @@ export default async function PostsPage() {
                               {post.category.name}
                             </Badge>
                           )}
+                        </div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <img
+                            src={post.coverImage}
+                            alt={post.title}
+                            // layout="fill"
+                            // objectFit="cover"
+                            className="transition-transform duration-300 group-hover:scale-110"
+                          />
                         </div>
                       </div>
 
