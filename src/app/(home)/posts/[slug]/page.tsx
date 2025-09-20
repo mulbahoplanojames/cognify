@@ -18,6 +18,7 @@ import Link from "next/link";
 import { ShareButtons } from "@/components/social/share-buttons";
 import { ReadingProgress } from "@/components/social/reading-progress";
 import posts from "@/data/sample-posts.json";
+import BackButton from "@/components/ui/back-button";
 
 interface PostPageProps {
   params: {
@@ -45,9 +46,10 @@ export default async function PostPage({ params }: PostPageProps) {
     <>
       <ReadingProgress />
 
-      <article className="container mx-auto px-4 py-8 max-w-4xl">
+      <article className="container mx-auto px-4 pb-8 pt-40 max-w-4xl">
+        <BackButton />
         {/* Post Header */}
-        <header className="mb-8">
+        <header className="mb-8 mt-6">
           <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
             {post.category && (
               <Badge variant="secondary">{post.category.name}</Badge>
