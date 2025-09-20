@@ -21,8 +21,41 @@ enum UserRole {
   GUEST
 }
 
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+}
+
+enum CommentStatus {
+  VISIBLE
+  PENDING
+  HIDDEN
+  DELETED
+}
+
+enum ReactionType {
+  LIKE
+  CLAP
+  INSIGHTFUL
+}
+
+enum ReportStatus {
+  OPEN
+  REVIEWED
+  DISMISSED
+}
+
+enum TargetType {
+  POST
+  COMMENT
+  USER
+}
+
+
 model User {
-  id            String    @id @map("_id")
+   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt     DateTime
   updatedAt     DateTime
 
@@ -31,15 +64,33 @@ model User {
   emailVerified Boolean
   image         String?
   role          UserRole @default(USER)
+
+  bio           String?
+  social        Json?  // { twitter, github, website }
+
+
+  // Relations
   sessions      Session[]
   accounts      Account[]
+
+
+  posts         Post[]
+  comments      Comment[]
+  reactions     Reaction[]
+  bookmarks     Bookmark[]
+  followers     Follow[]  @relation("UserFollowers")
+  following     Follow[]  @relation("UserFollowing")
+  reports       Report[]  @relation("ReportedBy")
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  postVersions  PostVersion[]
 
   @@unique([email])
   @@map("user")
 }
 
 model Session {
-  id        String   @id @map("_id")
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime
   updatedAt DateTime
 
@@ -48,7 +99,7 @@ model Session {
   
   ipAddress String?
   userAgent String?
-  userId    String
+  userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
@@ -56,10 +107,10 @@ model Session {
 }
 
 model Account {
-  id                    String    @id @map("_id")
+   id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
   accountId             String
   providerId            String
-  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -86,4 +137,182 @@ model Verification {
 }
 
 
+model Post {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  authorId    String     @db.ObjectId
+  title       String
+  slug        String     @unique
+  excerpt     String?
+  content     String     // MDX content
+  coverImage  String?
+  ogImage     String?
+  status      PostStatus @default(DRAFT)
+  scheduledAt DateTime?
+  publishedAt DateTime?
+  readingTime Int?       // in minutes
+  views       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 
+  // Relations
+  author     User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category   Category?     @relation(fields: [categoryId], references: [id])
+  categoryId String?       @db.ObjectId
+  tags       Tag[]         @relation(fields: [tagIds], references: [id])
+  tagIds     String[]      @db.ObjectId
+  comments   Comment[]
+  reactions  Reaction[]
+  bookmarks  Bookmark[]
+  versions   PostVersion[]
+
+  @@map("posts")
+}
+
+
+model PostVersion {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String   @db.ObjectId
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  editorId  String   @db.ObjectId
+
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  editor User @relation(fields: [editorId], references: [id])
+
+  @@map("post_versions")
+}
+
+model Category {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  name        String @unique
+  slug        String @unique
+  description String?
+  posts       Post[]
+
+  @@map("categories")
+}
+
+model Tag {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String @unique
+  slug  String @unique
+  posts Post[] @relation(fields: [postIds], references: [id])
+  postIds String[] @db.ObjectId
+
+  @@map("tags")
+}
+
+
+
+model Comment {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  postId    String        @db.ObjectId
+  authorId  String        @db.ObjectId
+  parentId  String?       @db.ObjectId
+  body      String
+  status    CommentStatus @default(VISIBLE)
+  editedAt  DateTime?
+  createdAt DateTime      @default(now())
+
+  // Relations
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent    Comment?   @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies   Comment[]  @relation("CommentReplies")
+  reactions Reaction[]
+
+  @@map("comments")
+}
+
+model Reaction {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String      @db.ObjectId
+  postId    String?     @db.ObjectId
+  commentId String?     @db.ObjectId
+  type      ReactionType
+  createdAt DateTime    @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId, type])
+  @@unique([userId, commentId, type])
+  @@map("reactions")
+}
+
+model Bookmark {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  postId    String   @db.ObjectId
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
+  @@map("bookmarks")
+}
+
+model Follow {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  followerId  String   @db.ObjectId
+  followingId String   @db.ObjectId
+  createdAt   DateTime @default(now())
+
+  follower  User @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("UserFollowing", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+  @@map("follows")
+}
+
+model Report {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  reporterId String       @db.ObjectId
+  targetType TargetType
+  targetId   String       @db.ObjectId
+  reason     String
+  status     ReportStatus @default(OPEN)
+  createdAt  DateTime     @default(now())
+
+  reporter User @relation("ReportedBy", fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@map("reports")
+}
+
+model SiteSetting {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value Json
+
+  @@map("site_settings")
+}
+
+model Notification {
+  id      String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String    @db.ObjectId
+  type    String
+  payload Json
+  readAt  DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  actorId    String   @db.ObjectId
+  action     String
+  targetType String
+  targetId   String   @db.ObjectId
+  meta       Json?
+  createdAt  DateTime @default(now())
+
+  actor User @relation(fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@map("audit_logs")
+}

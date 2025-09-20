@@ -1,7 +1,4 @@
 import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import { PostService } from "@/lib/services/post-service";
-import { SEOService } from "@/lib/seo";
 import { CommentSection } from "@/components/social/comment-section";
 import { ReactionButtons } from "@/components/social/reaction-buttons";
 import { BookmarkButton } from "@/components/social/bookmark-button";
@@ -20,7 +17,7 @@ import {
 import Link from "next/link";
 import { ShareButtons } from "@/components/social/share-buttons";
 import { ReadingProgress } from "@/components/social/reading-progress";
-import { AIInsights } from "@/components/social/ai-insights";
+import posts from "@/data/sample-posts.json";
 
 interface PostPageProps {
   params: {
@@ -29,25 +26,24 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await PostService.getPost(params.slug);
+  const post = posts.find((post) => post.slug === params.slug);
+  const relatedPosts = posts
+    .filter(
+      (p) =>
+        p.id !== post?.id &&
+        p.tags.some((tag: any) =>
+          post?.tags.map((t: any) => t.id).includes(tag.id)
+        )
+    )
+    .slice(0, 4);
 
   if (!post) {
     notFound();
   }
 
-  const seo = SEOService.generatePostSEO(post);
-  const relatedPosts = await PostService.getRelatedPosts(post.id);
-
   return (
     <>
       <ReadingProgress />
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(seo.structuredData),
-        }}
-      />
 
       <article className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Post Header */}
@@ -59,7 +55,8 @@ export default async function PostPage({ params }: PostPageProps) {
             <CalendarDays className="h-4 w-4" />
             <time
               dateTime={
-                post.publishedAt?.toISOString() || post.createdAt.toISOString()
+                // post.publishedAt?.toISOString() || post.createdAt.toISOString()
+                post.publishedAt || post.createdAt
               }
             >
               {post.publishedAt
@@ -151,16 +148,12 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         )}
 
-        <div className="grid lg:grid-cols-4 gap-8 mb-12">
-          <div className="lg:col-span-3">
+        <div className=" gap-8 mb-12">
+          <div>
             {/* Post Content */}
             <div className="prose prose-lg max-w-none">
               <div dangerouslySetInnerHTML={{ __html: post.content }} />
             </div>
-          </div>
-
-          <div className="lg:col-span-1">
-            <AIInsights postId={post.id} />
           </div>
         </div>
 
