@@ -1,3 +1,4 @@
+import JoinCommunity from "@/components/about/join-community";
 import OpenSourceMission from "@/components/about/open-source-mission";
 import TeamSection from "@/components/about/team-section";
 import WhatYouWillFindSection from "@/components/about/what-you-will-find-section";
@@ -14,6 +15,7 @@ export default function AboutPage() {
         <WhatYouWillFindSection />
       </div>
       <TeamSection />
+      <JoinCommunity />
     </>
   );
 }
