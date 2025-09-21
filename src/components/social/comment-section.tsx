@@ -43,7 +43,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session || !newComment.trim()) return;
+    if (!session.data?.session || !newComment.trim()) return;
 
     setIsLoading(true);
     try {
@@ -134,7 +134,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
       </div>
 
       {/* New Comment Form */}
-      {session ? (
+      {session.data?.session ? (
         <Card>
           <CardContent className="pt-6">
             <form onSubmit={handleSubmitComment} className="space-y-4">
@@ -215,7 +215,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
               <p className="mb-4">{comment.body}</p>
               <div className="flex items-center gap-4">
                 <ReactionButtons targetId={comment.id} targetType="comment" />
-                {session && (
+                {session.data?.session && (
                   <Button
                     variant="ghost"
                     size="sm"
