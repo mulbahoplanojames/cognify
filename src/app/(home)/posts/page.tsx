@@ -60,7 +60,7 @@ export default async function PostsPage() {
                   <h2 className="text-2xl font-bold">Featured Article</h2>
                 </div>
 
-                <Card className="hover:shadow-lg p-0 transition-all duration-500 border-0 bg-gradient-to-br from-card to-muted/30 overflow-hidden">
+                <Card className="hover:shadow-lg p-0 group transition-all duration-500 border-0 bg-gradient-to-br from-card to-muted/30 overflow-hidden">
                   <div className="md:flex">
                     <div className="md:w-2/3">
                       <CardHeader className="py-4 ">
@@ -102,10 +102,10 @@ export default async function PostsPage() {
                           )}
                         </div>
 
-                        <CardTitle className="text-3xl mb-4 hover:text-primary transition-colors">
+                        <CardTitle className="text-3xl mb-4 group-hover:text-blue-600 transition-colors">
                           <Link
                             href={`/posts/${featuredPost.slug}`}
-                            className="line-clamp-2"
+                            className="line-clamp-2 cursor-pointer group-hover:text-blue-600"
                           >
                             {featuredPost.title}
                           </Link>
@@ -249,7 +249,7 @@ export default async function PostsPage() {
                           )}
                         </div>
 
-                        <CardTitle className="text-xl group-hover:text-primary transition-colors line-clamp-2">
+                        <CardTitle className="text-xl group-hover:text-blue-600 transition-colors line-clamp-2">
                           <Link href={`/posts/${post.slug}`}>{post.title}</Link>
                         </CardTitle>
 
