@@ -1,6 +1,13 @@
 import { kpiCardsType } from "@/types/admin";
-import { AlertTriangle, FileText, MessageCircle, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  FileText,
+  MessageCircle,
+  Settings,
+  Users,
+} from "lucide-react";
 
+//Todo: Replace with actual data in future updates
 const stats = {
   users: { total: 1247, newThisMonth: 89 },
   posts: { published: 342, drafts: 23 },
@@ -40,5 +47,57 @@ export const kpiCards: kpiCardsType[] = [
     changeType: "negative" as const,
     description: `${stats.reports.newThisWeek} new this week`,
     icon: AlertTriangle,
+  },
+];
+
+//Todo: Replace with actual data in future updates
+export const recentActivity = [
+  {
+    action: "New user registered",
+    user: "john.doe@example.com",
+    time: "2 minutes ago",
+    type: "user",
+  },
+  {
+    action: "Post published",
+    user: "Jane Smith",
+    time: "15 minutes ago",
+    type: "content",
+  },
+  {
+    action: "Comment reported",
+    user: "Anonymous",
+    time: "1 hour ago",
+    type: "report",
+  },
+  {
+    action: "User role updated",
+    user: "mike.wilson@example.com",
+    time: "2 hours ago",
+    type: "admin",
+  },
+];
+
+// Todo: Quick actions
+export const quickActions = [
+  {
+    title: "Manage Users",
+    icon: Users,
+    href: "/admin/users",
+  },
+  {
+    title: "Review Comments",
+    icon: MessageCircle,
+    href: "/admin/comments",
+  },
+  {
+    title: "Handle Reports",
+    icon: AlertTriangle,
+    href: "/admin/reports",
+  },
+  {
+    title: "Site Settings",
+    icon: Settings,
+    href: "/admin/settings",
   },
 ];

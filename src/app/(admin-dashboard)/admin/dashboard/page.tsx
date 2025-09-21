@@ -1,4 +1,6 @@
-import KpiCard from "@/components/admin/kpi-card";
+import ContentOverview from "@/components/admin/dashboard/content-overiew";
+import KpiCard from "@/components/admin/dashboard/kpi-card";
+import QuickMetrics from "@/components/admin/dashboard/quick-metrics";
 import { kpiCards } from "@/data/admin/admin";
 export default function AdminDashboardPage() {
   return (
@@ -10,7 +12,6 @@ export default function AdminDashboardPage() {
             Monitor your platform's performance and manage operations
           </p>
         </div>
-
         {/* KPI Cards */}
         <div className="grid gap-6 md:grid-cols-2 grid-cols-2 lg:grid-cols-4 mt-8">
           {kpiCards.map((kpi) => (
@@ -18,6 +19,8 @@ export default function AdminDashboardPage() {
           ))}
         </div>
       </section>
+      <QuickMetrics />
+      <ContentOverview />
     </>
   );
 }
