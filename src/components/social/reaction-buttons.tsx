@@ -31,7 +31,7 @@ export function ReactionButtons({
   const [userReactions, setUserReactions] = useState<ReactionType[]>([]);
 
   useEffect(() => {
-    if (session) {
+    if (session.data?.session) {
       fetchReactions();
     }
   }, [targetId, session]);
@@ -62,7 +62,7 @@ export function ReactionButtons({
   };
 
   const handleReaction = async (type: ReactionType) => {
-    if (!session) {
+    if (!session.data?.session) {
       toast.error("Sign in required", {
         description: "Please sign in to react to posts",
       });

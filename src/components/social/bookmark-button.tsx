@@ -16,7 +16,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (session) {
+    if (session.data?.session) {
       checkBookmarkStatus();
     }
   }, [postId, session]);
@@ -34,7 +34,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
   };
 
   const handleToggleBookmark = async () => {
-    if (!session) {
+    if (!session.data?.session) {
       toast.error("Sign in required", {
         description: "Please sign in to bookmark posts",
       });
