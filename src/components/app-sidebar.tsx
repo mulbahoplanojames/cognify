@@ -1,23 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  BookOpen,
-  Bot,
+  AlertTriangle,
+  BarChart3,
+  Bell,
   Command,
-  Frame,
-  LifeBuoy,
-  Map,
-  PieChart,
+  FileText,
+  Github,
+  LayoutDashboard,
+  MessageCircle,
   Send,
   Settings2,
-  SquareTerminal,
-} from "lucide-react"
+  Users,
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavSecondary } from "@/components/nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavMain } from "@/components/nav-main";
+import { NavSecondary } from "@/components/nav-secondary";
+import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -26,7 +26,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import Image from "next/image";
+import Link from "next/link";
 
 const data = {
   user: {
@@ -36,86 +38,90 @@ const data = {
   },
   navMain: [
     {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
+      title: "Overview",
+      url: "/admin/dashboard",
+      icon: LayoutDashboard,
+      isActive: false,
       items: [
         {
           title: "History",
           url: "#",
         },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "User Management",
+      url: "/admin/users",
+      icon: Users,
       items: [
         {
           title: "Genesis",
           url: "#",
         },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
       ],
     },
     {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
+      title: "Content Moderation",
+      url: "/admin/content",
+      icon: FileText,
       items: [
         {
           title: "Introduction",
           url: "#",
         },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
       ],
     },
     {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
+      title: "Comments",
+      url: "/admin/comments",
+      icon: MessageCircle,
       items: [
         {
           title: "General",
           url: "#",
         },
+      ],
+    },
+    {
+      title: "Reports",
+      url: "/admin/reports",
+      icon: AlertTriangle,
+      items: [
         {
-          title: "Team",
+          title: "General",
           url: "#",
         },
+      ],
+    },
+    {
+      title: "Analytics",
+      url: "/admin/analytics",
+      icon: BarChart3,
+      items: [
         {
-          title: "Billing",
+          title: "General",
           url: "#",
         },
+      ],
+    },
+    {
+      title: "Notifications",
+      url: "/admin/notifications",
+      icon: Bell,
+      items: [
         {
-          title: "Limits",
+          title: "General",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Site Settings",
+      url: "/admin/settings",
+      icon: Settings2,
+      items: [
+        {
+          title: "General",
           url: "#",
         },
       ],
@@ -123,9 +129,9 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Support",
-      url: "#",
-      icon: LifeBuoy,
+      title: "Github",
+      url: "https://github.com/cognify",
+      icon: Github,
     },
     {
       title: "Feedback",
@@ -133,24 +139,7 @@ const data = {
       icon: Send,
     },
   ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -159,27 +148,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                  <Command className="size-4" />
+              <Link href="/">
+                <div className="bg-sidebar-primary dark:bg-white text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <Image src="/logo.png" alt="Logo" width={30} height={30} />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <span className="truncate font-medium">Cognify</span>
+                  <span className="truncate text-xs">Admin Panel</span>
                 </div>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
     </Sidebar>
-  )
+  );
 }

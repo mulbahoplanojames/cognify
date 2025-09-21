@@ -42,15 +42,15 @@ export default function UserDropDown() {
     setIsPending(false);
   }
 
-  //   console.log("Session", session.data?.user);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar>
+        <Avatar className="cursor-pointer">
           <AvatarImage src={session.data?.user.image || ""} />
           <AvatarFallback>
-            {session.data?.user.name.slice(0, 2).toUpperCase()}
+            {`${session.data?.user.name.charAt(0)}${session.data?.user.name
+              .split(" ")[1]
+              .charAt(0)}`}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
