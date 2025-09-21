@@ -38,7 +38,7 @@ interface AdminUser {
   role: UserRole;
   image: string | null;
   createdAt: string;
-  _count: {
+  _count?: {
     posts: number;
     comments: number;
     followers: number;
@@ -172,11 +172,11 @@ export default function AdminUsersPage() {
       </Card>
 
       {/* Users Table */}
-      <Card>
+      <Card className="px-3">
         <CardContent className="p-0">
           <Table>
-            <TableHeader>
-              <TableRow>
+            <TableHeader className="p-0">
+              <TableRow className="p-0">
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Stats</TableHead>
@@ -184,7 +184,7 @@ export default function AdminUsersPage() {
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="p-0">
               {loading ? (
                 <TableRow>
                   <TableCell colSpan={5} className="text-center py-8">
@@ -201,7 +201,7 @@ export default function AdminUsersPage() {
                 users.map((user) => {
                   const RoleIcon = roleIcons[user.role];
                   return (
-                    <TableRow key={user.id}>
+                    <TableRow key={user.id} className="p-0">
                       <TableCell>
                         <div className="flex items-center gap-3">
                           <Avatar className="h-8 w-8">
@@ -231,14 +231,18 @@ export default function AdminUsersPage() {
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          <div>{user._count.posts} posts</div>
-                          <div>{user._count.comments} comments</div>
-                          <div>{user._count.followers} followers</div>
+                          <div>{user?._count?.posts} posts</div>
+                          <div>{user?._count?.comments} comments</div>
+                          <div>{user?._count?.followers} followers</div>
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="text-sm text-muted-foreground">
-                          {new Date(user.createdAt).toLocaleDateString()}
+                          {new Intl.DateTimeFormat("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          }).format(new Date(user.createdAt))}
                         </div>
                       </TableCell>
                       <TableCell>
