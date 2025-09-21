@@ -10,7 +10,7 @@ export default function KpiCard({ kpi }: { kpi: kpiCardsType }) {
         <kpi.icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent className="">
-        <div className="text-2xl font-bold">{kpi.value.toLocaleString()}</div>
+        <div className="text-2xl font-bold">{kpi.value}</div>
         <div className="flex items-center gap-2 text-xs">
           <span
             className={`flex items-center gap-1 ${

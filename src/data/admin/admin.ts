@@ -1,3 +1,4 @@
+import { fetchUsers } from "@/helpers/fetch-users";
 import { kpiCardsType } from "@/types/admin";
 import {
   AlertTriangle,
@@ -8,8 +9,12 @@ import {
 } from "lucide-react";
 
 //Todo: Replace with actual data in future updates
+
+// This function fetches users from the helpers file
+const users = await fetchUsers();
+
 const stats = {
-  users: { total: 1247, newThisMonth: 89 },
+  users: { total: users?.length, newThisMonth: users?.length },
   posts: { published: 342, drafts: 23 },
   comments: { total: 1856, pending: 12 },
   reports: { open: 7, newThisWeek: 3 },
@@ -18,23 +23,23 @@ const stats = {
 export const kpiCards: kpiCardsType[] = [
   {
     title: "Active Users",
-    value: stats.users.total,
+    value: stats?.users?.total || 0,
     change: "+12%",
     changeType: "positive" as const,
-    description: `${stats.users.newThisMonth} new this month`,
+    description: `${stats?.users?.newThisMonth || 0} new this month`,
     icon: Users,
   },
   {
     title: "Published Posts",
-    value: stats.posts.published,
+    value: stats?.posts?.published || 0,
     change: "+8%",
     changeType: "positive" as const,
-    description: `${stats.posts.drafts} drafts pending`,
+    description: `${stats?.posts?.drafts || 0} drafts pending`,
     icon: FileText,
   },
   {
     title: "Total Comments",
-    value: stats.comments.total,
+    value: stats?.comments?.total || 0,
     change: "+23%",
     changeType: "positive" as const,
     description: `${stats.comments.pending} awaiting moderation`,

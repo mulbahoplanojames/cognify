@@ -71,6 +71,7 @@ export default function AdminUsersPage() {
     fetchUsers();
   }, [search, roleFilter]);
 
+  // This function fetches users from the API and updates the state
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -82,6 +83,7 @@ export default function AdminUsersPage() {
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
+        return data;
       }
     } catch (error) {
       toast.error("Error", {
@@ -92,6 +94,7 @@ export default function AdminUsersPage() {
     }
   };
 
+  // This function updates the user role in the database and updates the state
   const updateUserRole = async (userId: string, newRole: UserRole) => {
     try {
       const response = await fetch(`/api/admin/users/${userId}/role`, {
@@ -213,9 +216,6 @@ export default function AdminUsersPage() {
                           <div>
                             <div className="font-medium">
                               {user.name || user.username}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              @{user.username}
                             </div>
                             <div className="text-xs text-muted-foreground">
                               {user.email}
