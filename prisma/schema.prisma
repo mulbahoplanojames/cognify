@@ -184,6 +184,7 @@ model Tag {
   id      String  @id @default(cuid()) @map("_id")
   name    String  @unique
   slug    String  @unique
+  description String?
   posts   Post[]  @relation(fields: [postIds], references: [id])
   postIds String[]
 
