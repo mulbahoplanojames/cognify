@@ -19,6 +19,7 @@ import { ShareButtons } from "@/components/social/share-buttons";
 import { ReadingProgress } from "@/components/social/reading-progress";
 import posts from "@/data/sample-posts.json";
 import BackButton from "@/components/ui/back-button";
+import { prisma } from "@/lib/prisma";
 
 interface PostPageProps {
   params: {
@@ -27,7 +28,25 @@ interface PostPageProps {
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = posts.find((post) => post.slug === params.slug);
+  // const post = posts.find((post) => post.slug === params.slug);
+
+  const post = await prisma.post.findUnique({
+    where: {
+      slug: params.slug,
+    },
+    include: {
+      author: {
+        select: { id: true, name: true, image: true },
+      },
+      category: {
+        select: { id: true, name: true, slug: true },
+      },
+      tags: {
+        select: { id: true, name: true, slug: true },
+      },
+    },
+  });
+
   const relatedPosts = posts
     .filter(
       (p) =>
@@ -57,8 +76,7 @@ export default async function PostPage({ params }: PostPageProps) {
             <CalendarDays className="h-4 w-4" />
             <time
               dateTime={
-                // post.publishedAt?.toISOString() || post.createdAt.toISOString()
-                post.publishedAt || post.createdAt
+                post.publishedAt?.toISOString() || post.createdAt.toISOString()
               }
             >
               {post.publishedAt
@@ -86,7 +104,8 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Author Info */}
           <div className="flex items-center justify-between mb-6">
             <Link
-              href={`/profile/${post.author.username}`}
+              href={`/profile/${post.author.name}`}
+              // href={`/profile/${post.author.username}`}
               className="flex items-center gap-3"
             >
               <Avatar className="h-12 w-12">
@@ -95,15 +114,16 @@ export default async function PostPage({ params }: PostPageProps) {
                   alt={post.author.name || ""}
                 />
                 <AvatarFallback>
-                  {post.author.name?.[0] || post.author.username[0]}
+                  {post.author.name?.[0] || post.author.name[0]}
+                  {/* {post.author.name?.[0] || post.author.username[0]} */}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-medium">
-                  {post.author.name || post.author.username}
+                  {post.author.name || post.author.name}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  @{post.author.username}
+                  @{post.author.name}
                 </p>
               </div>
             </Link>

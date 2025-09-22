@@ -18,6 +18,7 @@ import { Post } from "@/lib/prisma";
 import ContentPostCard from "@/components/admin/content/content-post-card";
 import { toast } from "sonner";
 import ContentStatsCards from "@/components/admin/content/content-stats-cards";
+import { prisma } from "@/lib/prisma";
 
 const mapApiPostToUiPost = (post: any): Post => ({
   ...post,
@@ -35,39 +36,6 @@ const mapApiPostToUiPost = (post: any): Post => ({
   },
 });
 
-const handleStatusUpdate = async (postId: string, newStatus: string) => {
-  try {
-    const response = await fetch(`/api/posts/${postId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ status: newStatus }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to update post status");
-    }
-
-    // Update local state
-    // setPosts(
-    //   posts.map((post) =>
-    //     post.id === postId ? { ...post, status: newStatus as any } : post
-    //   )
-    // );
-    toast.success("Status updated", {
-      description: `Post has been ${
-        newStatus === "PUBLISHED" ? "published" : "rejected"
-      }.`,
-    });
-  } catch (error) {
-    console.error("Error updating post status:", error);
-    toast.error("Error", {
-      description: "Failed to update post status. Please try again.",
-    });
-  }
-};
-
 export default function ContentModerationPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
@@ -82,13 +50,15 @@ export default function ContentModerationPage() {
         setError(null);
 
         // Fetch all posts with their authors
-        const response = await fetch("/api/posts?limit=100"); // Increase limit to get all posts
+        const response = await fetch("/api/posts");
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
         }
 
         const data = await response.json();
+        console.log("Post for moderaate", data);
         const mappedPosts = data.map(mapApiPostToUiPost);
+        console.log("Mapped posts", mappedPosts);
         setPosts(mappedPosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
@@ -104,6 +74,50 @@ export default function ContentModerationPage() {
     fetchPosts();
   }, [toast]);
 
+  const handleStatusUpdate = async (postId: string, newStatus: string) => {
+    try {
+      // Find the post in the local state to get the slug
+      const post = posts.find((p) => p.id === postId);
+
+      if (!post) {
+        throw new Error("Post not found in local state");
+      }
+
+      const response = await fetch(`/api/posts/${post.slug}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update post status");
+      }
+
+      // Update local state
+      setPosts(
+        posts.map((p) =>
+          p.id === postId ? { ...p, status: newStatus as any } : p
+        )
+      );
+
+      toast.success("Status updated", {
+        description: `Post has been ${
+          newStatus === "PUBLISHED" ? "published" : "rejected"
+        }.`,
+      });
+    } catch (error) {
+      console.error("Error updating post status:", error);
+      toast.error("Error", {
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update post status. Please try again.",
+      });
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -113,34 +127,34 @@ export default function ContentModerationPage() {
     );
   }
 
-  // if (error) {
-  //   return (
-  //     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
-  //       <div className="flex">
-  //         <div className="flex-shrink-0">
-  //           <XCircle className="h-5 w-5 text-red-400" aria-hidden="true" />
-  //         </div>
-  //         <div className="ml-3">
-  //           <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
-  //             Error loading posts
-  //           </h3>
-  //           <div className="mt-2 text-sm text-red-700 dark:text-red-300">
-  //             <p>{error}</p>
-  //           </div>
-  //           <div className="mt-4">
-  //             <button
-  //               type="button"
-  //               onClick={() => window.location.reload()}
-  //               className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:text-red-200 dark:bg-red-900/50 dark:hover:bg-red-800/50"
-  //             >
-  //               Try again
-  //             </button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (error) {
+    return (
+      <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <XCircle className="h-5 w-5 text-red-400" aria-hidden="true" />
+          </div>
+          <div className="ml-3">
+            <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
+              Error loading posts
+            </h3>
+            <div className="mt-2 text-sm text-red-700 dark:text-red-300">
+              <p>{error}</p>
+            </div>
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:text-red-200 dark:bg-red-900/50 dark:hover:bg-red-800/50"
+              >
+                Try again
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
