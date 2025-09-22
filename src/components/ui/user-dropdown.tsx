@@ -42,21 +42,30 @@ export default function UserDropDown() {
     setIsPending(false);
   }
 
-  //   console.log("Session", session.data?.user);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar>
+        <Avatar className="cursor-pointer">
           <AvatarImage src={session.data?.user.image || ""} />
           <AvatarFallback>
-            {session.data?.user.name.slice(0, 2).toUpperCase()}
+            {`${session.data?.user.name.charAt(0)}${session.data?.user.name
+              .split(" ")[1]
+              .charAt(0)}`}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {(session.data?.user?.role === "ADMIN" ||
+          session.data?.user?.role === "AUTHOR") && (
+          <DropdownMenuItem asChild>
+            <Link href="/write">
+              Write
+              <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/profile">

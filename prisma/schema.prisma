@@ -12,6 +12,7 @@ enum UserRole {
   ADMIN
   USER
   VISITOR
+  AUTHOR
   GUEST
 }
 
@@ -19,6 +20,7 @@ enum PostStatus {
   DRAFT
   SCHEDULED
   PUBLISHED
+  PENDING
 }
 
 enum CommentStatus {
@@ -182,6 +184,7 @@ model Tag {
   id      String  @id @default(cuid()) @map("_id")
   name    String  @unique
   slug    String  @unique
+  description String?
   posts   Post[]  @relation(fields: [postIds], references: [id])
   postIds String[]
 
