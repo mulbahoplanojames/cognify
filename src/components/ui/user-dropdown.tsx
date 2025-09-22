@@ -60,7 +60,7 @@ export default function UserDropDown() {
         {(session.data?.user?.role === "ADMIN" ||
           session.data?.user?.role === "AUTHOR") && (
           <DropdownMenuItem asChild>
-            <Link href="/admin/write">
+            <Link href="/write">
               Write
               <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
             </Link>

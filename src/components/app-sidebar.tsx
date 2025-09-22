@@ -5,13 +5,14 @@ import {
   AlertTriangle,
   BarChart3,
   Bell,
-  Command,
+  Boxes,
   FileText,
   Github,
   LayoutDashboard,
   MessageCircle,
   Send,
   Settings2,
+  Tag,
   Users,
 } from "lucide-react";
 
@@ -64,6 +65,28 @@ const data = {
       title: "Content Moderation",
       url: "/admin/content",
       icon: FileText,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Tags",
+      url: "/admin/tags",
+      icon: Tag,
+      items: [
+        {
+          title: "Introduction",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Categories",
+      url: "/admin/categories",
+      icon: Boxes,
       items: [
         {
           title: "Introduction",
