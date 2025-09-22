@@ -20,6 +20,7 @@ enum PostStatus {
   DRAFT
   SCHEDULED
   PUBLISHED
+  PENDING
 }
 
 enum CommentStatus {

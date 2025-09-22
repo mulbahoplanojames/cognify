@@ -57,6 +57,15 @@ export default function UserDropDown() {
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {(session.data?.user?.role === "ADMIN" ||
+          session.data?.user?.role === "AUTHOR") && (
+          <DropdownMenuItem asChild>
+            <Link href="/admin/write">
+              Write
+              <DropdownMenuShortcut>⌘W</DropdownMenuShortcut>
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
             <Link href="/profile">
