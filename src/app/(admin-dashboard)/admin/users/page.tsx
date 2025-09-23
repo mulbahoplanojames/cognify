@@ -79,7 +79,7 @@ export default function AdminUsersPage() {
       if (search) params.set("search", search);
       if (roleFilter !== "ALL") params.set("role", roleFilter);
 
-      const response = await fetch(`/api/admin/users?${params}`);
+      const response = await fetch(`/api/v1/admin/users?${params}`);
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
@@ -97,7 +97,7 @@ export default function AdminUsersPage() {
   // This function updates the user role in the database and updates the state
   const updateUserRole = async (userId: string, newRole: UserRole) => {
     try {
-      const response = await fetch(`/api/admin/users/${userId}/role`, {
+      const response = await fetch(`/api/v1/admin/users/${userId}/role`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: newRole }),

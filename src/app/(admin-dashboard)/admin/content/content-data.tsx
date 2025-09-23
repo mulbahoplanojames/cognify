@@ -1,5 +1,5 @@
-import { db } from "@/lib/db";
-import { PostStatus } from "@/lib/db";
+import { prisma } from "@/lib/prisma";
+import { PostStatus } from "../../../../../generated/prisma";
 
 export async function getContentStats() {
   const [
@@ -12,15 +12,15 @@ export async function getContentStats() {
     totalReports,
   ] = await Promise.all([
     // Total posts count
-    db.post.count(),
+    prisma.post.count(),
 
     // Published posts count
-    db.post.count({
+    prisma.post.count({
       where: { status: PostStatus.PUBLISHED },
     }),
 
     // Scheduled posts count
-    db.post.count({
+    prisma.post.count({
       where: {
         status: PostStatus.SCHEDULED,
         scheduledAt: { gte: new Date() },
@@ -28,15 +28,15 @@ export async function getContentStats() {
     }),
 
     // Draft posts count
-    db.post.count({
+    prisma.post.count({
       where: { status: PostStatus.DRAFT },
     }),
 
     // Total comments count
-    db.comment.count(),
+    prisma.comment.count(),
 
     // Recent posts with author info
-    db.post.findMany({
+    prisma.post.findMany({
       take: 10,
       orderBy: { createdAt: "desc" },
       include: {
@@ -44,7 +44,6 @@ export async function getContentStats() {
           select: {
             id: true,
             name: true,
-            username: true,
             image: true,
           },
         },
@@ -55,20 +54,20 @@ export async function getContentStats() {
     }),
 
     // Total reports count (if reports table exists)
-    db.report.count().catch(() => 0),
+    prisma.report.count().catch(() => 0),
   ]);
 
   // Get user data for each post
   const recentPosts = await Promise.all(
     recentPostsWithAuthor.map(async (post) => {
       // Get report count for each post
-      // const reportCount = await db.report
+      // const reportCount = await prisma.report
       //   .count({
       //     where: { postId: post.id, status: "OPEN" },
       //   })
       //   .catch(() => 0);
 
-      const reportCount = await db.report
+      const reportCount = await prisma.report
         .count({
           where: {
             targetType: "POST", // Make sure to use the correct enum value
@@ -81,7 +80,7 @@ export async function getContentStats() {
       return {
         id: post.id,
         title: post.title,
-        author: post.author.name || post.author.username || "Unknown",
+        author: post.author.name || "Unknown",
         status: post.status,
         createdAt: post.createdAt.toISOString(),
         reports: reportCount,

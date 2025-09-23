@@ -4,21 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Search,
-  Filter,
-  Eye,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Flag,
-  Loader2,
-} from "lucide-react";
+import { Search, Filter, XCircle, Clock, Loader2 } from "lucide-react";
 import { Post } from "@/lib/prisma";
 import ContentPostCard from "@/components/admin/content/content-post-card";
 import { toast } from "sonner";
 import ContentStatsCards from "@/components/admin/content/content-stats-cards";
-import { prisma } from "@/lib/prisma";
 
 const mapApiPostToUiPost = (post: any): Post => ({
   ...post,
@@ -50,7 +40,7 @@ export default function ContentModerationPage() {
         setError(null);
 
         // Fetch all posts with their authors
-        const response = await fetch("/api/posts");
+        const response = await fetch("/api/v1/posts");
         if (!response.ok) {
           throw new Error("Failed to fetch posts");
         }
@@ -83,7 +73,7 @@ export default function ContentModerationPage() {
         throw new Error("Post not found in local state");
       }
 
-      const response = await fetch(`/api/posts/${post.slug}`, {
+      const response = await fetch(`/api/v1/posts/${post.slug}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

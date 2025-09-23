@@ -153,7 +153,7 @@ export default function WritePage() {
   //Todo: This function is used to load the user posts
   const loadUserPosts = async () => {
     try {
-      const response = await fetch("/api/posts/user");
+      const response = await fetch("/api/v1/posts/user");
       if (response.ok) {
         const posts = await response.json();
         setUserPosts(posts);
@@ -168,12 +168,14 @@ export default function WritePage() {
     const fetchData = async () => {
       try {
         // Mock data - replace with actual API calls
-        const categoryresponse = await fetch("/api/admin/categories");
+        const categoryresponse = await fetch("/api/v1/admin/categories");
         const categories = await categoryresponse.json();
         setCategories(categories);
+        console.log("categories", categories);
 
-        const tagresponse = await fetch("/api/admin/tags");
+        const tagresponse = await fetch("/api/v1/admin/tags");
         const tags = await tagresponse.json();
+        console.log("tags", tags);
         setTags(tags);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -209,7 +211,7 @@ export default function WritePage() {
 
       //todo: Determine if this is an update or create operation
       const isUpdate = "id" in postData && postData.id;
-      const url = isUpdate ? `/api/posts/${postData.id}` : "/api/posts";
+      const url = isUpdate ? `/api/v1/posts/${postData.id}` : "/api/v1/posts";
       const method = isUpdate ? "PUT" : "POST";
 
       //todo: Remove id for new posts
