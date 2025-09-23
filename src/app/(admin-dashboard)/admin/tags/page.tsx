@@ -44,7 +44,7 @@ export default function TagsPage() {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const response = await fetch("/api/admin/tags");
+        const response = await fetch("/api/v1/admin/tags");
         if (response.ok) {
           const data = await response.json();
           setTags(data);
@@ -91,7 +91,7 @@ export default function TagsPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/admin/tags", {
+      const response = await fetch("/api/v1/admin/tags", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default function TagsPage() {
     if (!confirm("Are you sure you want to delete this tag?")) return;
 
     try {
-      const response = await fetch(`/api/admin/tags/${id}`, {
+      const response = await fetch(`/api/v1/admin/tags/${id}`, {
         method: "DELETE",
       });
 

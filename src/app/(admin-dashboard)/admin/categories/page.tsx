@@ -74,7 +74,7 @@ export default function CategoriesPage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch("/api/admin/categories");
+        const response = await fetch("/api/v1/admin/categories");
         if (response.ok) {
           const data = await response.json();
           setCategories(data);
@@ -92,7 +92,7 @@ export default function CategoriesPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/admin/categories", {
+      const response = await fetch("/api/v1/admin/categories", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -135,7 +135,7 @@ export default function CategoriesPage() {
       return;
 
     try {
-      const response = await fetch(`/api/admin/categories/${id}`, {
+      const response = await fetch(`/api/v1/admin/categories/${id}`, {
         method: "DELETE",
       });
 
