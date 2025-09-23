@@ -167,7 +167,6 @@ export default function WritePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Mock data - replace with actual API calls
         const categoryresponse = await fetch("/api/v1/admin/categories");
         const categories = await categoryresponse.json();
         setCategories(categories);

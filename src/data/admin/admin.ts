@@ -4,9 +4,7 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Eye,
   FileText,
-  Flag,
   MessageCircle,
   Settings,
   Users,
@@ -188,5 +186,24 @@ export const moderationQueue = [
     changeType: "negative" as const,
     description: "3 posts rejected today",
     color: "red-600",
+  },
+];
+
+// Todo: This is a placeholder data for content performance
+export const contentPerformance = [
+  {
+    title: "Posts This Week",
+    value: stats?.posts?.postThisWeek || 0,
+    change: "+12% from last month",
+  },
+  {
+    title: "Average Views",
+    value: 1247,
+    change: "+12% from last month",
+  },
+  {
+    title: "Engagement Rate",
+    value: "8.3%",
+    change: "+12% from last month",
   },
 ];

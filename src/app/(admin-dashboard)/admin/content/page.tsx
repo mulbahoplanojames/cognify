@@ -1,10 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search, Filter, XCircle, Clock, Loader2 } from "lucide-react";
+import { Search, Filter, XCircle, Clock } from "lucide-react";
 import { Post } from "@/lib/prisma";
 import ContentPostCard from "@/components/admin/content/content-post-card";
 import { toast } from "sonner";
