@@ -243,6 +243,7 @@ export default function TagsPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleDelete(tag.id)}
+                            disabled={tag._count?.posts > 0}
                             className="text-red-600 hover:bg-red-50"
                           >
                             <Trash2 className="h-4 w-4" />

@@ -46,9 +46,7 @@ export default function ContentModerationPage() {
         }
 
         const data = await response.json();
-        console.log("Post for moderaate", data);
         const mappedPosts = data.map(mapApiPostToUiPost);
-        console.log("Mapped posts", mappedPosts);
         setPosts(mappedPosts);
       } catch (err) {
         console.error("Error fetching posts:", err);
@@ -108,14 +106,14 @@ export default function ContentModerationPage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin" />
-        <span className="ml-2">Loading posts...</span>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-64">
+  //       <Loader2 className="h-8 w-8 animate-spin" />
+  //       <span className="ml-2">Loading posts...</span>
+  //     </div>
+  //   );
+  // }
 
   if (error) {
     return (

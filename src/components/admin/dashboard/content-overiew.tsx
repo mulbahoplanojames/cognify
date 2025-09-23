@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { moderationQueue } from "@/data/admin/admin";
 import { CheckCircle, Clock, Eye, TrendingUp, XCircle } from "lucide-react";
+import { color } from "motion/react";
 
 export default function ContentOverview() {
   return (
@@ -43,27 +45,19 @@ export default function ContentOverview() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-600" />
-                Approved Today
-              </span>
-              <span className="font-medium">24</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm flex items-center gap-2">
-                <Clock className="h-4 w-4 text-yellow-600" />
-                Pending Review
-              </span>
-              <span className="font-medium">7</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-600" />
-                Rejected Today
-              </span>
-              <span className="font-medium">3</span>
-            </div>
+            {moderationQueue.map((moderationQueue) => {
+              return (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm flex items-center gap-2">
+                    <moderationQueue.icon
+                      className={`h-4 w-4 text-${moderationQueue.color}`}
+                    />
+                    {moderationQueue.title}
+                  </span>
+                  <span className="font-medium">{moderationQueue.value}</span>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>

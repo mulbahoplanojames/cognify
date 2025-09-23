@@ -1,21 +1,64 @@
-import { fetchUsers } from "@/helpers/fetch-users";
+import { fetchPosts, fetchUsers } from "@/helpers/fetch-users";
 import { kpiCardsType } from "@/types/admin";
 import {
   AlertTriangle,
+  CheckCircle,
+  Clock,
+  Eye,
   FileText,
+  Flag,
   MessageCircle,
   Settings,
   Users,
+  XCircle,
 } from "lucide-react";
 
 //Todo: Replace with actual data in future updates
 
 // This function fetches users from the helpers file
 const users = await fetchUsers();
+const posts = await fetchPosts();
 
 const stats = {
-  users: { total: users?.length, newThisMonth: users?.length },
-  posts: { published: 342, drafts: 23 },
+  users: {
+    total: users?.length,
+    newThisMonth: users?.filter(
+      (user) =>
+        user.createdAt >=
+        new Date(new Date().setMonth(new Date().getMonth() - 1))
+    ).length,
+    newUserThisMonth: users?.filter(
+      (user) =>
+        user.createdAt >=
+        new Date(new Date().setMonth(new Date().getMonth() - 1))
+    ).length,
+  },
+  posts: {
+    postThisWeek: posts?.filter(
+      (post) =>
+        post.createdAt >=
+        new Date(new Date().setMonth(new Date().getMonth() - 1))
+    ).length,
+    published: posts?.filter((post) => post.status === "PUBLISHED")?.length,
+    publishedThisMonth: posts?.filter(
+      (post) =>
+        post.status === "PUBLISHED" &&
+        post.createdAt >=
+          new Date(new Date().setMonth(new Date().getMonth() - 1))
+    ).length,
+    drafts: posts?.filter((post) => post.status === "DRAFT")?.length,
+    pending: posts?.filter((post) => post.status === "PENDING")?.length,
+    approvePublishToday: posts?.filter(
+      (post) =>
+        post.status === "PUBLISHED" &&
+        post.updatedAt >= new Date(new Date().setDate(new Date().getDate() - 1))
+    ).length,
+    rejectedPublishToday: posts?.filter(
+      (post) =>
+        post.status === "DRAFT" &&
+        post.updatedAt >= new Date(new Date().setDate(new Date().getDate() - 1))
+    ).length,
+  },
   comments: { total: 1856, pending: 12 },
   reports: { open: 7, newThisWeek: 3 },
 };
@@ -58,15 +101,25 @@ export const kpiCards: kpiCardsType[] = [
 //Todo: Replace with actual data in future updates
 export const recentActivity = [
   {
-    action: "New user registered",
-    user: "john.doe@example.com",
-    time: "2 minutes ago",
+    action: `${stats?.users?.newThisMonth || 0} new users this month`,
+    user: users?.map((user) => user.name).join(", "),
+    time: new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    }).format(new Date()),
     type: "user",
   },
   {
-    action: "Post published",
-    user: "Jane Smith",
-    time: "15 minutes ago",
+    action: `${
+      stats?.posts?.publishedThisMonth || 0
+    } Post published this month`,
+    user: "",
+    time: new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+    }).format(new Date()),
     type: "content",
   },
   {
@@ -104,5 +157,36 @@ export const quickActions = [
     title: "Site Settings",
     icon: Settings,
     href: "/admin/settings",
+  },
+];
+
+// Todo: This is a placeholder data for moderation queue
+export const moderationQueue = [
+  {
+    title: "Approved Today",
+    value: stats?.posts?.approvePublishToday || 0,
+    icon: CheckCircle,
+    change: "+8%",
+    changeType: "positive" as const,
+    description: "24 posts approved today",
+    color: "green-600",
+  },
+  {
+    title: "Pending Review",
+    value: stats?.posts?.pending || 0,
+    icon: Clock,
+    change: "+2%",
+    changeType: "positive" as const,
+    description: "7 posts pending review",
+    color: "yellow-600",
+  },
+  {
+    title: "Rejected Today",
+    value: stats?.posts?.rejectedPublishToday || 0,
+    icon: XCircle,
+    change: "-5%",
+    changeType: "negative" as const,
+    description: "3 posts rejected today",
+    color: "red-600",
   },
 ];
