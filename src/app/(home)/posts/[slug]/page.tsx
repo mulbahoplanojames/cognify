@@ -22,18 +22,24 @@ import BackButton from "@/components/ui/back-button";
 import { prisma } from "@/lib/prisma";
 import PlaceholderImage from "@/components/ui/placeholder-image";
 
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
+// interface PostPageProps {
+//   params: {
+//     slug: string;
+//   };
+// }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  // Ensure params is properly destructured
+  const { slug } = await params;
   // const post = posts.find((post) => post.slug === params.slug);
 
   const post = await prisma.post.findUnique({
     where: {
-      slug: params.slug,
+      slug,
     },
     include: {
       author: {
