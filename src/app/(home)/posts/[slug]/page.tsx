@@ -20,6 +20,7 @@ import { ReadingProgress } from "@/components/social/reading-progress";
 import posts from "@/data/sample-posts.json";
 import BackButton from "@/components/ui/back-button";
 import { prisma } from "@/lib/prisma";
+import PlaceholderImage from "@/components/ui/placeholder-image";
 
 interface PostPageProps {
   params: {
@@ -160,15 +161,31 @@ export default async function PostPage({ params }: PostPageProps) {
         </header>
 
         {/* Cover Image */}
-        {post.coverImage && (
+        {/* {post.coverImage && (
           <div className="mb-8">
             <img
               src={post.coverImage || "/placeholder.svg"}
               alt={post.title}
-              className="w-full h-64 md:h-96 object-cover rounded-lg premium-shadow"
+              className="w-full h-64 md:h-96 object-cover rounded-lg premium-shadow shadow-lg dark:shadow-2xl"
             />
           </div>
-        )}
+        )} */}
+
+        {/* Cover Image */}
+        <div className="mb-8">
+          {post.coverImage ? (
+            <img
+              src={post.coverImage}
+              alt={post.title}
+              className="w-full h-64 md:h-96 object-cover rounded-lg premium-shadow shadow-lg dark:shadow-2xl"
+            />
+          ) : (
+            <PlaceholderImage
+              title={post.title}
+              className="w-full h-64 md:h-96 flex items-center justify-center rounded-lg premium-shadow shadow-lg dark:shadow-2xl"
+            />
+          )}
+        </div>
 
         <div className=" gap-8 mb-12">
           <div>
