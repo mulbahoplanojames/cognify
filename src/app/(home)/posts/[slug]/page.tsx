@@ -106,7 +106,6 @@ export default async function PostPage({ params }: PostPageProps) {
           <div className="flex items-center justify-between mb-6">
             <Link
               href={`/profile/${post.author.name}`}
-              // href={`/profile/${post.author.username}`}
               className="flex items-center gap-3"
             >
               <Avatar className="h-12 w-12">

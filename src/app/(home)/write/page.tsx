@@ -16,17 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { FileUpload } from "@/components/ui/file-upload";
-import {
-  Save,
-  Send,
-  Plus,
-  Edit,
-  Clock,
-  Eye,
-  Calendar,
-  Tag,
-  Folder,
-} from "lucide-react";
+import { Save, Send, Plus, Edit, Clock, Eye, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";
 import {
@@ -173,8 +163,6 @@ export default function WritePage() {
       });
       return;
     }
-
-    // console.log("formData", formData);
 
     setIsLoading(true);
 
