@@ -44,25 +44,7 @@ import {
 import { toast } from "sonner";
 import { Post } from "@/lib/prisma";
 import { useSession } from "@/lib/auth-client";
-
-// interface Post {
-//   id: string;
-//   title: string;
-//   slug: string;
-//   excerpt: string;
-//   content: string;
-//   coverImage: string;
-//   ogImage: string;
-//   status: "DRAFT" | "PENDING" | "PUBLISHED" | "ARCHIVED";
-//   scheduledAt?: string | null;
-//   publishedAt?: string | null;
-//   readingTime?: number | null;
-//   views: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   categoryId?: string | null;
-//   tagIds: string[];
-// }
+import Link from "next/link";
 
 export default function WritePage() {
   const session = useSession();
@@ -579,7 +561,7 @@ export default function WritePage() {
                           <div className="flex items-center gap-2 mt-2">
                             <Badge variant="secondary">Draft</Badge>
                             <span className="text-xs text-muted-foreground">
-                              Updated{" "}
+                              Updated
                               {new Date(post.updatedAt).toLocaleDateString()}
                             </span>
                           </div>
@@ -594,14 +576,14 @@ export default function WritePage() {
                             Edit
                           </Button>
                           <Button variant="outline" size="sm" asChild>
-                            <a
+                            <Link
                               href={`/posts/${post.slug}`}
                               target="_blank"
                               rel="noreferrer"
                             >
                               <Eye className="h-4 w-4 mr-1" />
                               Preview
-                            </a>
+                            </Link>
                           </Button>
                         </div>
                       </div>
