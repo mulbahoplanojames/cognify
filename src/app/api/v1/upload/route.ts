@@ -1,12 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
+import path from "path";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  secure: true,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-
-    const BASE_DIR = "src/media";
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -19,6 +26,9 @@ export async function POST(request: NextRequest) {
       file.name.split(".")[0],
     )}`;
 
+    await uploadToCloudinary(file);
+    // await writeWithFileHandle(file, fileName);
+
     return NextResponse.json({
       url: imageUrl,
       fileName: fileName,
@@ -29,25 +39,52 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function writeWithFileHandle() {
+async function writeWithFileHandle(file: File, fileName: string) {
   let fileHandle;
+  const mediaDir = path.resolve("./media");
 
   try {
-    // Open a file for writing (creates if doesn't exist)
-    fileHandle = await fs.open("output.txt", "w");
+    await fs.access(mediaDir);
+  } catch (error) {
+    console.log("Media DIR doesn't exist");
+    await fs.mkdir(mediaDir);
+    console.log("Created a media DIR");
+  }
 
-    // Write content to the file
-    await fileHandle.write("First line\n");
-    await fileHandle.write("Second line\n");
-    await fileHandle.write("Third line\n");
+  try {
+    const filePath = path.join(mediaDir, fileName);
+    const content = await file.bytes();
+    console.log(filePath);
+
+    fileHandle = await fs.open(filePath, "w");
+
+    await fileHandle.write(content);
 
     console.log("Content written successfully");
   } catch (err) {
     console.error("Error writing to file:", err);
   } finally {
-    // Always close the file handle
     if (fileHandle) {
       await fileHandle.close();
     }
+    console.log("Closed");
   }
+}
+
+export async function uploadToCloudinary(file: File) {
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer); //  <-- convert to Buffer
+
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader
+      .upload_stream({ resource_type: "image" }, onDone)
+      .end(buffer);
+
+    function onDone(error: Error, result: string) {
+      if (error) {
+        return reject({ success: false, error });
+      }
+      return resolve({ success: true, result });
+    }
+  });
 }
