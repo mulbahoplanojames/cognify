@@ -17,7 +17,6 @@ import {
   User,
   MoreHorizontal,
 } from "lucide-react";
-// import { Post } from "@/types/admin";
 import { Post } from "@/lib/prisma";
 
 interface PostCardProps {
@@ -41,12 +40,6 @@ export default function ContentPostCard({
               <Badge className={getStatusColor(post.status)}>
                 {post.status}
               </Badge>
-              {/* {post._count?.reports ? (
-                <Badge variant="destructive">
-                  {post._count.reports}{" "}
-                  {post._count.reports === 1 ? "report" : "reports"}
-                </Badge>
-              ) : null} */}
             </div>
             <p className="text-muted-foreground mb-3">{post.excerpt}</p>
             <div className="flex items-center space-x-4 text-sm text-muted-foreground">
