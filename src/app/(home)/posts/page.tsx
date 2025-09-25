@@ -17,13 +17,17 @@ import {
   Heart,
   Star,
 } from "lucide-react";
-import posts from "@/data/sample-posts.json";
+// import posts from "@/data/sample-posts.json";
 import HeroSection from "@/components/ui/hero-section";
-import Image from "next/image";
+import { fetchPosts } from "@/helpers/fetch-users";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function PostsPage() {
-  const featuredPost = posts[0];
-  const regularPosts = posts.slice(1);
+  // const featuredPost = posts[0];
+
+  const posts = await fetchPosts();
+  const featuredPost = posts?.[0];
+  const regularPosts = posts?.slice(1);
 
   return (
     <>
@@ -36,7 +40,7 @@ export default async function PostsPage() {
       />
 
       <div className="container mx-auto px-4 py-12">
-        {posts.length === 0 ? (
+        {posts?.length === 0 ? (
           <div className="text-center py-16">
             <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <Star className="h-12 w-12 text-primary" />
@@ -67,11 +71,19 @@ export default async function PostsPage() {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                              <User className="h-4 w-4 text-primary" />
+                              <Avatar>
+                                <AvatarImage
+                                  src={featuredPost.author.image || ""}
+                                />
+                                <AvatarFallback>
+                                  {featuredPost.author.name
+                                    .charAt(0)
+                                    .toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
                             </div>
                             <span className="font-medium">
-                              {featuredPost.author.name ||
-                                featuredPost.author.username}
+                              {featuredPost.author.name}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
@@ -162,7 +174,7 @@ export default async function PostsPage() {
 
                         <div className="absolute inset-0 flex items-center justify-center">
                           <img
-                            src={featuredPost.coverImage}
+                            src={featuredPost?.coverImage || ""}
                             alt={featuredPost.title}
                             // layout="fill"
                             // objectFit="cover"
@@ -176,17 +188,17 @@ export default async function PostsPage() {
             )}
 
             {/* Regular Articles Grid */}
-            {regularPosts.length > 0 && (
+            {regularPosts?.length! > 0 && (
               <section>
                 <div className="flex items-center justify-between mb-8">
                   <h2 className="text-2xl font-bold">Latest Articles</h2>
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span>{regularPosts.length} articles</span>
+                    <span>{regularPosts!.length} articles</span>
                   </div>
                 </div>
 
                 <div className="grid lg:grid-cols-2 gap-8">
-                  {regularPosts.map((post) => (
+                  {regularPosts!.map((post) => (
                     <Card
                       key={post.id}
                       className="group pt-0 hover:shadow-xl transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm overflow-hidden"
@@ -202,7 +214,7 @@ export default async function PostsPage() {
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center">
                           <img
-                            src={post.coverImage}
+                            src={post.coverImage || ""}
                             alt={post.title}
                             // layout="fill"
                             // objectFit="cover"
@@ -215,11 +227,14 @@ export default async function PostsPage() {
                         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
                           <div className="flex items-center gap-2">
                             <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center">
-                              <User className="h-3 w-3 text-primary" />
+                              <Avatar>
+                                <AvatarImage src={post.author.image || ""} />
+                                <AvatarFallback>
+                                  {post.author.name.charAt(0).toUpperCase()}
+                                </AvatarFallback>
+                              </Avatar>
                             </div>
-                            <span>
-                              {post.author.name || post.author.username}
-                            </span>
+                            <span>{post.author.name}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <CalendarDays className="h-3 w-3" />

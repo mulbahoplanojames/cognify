@@ -11,7 +11,19 @@ export const fetchUsers = async () => {
 
 export const fetchPosts = async () => {
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+      include: {
+        author: true,
+        category: true,
+        tags: true,
+        _count: {
+          select: {
+            comments: true,
+            reactions: true,
+          },
+        },
+      },
+    });
     return posts;
   } catch (error) {
     console.error("Error fetching posts:", error);

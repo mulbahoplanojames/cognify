@@ -21,6 +21,7 @@ import posts from "@/data/sample-posts.json";
 import BackButton from "@/components/ui/back-button";
 import { prisma } from "@/lib/prisma";
 import PlaceholderImage from "@/components/ui/placeholder-image";
+import page from "../page";
 
 // interface PostPageProps {
 //   params: {
@@ -50,6 +51,9 @@ export default async function PostPage({
       },
       tags: {
         select: { id: true, name: true, slug: true },
+      },
+      _count: {
+        select: { comments: true, reactions: true, bookmarks: true },
       },
     },
   });
@@ -148,19 +152,21 @@ export default async function PostPage({
           <div className="flex items-center gap-6 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4 text-red-500" />
-              <span className="font-medium">247 likes</span>
+              <span className="font-medium">{post._count.reactions}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <MessageCircle className="h-4 w-4 text-blue-500" />
-              <span className="font-medium">32 comments</span>
+              <span className="font-medium">{post._count.comments}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Bookmark className="h-4 w-4 text-green-500" />
-              <span className="font-medium">89 bookmarks</span>
+              <span className="font-medium">{post._count.bookmarks}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <TrendingUp className="h-4 w-4 text-purple-500" />
-              <span className="font-medium">Trending #3</span>
+              <span className="font-medium">
+                Trending #{post._count.bookmarks}
+              </span>
             </div>
           </div>
         </header>
