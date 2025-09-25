@@ -35,6 +35,7 @@ import { toast } from "sonner";
 import { Post } from "@/lib/prisma";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
+import { PostStatus } from "../../../../generated/prisma";
 
 export default function WritePage() {
   const session = useSession();
@@ -53,9 +54,9 @@ export default function WritePage() {
     content: string;
     coverImage: string;
     ogImage: string;
-    status: "DRAFT" | "PENDING" | "PUBLISHED" | "ARCHIVED";
-    scheduledAt: string | null;
-    publishedAt: string | null;
+    status: PostStatus;
+    scheduledAt: Date | null;
+    publishedAt: Date | null;
     readingTime: number | null;
     categoryId: string | null;
     tagIds: string[];
@@ -63,6 +64,7 @@ export default function WritePage() {
 
   // State for the form (without id initially)
   const [formData, setFormData] = useState<FormData>({
+    id: "",
     authorId: loginUser?.id || "",
     title: "",
     slug: "",
@@ -70,7 +72,7 @@ export default function WritePage() {
     content: "",
     coverImage: "",
     ogImage: "",
-    status: "DRAFT",
+    status: PostStatus.DRAFT,
     scheduledAt: null,
     publishedAt: null,
     readingTime: 0,
@@ -91,9 +93,7 @@ export default function WritePage() {
   const updateFormData = (updates: Partial<FormData>) => {
     setFormData((prev) => ({
       ...prev,
-      ...Object.fromEntries(
-        Object.entries(updates).filter(([key]) => key !== "id")
-      ),
+      ...updates,
     }));
   };
 
@@ -178,9 +178,11 @@ export default function WritePage() {
       };
 
       //todo: Determine if this is an update or create operation
-      const isUpdate = "id" in postData && postData.id;
-      const url = isUpdate ? `/api/v1/posts/${postData.id}` : "/api/v1/posts";
-      const method = isUpdate ? "PUT" : "POST";
+      // const isUpdate = "id" in postData && postData.id;
+      // Fix the isUpdate check
+      const isUpdate = Boolean(postData.id);
+      const url = isUpdate ? `/api/v1/posts/${postData.slug}` : "/api/v1/posts";
+      const method = isUpdate ? "PATCH" : "POST";
 
       //todo: Remove id for new posts
       const requestData = isUpdate
@@ -248,12 +250,14 @@ export default function WritePage() {
   // Handle editing an existing post
   const handleEditPost = (post: Post) => {
     // Update form data with the post data (excluding id from the form state)
-    const { id, createdAt, updatedAt, views, authorId, ...postData } = post;
+    const { views, authorId, ...postData } = post;
 
-    // Convert dates to strings for the form
     updateFormData({
       ...postData,
-      excerpt: postData.excerpt || "", // Ensure excerpt is never null
+      id: post.id,
+      excerpt: postData.excerpt || "",
+      coverImage: postData.coverImage || "",
+      ogImage: postData.ogImage || "",
       scheduledAt: post.scheduledAt || null,
       publishedAt: post.publishedAt || null,
     });

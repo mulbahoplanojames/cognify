@@ -6,7 +6,6 @@ import { headers } from "next/headers";
 import { PostStatus } from "../../../../../generated/prisma";
 
 const createPostSchema = z.object({
-  authorId: z.string(),
   title: z.string().min(1).max(300),
   slug: z.string().min(1).max(300),
   excerpt: z.string().max(500).optional(),
@@ -109,6 +108,7 @@ export async function POST(request: NextRequest) {
     const post = await prisma.post.create({
       data: {
         ...data,
+        authorId: session.user.id,
         status,
         scheduledAt: data.scheduledAt ? new Date(data.scheduledAt) : undefined,
         // ...(data.tagIds &&
