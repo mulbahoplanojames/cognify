@@ -62,7 +62,6 @@ export default function WritePage() {
     tagIds: string[];
   };
 
-  // State for the form (without id initially)
   const [formData, setFormData] = useState<FormData>({
     id: "",
     authorId: loginUser?.id || "",
