@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const data = createCommentSchema.parse(body);
 
     // const comment = await CommentService.createComment(session.user.id, data);
-    const comment = prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         ...data,
         authorId: session.user.id,
