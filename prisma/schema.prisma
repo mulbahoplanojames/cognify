@@ -133,6 +133,7 @@ model Post {
   excerpt     String?
   content     String
   coverImage  String?
+  featured    Boolean    @default(false)
   ogImage     String?
   status      PostStatus @default(DRAFT)
   scheduledAt DateTime?
