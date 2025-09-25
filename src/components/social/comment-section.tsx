@@ -31,7 +31,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`/api/posts/${postId}/comments`);
+      const response = await fetch(`/api/v1/posts/${postId}/comments`);
       if (response.ok) {
         const data = await response.json();
         setComments(data);
@@ -47,7 +47,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/comments", {
+      const response = await fetch("/api/v1/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,7 +78,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/comments", {
+      const response = await fetch("/api/v1/comments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -109,7 +109,7 @@ export function CommentSection({ postId }: CommentSectionProps) {
     if (!confirm("Are you sure you want to delete this comment?")) return;
 
     try {
-      const response = await fetch(`/api/comments/${commentId}`, {
+      const response = await fetch(`/api/v1/comments/${commentId}`, {
         method: "DELETE",
       });
 

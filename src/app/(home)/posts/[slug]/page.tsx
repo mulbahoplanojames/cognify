@@ -17,17 +17,9 @@ import {
 import Link from "next/link";
 import { ShareButtons } from "@/components/social/share-buttons";
 import { ReadingProgress } from "@/components/social/reading-progress";
-import posts from "@/data/sample-posts.json";
 import BackButton from "@/components/ui/back-button";
 import { prisma } from "@/lib/prisma";
 import PlaceholderImage from "@/components/ui/placeholder-image";
-import page from "../page";
-
-// interface PostPageProps {
-//   params: {
-//     slug: string;
-//   };
-// }
 
 export default async function PostPage({
   params,
@@ -58,15 +50,31 @@ export default async function PostPage({
     },
   });
 
-  const relatedPosts = posts
-    .filter(
-      (p) =>
-        p.id !== post?.id &&
-        p.tags.some((tag: any) =>
-          post?.tags.map((t: any) => t.id).includes(tag.id)
-        )
-    )
-    .slice(0, 4);
+  const posts = await prisma.post.findMany({
+    where: {
+      tags: {
+        some: {
+          id: {
+            in: post?.tags.map((tag) => tag.id),
+          },
+        },
+      },
+    },
+    include: {
+      tags: true,
+      author: {
+        select: { id: true, name: true, image: true },
+      },
+      category: {
+        select: { id: true, name: true, slug: true },
+      },
+      _count: {
+        select: { comments: true, reactions: true, bookmarks: true },
+      },
+    },
+  });
+
+  const relatedPosts = posts?.filter((p) => p.id !== post?.id);
 
   if (!post) {
     notFound();
@@ -234,13 +242,13 @@ export default async function PostPage({
               {relatedPosts.map((relatedPost) => (
                 <Card
                   key={relatedPost.id}
-                  className="hover:shadow-lg transition-shadow"
+                  className="hover:shadow-lg transition-shadow group"
                 >
                   <CardHeader>
                     <CardTitle className="text-lg">
                       <Link
                         href={`/posts/${relatedPost.slug}`}
-                        className="hover:text-primary"
+                        className="group-hover:text-blue-600 hover:underline  transition-colors "
                       >
                         {relatedPost.title}
                       </Link>
@@ -253,9 +261,7 @@ export default async function PostPage({
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span>
-                        {relatedPost.author.name || relatedPost.author.username}
-                      </span>
+                      <span>{relatedPost.author.name}</span>
                       <span>•</span>
                       <span>
                         {relatedPost.publishedAt
