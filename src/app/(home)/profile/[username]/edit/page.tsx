@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -40,6 +39,9 @@ const profileFormSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
+  }),
   experience: z.string().min(10, {
     message: "Please provide some details about your experience.",
   }),
@@ -66,6 +68,7 @@ export default function EditProfilePage() {
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: "",
+      username: "",
       experience: "",
       bio: "",
       website: "",
@@ -82,7 +85,7 @@ export default function EditProfilePage() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch("/api/users/me");
+        const response = await fetch("/api/v1/users/me");
         if (!response.ok) {
           throw new Error("Failed to fetch user data");
         }
@@ -91,6 +94,7 @@ export default function EditProfilePage() {
         // Set form values with the fetched data
         form.reset({
           name: userData.name || "",
+          username: userData.username || "",
           experience: userData.experience || "",
           bio: userData.bio || "",
           website: userData.social?.website || "",
@@ -167,14 +171,14 @@ export default function EditProfilePage() {
     try {
       setIsSubmitting(true);
 
-      const response = await fetch("/api/users/me", {
+      const response = await fetch("/api/v1/users/me", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: data.name,
-          username: session?.data?.user?.name, // Use the username from session
+          username: data.username,
           bio: data.bio,
           experience: data.experience,
           social: {
@@ -218,7 +222,7 @@ export default function EditProfilePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl mt-28">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold">Edit Profile</h1>
         <div className="flex gap-2">
@@ -270,19 +274,33 @@ export default function EditProfilePage() {
                   )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="experience">Experience</Label>
-                  <Textarea
-                    id="experience"
-                    placeholder="Tell us about your professional experience"
-                    className="min-h-[100px]"
-                    {...form.register("experience")}
+                  <Label htmlFor="username">Username</Label>
+                  <Input
+                    id="username"
+                    placeholder="Your username"
+                    {...form.register("username")}
                   />
-                  {form.formState.errors.experience && (
+                  {form.formState.errors.username && (
                     <p className="text-sm text-red-500">
-                      {form.formState.errors.experience.message}
+                      {form.formState.errors.username.message}
                     </p>
                   )}
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="experience">Experience</Label>
+                <Textarea
+                  id="experience"
+                  placeholder="Tell us about your professional experience"
+                  className="min-h-[100px]"
+                  {...form.register("experience")}
+                />
+                {form.formState.errors.experience && (
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.experience.message}
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">

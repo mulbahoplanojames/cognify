@@ -126,7 +126,9 @@ export default async function ProfilePage({
 
                 <div className="flex-1 text-center md:text-left">
                   <h1 className="text-3xl font-bold">{user.name}</h1>
-                  <p className="text-muted-foreground text-lg">@{user.name}</p>
+                  <p className="text-muted-foreground text-lg">
+                    @{user.username || user.name}
+                  </p>
 
                   {user.bio && (
                     <p className="mt-2 text-muted-foreground">{user.bio}</p>
@@ -154,7 +156,7 @@ export default async function ProfilePage({
 
                     {social?.github && (
                       <a
-                        href={`https://github.com/${social.github}`}
+                        href={social.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1 hover:text-foreground"
@@ -166,7 +168,7 @@ export default async function ProfilePage({
 
                     {social?.twitter && (
                       <a
-                        href={`https://twitter.com/${social.twitter}`}
+                        href={social.twitter}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1 hover:text-foreground"
