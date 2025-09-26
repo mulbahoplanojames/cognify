@@ -28,6 +28,17 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PostStatus } from "../../../../../generated/prisma";
 
+type Skill = {
+  id: string;
+  name: string;
+};
+type Project = {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+};
+
 export default async function ProfilePage({
   params,
 }: {
@@ -138,7 +149,12 @@ export default async function ProfilePage({
                     <div className="flex items-center gap-1">
                       <CalendarDays className="h-4 w-4" />
                       <span>
-                        Joined {new Date(user.createdAt).toLocaleDateString()}
+                        Joined{" "}
+                        {new Date(user.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          day: "numeric",
+                          month: "short",
+                        })}
                       </span>
                     </div>
 
@@ -332,7 +348,7 @@ export default async function ProfilePage({
                     Experience
                   </h3>
                   <p className="text-muted-foreground">
-                    {user.bio || "Coming Soon."}
+                    {user.experience || "💭🤔💭"}
                   </p>
                 </div>
 
@@ -341,7 +357,9 @@ export default async function ProfilePage({
                     <MapPin className="h-4 w-4" />
                     Location
                   </h3>
-                  <p className="text-muted-foreground">Coming Soon.</p>
+                  <p className="text-muted-foreground">
+                    {user.location || "📍📍"}
+                  </p>
                 </div>
 
                 <div className="space-y-2">
@@ -349,7 +367,9 @@ export default async function ProfilePage({
                     <Building2 className="h-4 w-4" />
                     Company
                   </h3>
-                  <p className="text-muted-foreground">Coming Soon.</p>
+                  <p className="text-muted-foreground">
+                    {user.company || "🌐🌐"}
+                  </p>
                 </div>
               </CardContent>
             </Card>
@@ -359,15 +379,42 @@ export default async function ProfilePage({
                 <CardTitle>Skills & Expertise</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <h2>Skills & Expertise Coming Soon</h2>
+                {user.skills &&
+                  Array.isArray(user.skills) &&
+                  (user.skills as Skill[]).map((skill) => (
+                    <Badge key={skill.id} variant="outline">
+                      {skill.name}
+                    </Badge>
+                  ))}
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="projects" className="space-y-4">
-            <Card className="grid gap-4 md:grid-cols-2 w-full">
-              <CardContent>
-                <h2>Projects Coming Soon</h2>
+            <Card className=" w-full">
+              <CardHeader>
+                <CardTitle>Projects</CardTitle>
+              </CardHeader>
+              <CardContent className="grid gap-4 md:grid-cols-2">
+                {user.projects &&
+                  Array.isArray(user.projects) &&
+                  (user.projects as Project[]).map((project) => (
+                    <Card key={project.id} className="w-full group">
+                      <CardHeader className="pb-0">
+                        <Link
+                          href={`${project.url}`}
+                          className="hover:text-blue-700"
+                        >
+                          <CardTitle className="text-lg font-semibold group-hover:text-blue-700">
+                            {project.name}
+                          </CardTitle>
+                        </Link>
+                      </CardHeader>
+                      <CardContent className="text-sm text-muted-foreground pt-0">
+                        <p>{project.description}</p>
+                      </CardContent>
+                    </Card>
+                  ))}
               </CardContent>
             </Card>
           </TabsContent>
@@ -389,30 +436,6 @@ export default async function ProfilePage({
                   </Link>
                 )}
               </CardFooter>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Popular Tags</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  {[
-                    "JavaScript",
-                    "TypeScript",
-                    "React",
-                    "Next.js",
-                    "Node.js",
-                    "Python",
-                    "Web Development",
-                    "UI/UX",
-                  ].map((tag) => (
-                    <Badge key={tag} variant="secondary" className="text-sm">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
