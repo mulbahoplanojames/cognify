@@ -19,9 +19,219 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
-import { cn } from "@/lib/utils";
 
+interface SearchResponse {
+  results: SearchResult[];
+  meta: {
+    total: number;
+    currentPage: number;
+    totalPages: number;
+    limit: number;
+  };
+}
 
+type SearchResult = {
+  id: string;
+  title: string;
+  excerpt: string | null;
+  slug: string;
+  category: {
+    id: string;
+    name: string;
+  } | null;
+  tags: Array<{
+    id: string;
+    name: string;
+  }>;
+  publishedAt: string | null;
+  readingTime: number | null;
+  author: {
+    id: string;
+    name: string | null;
+    image: string | null;
+  } | null;
+  coverImage: string | null;
+};
+
+type Category = {
+  id: string;
+  name: string;
+};
+
+type Tag = {
+  id: string;
+  name: string;
+};
+
+export default function SearchPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [results, setResults] = useState<SearchResult[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [sortBy, setSortBy] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [availableCategories, setAvailableCategories] = useState<Category[]>(
+    []
+  );
+  const [availableTags, setAvailableTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
+    limit: 10,
+  });
+  const router = useRouter();
+
+  // Debounce search input
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  // Fetch available categories and tags
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch categories
+        const categoriesRes = await fetch("/api/v1/admin/categories");
+        if (categoriesRes.ok) {
+          const categoriesData = await categoriesRes.json();
+          setAvailableCategories(categoriesData);
+        }
+
+        // Fetch tags
+        const tagsRes = await fetch("/api/v1/admin/tags");
+        if (tagsRes.ok) {
+          const tagsData = await tagsRes.json();
+          setAvailableTags(tagsData);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Search when debounced query or filters change
+  useEffect(() => {
+    if (
+      debouncedSearchQuery ||
+      selectedCategories.length > 0 ||
+      selectedTags.length > 0
+    ) {
+      setHasSearched(true);
+      performSearch(debouncedSearchQuery);
+    } else if (hasSearched) {
+      setResults([]);
+    }
+  }, [debouncedSearchQuery, selectedCategories, selectedTags, sortBy]);
+
+  // Handle page changes
+  useEffect(() => {
+    if (hasSearched) {
+      performSearch(debouncedSearchQuery, pagination.currentPage);
+    }
+  }, [pagination.currentPage]);
+
+  const performSearch = async (query: string, page: number = 1) => {
+    try {
+      setIsSearching(true);
+      const params = new URLSearchParams({
+        q: query,
+        page: page.toString(),
+        limit: pagination.limit.toString(),
+        // ...(sortBy && { sort: sortBy }),
+        ...(selectedCategories.length > 0 && {
+          categories: selectedCategories.join(","),
+        }),
+        ...(selectedTags.length > 0 && { tags: selectedTags.join(",") }),
+      });
+
+      const response = await fetch(`/api/search?${params.toString()}`);
+      if (!response.ok) throw new Error("Search failed");
+
+      const data: SearchResponse = await response.json();
+      setResults(data.results || []);
+
+      setPagination({
+        currentPage: data.meta.currentPage,
+        totalPages: data.meta.totalPages,
+        totalItems: data.meta.total,
+        limit: data.meta.limit,
+      });
+    } catch (error) {
+      console.error("Search error:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (
+      searchQuery.trim() ||
+      selectedCategories.length > 0 ||
+      selectedTags.length > 0
+    ) {
+      setPagination((prev) => ({ ...prev, currentPage: 1 }));
+      setHasSearched(true);
+      performSearch(searchQuery, 1);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= pagination.totalPages) {
+      setPagination((prev) => ({ ...prev, currentPage: page }));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setResults([]);
+    setHasSearched(false);
+    setPagination({
+      currentPage: 1,
+      totalPages: 1,
+      totalItems: 0,
+      limit: 10,
+    });
+  };
+
+  const toggleCategory = (categoryId: string) => {
+    setSelectedCategories((prev) => {
+      const newCategories = prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId];
+      return newCategories;
+    });
+    setHasSearched(true);
+  };
+
+  const toggleTag = (tagId: string) => {
+    setSelectedTags((prev) => {
+      const newTags = prev.includes(tagId)
+        ? prev.filter((id) => id !== tagId)
+        : [...prev, tagId];
+      return newTags;
+    });
+    setHasSearched(true);
+  };
+
+  const clearFilters = () => {
+    setSelectedCategories([]);
+    setSelectedTags([]);
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return "Unknown date";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -160,12 +370,12 @@ import { cn } from "@/lib/utils";
           {[...Array(3)].map((_, i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6">
-                <div className="h-6 bg-gray-200 rounded w-3/4 mb-4"></div>
-                <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+                <Skeleton className="h-6 rounded w-3/4 mb-4" />
+                <Skeleton className="h-4 rounded w-full mb-2" />
+                <Skeleton className="h-4 rounded w-5/6 mb-4" />
                 <div className="flex space-x-4">
-                  <div className="h-4 bg-gray-200 rounded w-24"></div>
-                  <div className="h-4 bg-gray-200 rounded w-16"></div>
+                  <Skeleton className="h-4 rounded w-24" />
+                  <Skeleton className="h-4 rounded w-16" />
                 </div>
               </CardContent>
             </Card>
