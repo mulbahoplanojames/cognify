@@ -147,7 +147,7 @@ export default function SearchPage() {
         ...(selectedTags.length > 0 && { tags: selectedTags.join(",") }),
       });
 
-      const response = await fetch(`/api/search?${params.toString()}`);
+      const response = await fetch(`/api/v1/search?${params.toString()}`);
       if (!response.ok) throw new Error("Search failed");
 
       const data: SearchResponse = await response.json();
