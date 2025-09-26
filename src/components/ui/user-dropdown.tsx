@@ -68,7 +68,7 @@ export default function UserDropDown() {
         )}
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/profile">
+            <Link href={`/profile/${session.data?.user.name}`}>
               Profile
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
