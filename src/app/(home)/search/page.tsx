@@ -442,9 +442,7 @@ export default function SearchPage() {
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 mb-4">
                 <Search className="h-6 w-6 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-1">
-                Search for content
-              </h3>
+              <h3 className="text-lg font-medium  mb-1">Search for content</h3>
               <p className="text-gray-500">
                 Enter keywords to find articles, guides, and more
               </p>
