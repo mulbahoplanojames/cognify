@@ -19,22 +19,9 @@ import {
   BookOpen,
   Building2,
   MapPin,
-  Mail,
   Briefcase,
-  Clock,
-  MessageSquare,
-  Heart,
-  ThumbsUp,
-  Star,
-  Code,
-  Database,
-  Cpu,
-  Server,
-  Cloud,
-  Terminal,
 } from "lucide-react";
 import Link from "next/link";
-import { Progress } from "@/components/ui/progress";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
@@ -56,7 +43,6 @@ export default async function ProfilePage({
 
   const { username } = await params;
 
-  console.log("Username", username);
   const user = await prisma.user.findFirst({
     where: { name: decodeURIComponent(username) },
     include: {
@@ -73,8 +59,6 @@ export default async function ProfilePage({
   if (!user) {
     notFound();
   }
-
-  console.log("User", user);
 
   const posts = await prisma.post.findMany({
     where: {
@@ -113,7 +97,7 @@ export default async function ProfilePage({
   } as const;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl mt-28">
       <div className="grid gap-6">
         {/* Profile Header */}
         <div className="grid gap-6 md:grid-cols-3">
@@ -220,10 +204,18 @@ export default async function ProfilePage({
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <Button className="w-full md:w-auto">Follow</Button>
-                  <Button variant="outline" className="w-full md:w-auto">
-                    Message
-                  </Button>
+                  {session.user.id === user.id ? (
+                    <Link href="/settings/profile" className="w-full md:w-auto">
+                      <Button className="w-full">Edit Profile</Button>
+                    </Link>
+                  ) : (
+                    <>
+                      <Button className="w-full md:w-auto">Follow</Button>
+                      <Button variant="outline" className="w-full md:w-auto">
+                        Message
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -384,11 +376,13 @@ export default async function ProfilePage({
                 <h2>Recent Activity Coming Soon</h2>
               </CardContent>
               <CardFooter>
-                <Link href={`/profile/${user.name}/edit`} className="w-full">
-                  <Button variant="ghost" className="w-full">
-                    Edit Profile
-                  </Button>
-                </Link>
+                {session.user.id === user.id && (
+                  <Link href={`/profile/${user.name}/edit`} className="w-full">
+                    <Button variant="ghost" className="w-full">
+                      Edit Profile
+                    </Button>
+                  </Link>
+                )}
               </CardFooter>
             </Card>
 
