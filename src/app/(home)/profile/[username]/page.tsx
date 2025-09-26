@@ -205,7 +205,10 @@ export default async function ProfilePage({
 
                 <div className="flex flex-col gap-2">
                   {session.user.id === user.id ? (
-                    <Link href="/settings/profile" className="w-full md:w-auto">
+                    <Link
+                      href={`/profile/${user.name}/edit`}
+                      className="w-full md:w-auto"
+                    >
                       <Button className="w-full">Edit Profile</Button>
                     </Link>
                   ) : (
