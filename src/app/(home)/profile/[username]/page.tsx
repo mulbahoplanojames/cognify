@@ -348,7 +348,8 @@ export default async function ProfilePage({
                     Experience
                   </h3>
                   <p className="text-muted-foreground">
-                    {user.experience || "💭🤔💭"}
+                    {user.experience ||
+                      "This user hasn't added any experience yet."}
                   </p>
                 </div>
 
@@ -358,7 +359,8 @@ export default async function ProfilePage({
                     Location
                   </h3>
                   <p className="text-muted-foreground">
-                    {user.location || "📍📍"}
+                    {user.location ||
+                      "This user hasn't added any location yet."}
                   </p>
                 </div>
 
@@ -368,7 +370,7 @@ export default async function ProfilePage({
                     Company
                   </h3>
                   <p className="text-muted-foreground">
-                    {user.company || "🌐🌐"}
+                    {user.company || "This user hasn't added any company yet."}
                   </p>
                 </div>
               </CardContent>
