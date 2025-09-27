@@ -17,11 +17,35 @@ import {
   Heart,
   Star,
 } from "lucide-react";
-import posts from "@/data/sample-posts.json";
 import HeroSection from "@/components/ui/hero-section";
 import Image from "next/image";
+import { prisma } from "@/lib/prisma";
+import { PostStatus } from "../../../../generated/prisma";
 
 export default async function PostsPage() {
+  const posts = await prisma.post.findMany({
+    where: {
+      status: PostStatus.PUBLISHED,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      author: {
+        select: { id: true, name: true, image: true },
+      },
+      category: {
+        select: { id: true, name: true, slug: true },
+      },
+      tags: {
+        select: { id: true, name: true, slug: true },
+      },
+      _count: {
+        select: { comments: true, reactions: true, bookmarks: true },
+      },
+    },
+  });
+
   const featuredPost = posts[0];
   const regularPosts = posts.slice(1);
 
@@ -70,8 +94,7 @@ export default async function PostsPage() {
                               <User className="h-4 w-4 text-primary" />
                             </div>
                             <span className="font-medium">
-                              {featuredPost.author.name ||
-                                featuredPost.author.username}
+                              {featuredPost.author.name}
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
@@ -161,11 +184,11 @@ export default async function PostsPage() {
                         </div>
 
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <img
-                            src={featuredPost.coverImage}
+                          <Image
+                            src={featuredPost.coverImage || ""}
                             alt={featuredPost.title}
-                            // layout="fill"
-                            // objectFit="cover"
+                            layout="fill"
+                            objectFit="cover"
                           />
                         </div>
                       </div>
@@ -201,11 +224,11 @@ export default async function PostsPage() {
                           )}
                         </div>
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <img
-                            src={post.coverImage}
+                          <Image
+                            src={post.coverImage || ""}
                             alt={post.title}
-                            // layout="fill"
-                            // objectFit="cover"
+                            layout="fill"
+                            objectFit="cover"
                             className="transition-transform duration-300 group-hover:scale-110"
                           />
                         </div>
@@ -217,9 +240,7 @@ export default async function PostsPage() {
                             <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center">
                               <User className="h-3 w-3 text-primary" />
                             </div>
-                            <span>
-                              {post.author.name || post.author.username}
-                            </span>
+                            <span>{post.author.name}</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <CalendarDays className="h-3 w-3" />

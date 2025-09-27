@@ -6,7 +6,7 @@ import { AnimatedGroup } from "@/components/ui/animated-group";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const transitionVariants = {
+export const transitionVariants = {
   item: {
     hidden: {
       opacity: 0,

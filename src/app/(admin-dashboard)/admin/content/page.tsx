@@ -9,7 +9,7 @@ import ContentPostCard from "@/components/admin/content/content-post-card";
 import { toast } from "sonner";
 import ContentStatsCards from "@/components/admin/content/content-stats-cards";
 
-const mapApiPostToUiPost = (post: any): Post => ({
+const mapApiPostToUiPost = (post: Post): Post => ({
   ...post,
   status:
     post.status === "PENDING"
@@ -19,10 +19,6 @@ const mapApiPostToUiPost = (post: any): Post => ({
       : post.status === "SCHEDULED"
       ? "SCHEDULED"
       : "DRAFT",
-  author: {
-    name: post.author?.name || "Unknown",
-    username: post.author?.username || "unknown",
-  },
 });
 
 export default function ContentModerationPage() {

@@ -36,13 +36,19 @@ import { Post } from "@/lib/prisma";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
 import { PostStatus } from "../../../../generated/prisma";
+import { useRouter } from "next/navigation";
 
 export default function WritePage() {
+  const router = useRouter();
   const session = useSession();
   const loginUser = session.data?.user;
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("new");
   const [userPosts, setUserPosts] = useState<Post[]>([]);
+
+  if (!session.data?.session) {
+    router.push("/profile");
+  }
 
   // Define the form state type
   type FormData = {
@@ -62,7 +68,6 @@ export default function WritePage() {
     tagIds: string[];
   };
 
-  // State for the form (without id initially)
   const [formData, setFormData] = useState<FormData>({
     id: "",
     authorId: loginUser?.id || "",

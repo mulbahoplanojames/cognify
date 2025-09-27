@@ -22,13 +22,6 @@ const createPostSchema = z.object({
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const statusParam = searchParams.get("status");
-  const status =
-    statusParam && Object.values(PostStatus).includes(statusParam as PostStatus)
-      ? (statusParam as PostStatus)
-      : undefined;
-  // const authorId = searchParams.get("authorId");
-  // const categoryId = searchParams.get("categoryId");
   const limit = Number.parseInt(searchParams.get("limit") || "10");
   const offset = Number.parseInt(searchParams.get("offset") || "0");
 

@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,9 +30,10 @@ export function CommentSection({ postId }: CommentSectionProps) {
 
   const fetchComments = async () => {
     try {
-      const response = await fetch(`/api/v1/posts/${postId}/comments`);
+      const response = await fetch(`/api/v1/comments/${postId}`);
       if (response.ok) {
         const data = await response.json();
+        console.log("Comments:", data);
         setComments(data);
       }
     } catch (error) {

@@ -68,14 +68,16 @@ export default function UserDropDown() {
         )}
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href="/profile">
+            <Link href={`/profile/${session.data?.user.name}`}>
               Profile
               <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+          <DropdownMenuItem asChild>
+            <Link href={`/profile/${session.data?.user.name}/edit`}>
+              Settings
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </Link>
           </DropdownMenuItem>
           {session.data?.user?.role === "ADMIN" && (
             <DropdownMenuItem asChild>

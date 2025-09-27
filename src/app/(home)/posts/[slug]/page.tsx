@@ -26,9 +26,7 @@ export default async function PostPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  // Ensure params is properly destructured
   const { slug } = await params;
-  // const post = posts.find((post) => post.slug === params.slug);
 
   const post = await prisma.post.findUnique({
     where: {
@@ -131,15 +129,10 @@ export default async function PostPage({
                   src={post.author.image || ""}
                   alt={post.author.name || ""}
                 />
-                <AvatarFallback>
-                  {post.author.name?.[0] || post.author.name[0]}
-                  {/* {post.author.name?.[0] || post.author.username[0]} */}
-                </AvatarFallback>
+                <AvatarFallback>{post.author.name?.[0]}</AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-medium">
-                  {post.author.name || post.author.name}
-                </p>
+                <p className="font-medium">{post.author.name}</p>
                 <p className="text-sm text-muted-foreground">
                   @{post.author.name}
                 </p>
@@ -160,33 +153,24 @@ export default async function PostPage({
           <div className="flex items-center gap-6 p-4 bg-muted/30 rounded-lg">
             <div className="flex items-center gap-2 text-sm">
               <Heart className="h-4 w-4 text-red-500" />
-              <span className="font-medium">247 likes</span>
+              <span className="font-medium">{post._count.reactions}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <MessageCircle className="h-4 w-4 text-blue-500" />
-              <span className="font-medium">32 comments</span>
+              <span className="font-medium">{post._count.comments}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Bookmark className="h-4 w-4 text-green-500" />
-              <span className="font-medium">89 bookmarks</span>
+              <span className="font-medium">{post._count.bookmarks}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <TrendingUp className="h-4 w-4 text-purple-500" />
-              <span className="font-medium">Trending #3</span>
+              <span className="font-medium">
+                Trending #{post._count.bookmarks}
+              </span>
             </div>
           </div>
         </header>
-
-        {/* Cover Image */}
-        {/* {post.coverImage && (
-          <div className="mb-8">
-            <img
-              src={post.coverImage || "/placeholder.svg"}
-              alt={post.title}
-              className="w-full h-64 md:h-96 object-cover rounded-lg premium-shadow shadow-lg dark:shadow-2xl"
-            />
-          </div>
-        )} */}
 
         {/* Cover Image */}
         <div className="mb-8">
