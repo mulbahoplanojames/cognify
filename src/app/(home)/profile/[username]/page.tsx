@@ -27,6 +27,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PostStatus } from "../../../../../generated/prisma";
+import { FollowButton } from "@/components/social/follow-button";
 
 type Skill = {
   id: string;
@@ -71,6 +72,7 @@ export default async function ProfilePage({
     notFound();
   }
 
+  //todo: Get user posts
   const posts = await prisma.post.findMany({
     where: {
       authorId: user.id,
@@ -97,7 +99,7 @@ export default async function ProfilePage({
     orderBy: { createdAt: "desc" },
   });
 
-  // Default social links if not provided
+  //todo: Default social links if not provided
   const social = {
     website: "",
     github: "",
@@ -207,7 +209,7 @@ export default async function ProfilePage({
                         {user._count.followers}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Followers
+                        Following
                       </div>
                     </div>
                     <div className="text-center">
@@ -215,7 +217,7 @@ export default async function ProfilePage({
                         {user._count.following}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Following
+                        Followers
                       </div>
                     </div>
                   </div>
@@ -231,7 +233,7 @@ export default async function ProfilePage({
                     </Link>
                   ) : (
                     <>
-                      <Button className="w-full md:w-auto">Follow</Button>
+                      <FollowButton userId={user.id} username={user.name} />
                       <Button variant="outline" className="w-full md:w-auto">
                         Message
                       </Button>
@@ -253,11 +255,11 @@ export default async function ProfilePage({
                 <Badge variant="secondary">{user._count.posts}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Followers</span>
+                <span className="text-sm text-muted-foreground">Following</span>
                 <Badge variant="secondary">{user._count.followers}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Following</span>
+                <span className="text-sm text-muted-foreground">Followers</span>
                 <Badge variant="secondary">{user._count.following}</Badge>
               </div>
               <div className="flex items-center justify-between">
