@@ -27,6 +27,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { PostStatus } from "../../../../../generated/prisma";
+import { FollowButton } from "@/components/social/follow-button";
 
 type Skill = {
   id: string;
@@ -71,6 +72,7 @@ export default async function ProfilePage({
     notFound();
   }
 
+  //todo: Get user posts
   const posts = await prisma.post.findMany({
     where: {
       authorId: user.id,
@@ -97,7 +99,7 @@ export default async function ProfilePage({
     orderBy: { createdAt: "desc" },
   });
 
-  // Default social links if not provided
+  //todo: Default social links if not provided
   const social = {
     website: "",
     github: "",
@@ -106,6 +108,23 @@ export default async function ProfilePage({
       ? user.social
       : {}),
   } as const;
+
+  //todo: follow toggle
+  const handleToggleFollow = async () => {
+    try {
+      const response = await fetch(`/api/v1/follow`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ followingId: user.id }),
+      });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl mt-28">
@@ -231,7 +250,7 @@ export default async function ProfilePage({
                     </Link>
                   ) : (
                     <>
-                      <Button className="w-full md:w-auto">Follow</Button>
+                      <FollowButton userId={user.id} username={user.name} />
                       <Button variant="outline" className="w-full md:w-auto">
                         Message
                       </Button>
