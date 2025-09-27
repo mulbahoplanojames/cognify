@@ -108,7 +108,7 @@ export default async function ProfilePage({
   } as const;
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl mt-28">
+    <div className="container mx-auto px-4 py-8 max-w-6xl mt-28">
       <div className="grid gap-6">
         {/* Profile Header */}
         <div className="grid gap-6 md:grid-cols-3">

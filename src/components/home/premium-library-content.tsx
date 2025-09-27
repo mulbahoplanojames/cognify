@@ -111,7 +111,7 @@ export default async function PremiumLibraryContentSection() {
           <div className="space-y-6">
             {premiumLibrary
               .filter((a) => !a.featured)
-              .slice(0, 3)
+              .slice(0, 2)
               .map((article) => (
                 <Card
                   key={article.id}
