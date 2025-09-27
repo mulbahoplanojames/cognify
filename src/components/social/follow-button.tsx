@@ -85,3 +85,15 @@ export function FollowButton({ userId, username }: FollowButtonProps) {
     </Button>
   );
 }
+
+//todo: get followers
+// const followers = await prisma.follow.findMany({
+//   where: {
+//     followingId: user.id,
+//   },
+//   include: {
+//     follower: {
+//       select: { id: true, name: true, image: true },
+//     },
+//   },
+// });

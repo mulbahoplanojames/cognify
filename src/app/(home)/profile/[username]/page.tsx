@@ -109,23 +109,6 @@ export default async function ProfilePage({
       : {}),
   } as const;
 
-  //todo: follow toggle
-  const handleToggleFollow = async () => {
-    try {
-      const response = await fetch(`/api/v1/follow`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ followingId: user.id }),
-      });
-      const result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl mt-28">
       <div className="grid gap-6">
@@ -226,7 +209,7 @@ export default async function ProfilePage({
                         {user._count.followers}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Followers
+                        Following
                       </div>
                     </div>
                     <div className="text-center">
@@ -234,7 +217,7 @@ export default async function ProfilePage({
                         {user._count.following}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        Following
+                        Followers
                       </div>
                     </div>
                   </div>
@@ -272,11 +255,11 @@ export default async function ProfilePage({
                 <Badge variant="secondary">{user._count.posts}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Followers</span>
+                <span className="text-sm text-muted-foreground">Following</span>
                 <Badge variant="secondary">{user._count.followers}</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Following</span>
+                <span className="text-sm text-muted-foreground">Followers</span>
                 <Badge variant="secondary">{user._count.following}</Badge>
               </div>
               <div className="flex items-center justify-between">
