@@ -3,7 +3,7 @@ import { z, ZodError } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { PostStatus } from "../../../../../../generated/prisma";
+import { PostStatus } from "@/types/prisma-types";
 
 const updatePostSchema = z.object({
   title: z.string().min(1).max(200).optional(),
