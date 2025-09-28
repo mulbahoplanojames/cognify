@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Heart, Zap, Lightbulb } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { ReactionType } from "../../../generated/prisma";
+import { ReactionType } from "@/types/prisma-types";
 
 interface ReactionButtonsProps {
   targetId: string;

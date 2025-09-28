@@ -107,14 +107,14 @@ export const whyChooseUsFeatures: whyChooseUsFeaturesType[] = [
     icon: icons.Globe,
     title: "Global Reach",
     description:
-      "Learn, share, and grow from anywhere! With multi-language support and global content delivery, students and learners everywhere are connected.",
+      "Learn, share, and grow from anywhere! Write your thoughts and connect with like-minded individuals, using our global content delivery, students and learners everywhere are connected.",
   },
   {
     id: 4,
     icon: icons.Award,
-    title: "Certification Programs",
+    title: "Self Improvement",
     description:
-      "Get certified, boost your skills, and show off what you’ve learned—perfect for students and lifelong learners aiming higher.",
+      "Boost your skills, and show off what you’ve learned—perfect for students and lifelong learners aiming higher.",
   },
   {
     id: 5,

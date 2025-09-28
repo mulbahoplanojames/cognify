@@ -20,7 +20,7 @@ import {
 import HeroSection from "@/components/ui/hero-section";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { PostStatus } from "../../../../generated/prisma";
+import { PostStatus } from "@/types/prisma-types";
 
 export default async function PostsPage() {
   const posts = await prisma.post.findMany({

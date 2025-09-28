@@ -1,12 +1,18 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { UserRole } from "../../../../../../../generated/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { UserRole } from "@/types/prisma-types";
 
 const updateRoleSchema = z.object({
-  role: z.nativeEnum(UserRole),
+  role: z.enum([
+    UserRole.ADMIN,
+    UserRole.USER,
+    UserRole.VISITOR,
+    UserRole.AUTHOR,
+    UserRole.GUEST,
+  ]),
 });
 
 export async function PATCH(
