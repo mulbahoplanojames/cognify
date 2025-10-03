@@ -49,25 +49,25 @@ enum TargetType {
 }
 
 model User {
-  id            String    @id @default(cuid()) @map("_id")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  name          String    @unique
-  username      String?    
-  email         String    @unique
+  id        String   @id @default(cuid()) @map("_id")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name          String   @unique
+  username      String?
+  email         String   @unique
   emailVerified Boolean
   image         String?
-  role          UserRole  @default(USER)
-  
-  bio           String?
-  social        Json?
-  experience     String? 
+  role          UserRole @default(USER)
+
+  bio        String?
+  social     Json?
+  experience String?
   company    String?
   location   String?
   skills     Json?
-  projects Json?
-  
+  projects   Json?
+
   // Relations
   sessions      Session[]
   accounts      Account[]
@@ -75,9 +75,9 @@ model User {
   comments      Comment[]
   reactions     Reaction[]
   bookmarks     Bookmark[]
-  followers     Follow[]  @relation("UserFollowers")
-  following     Follow[]  @relation("UserFollowing")
-  reports       Report[]  @relation("ReportedBy")
+  followers     Follow[]       @relation("UserFollowers")
+  following     Follow[]       @relation("UserFollowing")
+  reports       Report[]       @relation("ReportedBy")
   notifications Notification[]
   auditLogs     AuditLog[]
   postVersions  PostVersion[]
@@ -92,30 +92,30 @@ model Session {
 
   expiresAt DateTime
   token     String   @unique
-  
+
   ipAddress String?
   userAgent String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }
 
 model Account {
-  id                     String   @id @default(cuid()) @map("_id")
-  userId                 String
-  accountId              String
-  providerId             String
-  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken            String?
-  refreshToken           String?
-  idToken                String?
-  accessTokenExpiresAt   DateTime?
-  refreshTokenExpiresAt  DateTime?
-  scope                  String?
-  password               String?
-  createdAt              DateTime  @default(now())
-  updatedAt              DateTime  @updatedAt
+  id                    String    @id @default(cuid()) @map("_id")
+  userId                String
+  accountId             String
+  providerId            String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   @@map("account")
 }
@@ -150,10 +150,10 @@ model Post {
   updatedAt   DateTime   @updatedAt
 
   // Relations
-  author     User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  category   Category?  @relation(fields: [categoryId], references: [id])
+  author     User          @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category   Category?     @relation(fields: [categoryId], references: [id])
   categoryId String?
-  tags       Tag[]      @relation(fields: [tagIds], references: [id])
+  tags       Tag[]         @relation(fields: [tagIds], references: [id])
   tagIds     String[]
   comments   Comment[]
   reactions  Reaction[]
@@ -178,9 +178,9 @@ model PostVersion {
 }
 
 model Category {
-  id          String @id @default(cuid()) @map("_id")
-  name        String @unique
-  slug        String @unique
+  id          String  @id @default(cuid()) @map("_id")
+  name        String  @unique
+  slug        String  @unique
   description String?
   posts       Post[]
 
@@ -188,12 +188,12 @@ model Category {
 }
 
 model Tag {
-  id      String  @id @default(cuid()) @map("_id")
-  name    String  @unique
-  slug    String  @unique
+  id          String   @id @default(cuid()) @map("_id")
+  name        String   @unique
+  slug        String   @unique
   description String?
-  posts   Post[]  @relation(fields: [postIds], references: [id])
-  postIds String[]
+  posts       Post[]   @relation(fields: [postIds], references: [id])
+  postIds     String[]
 
   @@map("tags")
 }
@@ -209,10 +209,10 @@ model Comment {
   createdAt DateTime      @default(now())
 
   // Relations
-  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  replies   Comment[] @relation("CommentReplies")
+  post      Post       @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author    User       @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent    Comment?   @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies   Comment[]  @relation("CommentReplies")
   reactions Reaction[]
 
   @@map("comments")
@@ -236,15 +236,17 @@ model Reaction {
 }
 
 model Bookmark {
-  id        String   @id @default(cuid()) @map("_id")
-  userId    String
-  postId    String
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid()) @map("_id")
+  userId       String
+  postId       String
+  createdAt    DateTime @default(now())
+  collectionId String? // For future extension
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  //collection Collection? @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, postId])
+  @@unique([userId, postId]) // Will be updated in the feature also
   @@map("bookmarks")
 }
 
@@ -284,12 +286,12 @@ model SiteSetting {
 }
 
 model Notification {
-  id        String   @id @default(cuid()) @map("_id")
+  id        String    @id @default(cuid()) @map("_id")
   userId    String
   type      String
   payload   Json
   readAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -309,7 +311,3 @@ model AuditLog {
 
   @@map("audit_logs")
 }
-
-
-
-
