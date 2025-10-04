@@ -14,6 +14,7 @@ import {
 import { Loader2, Search } from "lucide-react";
 import { SearchParams, TrendingPost } from "@/types/post";
 import { TrendingPostCard } from "@/components/trending/trending-post-card";
+import HeroSection from "../ui/hero-section";
 
 type TimeRangeValue = "1" | "7" | "30" | "0";
 type SortByValue = "score" | "newest" | "reactions" | "comments" | "views";
@@ -109,7 +110,7 @@ export function TrendingPosts() {
           ...(category && { category }),
         });
 
-        const res = await fetch(`/api/trending?${params}`);
+        const res = await fetch(`/api/v1/trending?${params}`);
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -130,151 +131,148 @@ export function TrendingPosts() {
   }, [timeRange, sortBy, debouncedSearchQuery, category]);
 
   return (
-    <div className="container max-w-7xl py-6 lg:py-10">
-      <div className="flex flex-col items-start gap-4 md:flex-row md:justify-between md:gap-8">
-        <div className="flex-1 space-y-4">
-          <h1 className="inline-block text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Trending Posts
-          </h1>
-          <p className="text-xl text-muted-foreground">
-            Discover the most engaging content on our platform
-          </p>
-        </div>
-      </div>
+    <>
+      <HeroSection
+        title="Trending Posts"
+        description="Discover the most engaging content on our platform"
+        tab="Trending"
+        postSearch={false}
+      />
+      <div className="container max-w-7xl py-6 mx-auto md:px-6 px-2 lg:py-10">
+        <div className="mt-8 flex flex-col space-y-6">
+          <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+            <div className="flex-1 max-w-md">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search posts..."
+                  className="pl-10"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    updateUrl({ q: e.target.value });
+                  }}
+                />
+              </div>
+            </div>
 
-      <div className="mt-8 flex flex-col space-y-6">
-        <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
-          <div className="flex-1 max-w-md">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search posts..."
-                className="pl-10"
-                value={searchQuery}
-                onChange={(e) => {
-                  setSearchQuery(e.target.value);
-                  updateUrl({ q: e.target.value });
+            <div className="flex flex-wrap items-center gap-2">
+              <Select
+                value={timeRange}
+                onValueChange={(value: TimeRangeValue) => {
+                  setTimeRange(value);
+                  updateUrl({ timeRange: value });
                 }}
-              />
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Time Range" />
+                </SelectTrigger>
+                <SelectContent>
+                  {timeRanges.map((range) => (
+                    <SelectItem key={range.value} value={range.value}>
+                      {range.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={sortBy}
+                onValueChange={(value: SortByValue) => {
+                  setSortBy(value);
+                  updateUrl({ sortBy: value });
+                }}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sortOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <Select
-              value={timeRange}
-              onValueChange={(value: TimeRangeValue) => {
-                setTimeRange(value);
-                updateUrl({ timeRange: value });
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Time Range" />
-              </SelectTrigger>
-              <SelectContent>
-                {timeRanges.map((range) => (
-                  <SelectItem key={range.value} value={range.value}>
-                    {range.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={sortBy}
-              onValueChange={(value: SortByValue) => {
-                setSortBy(value);
-                updateUrl({ sortBy: value });
-              }}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Sort by" />
-              </SelectTrigger>
-              <SelectContent>
-                {sortOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {categories.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            <Button
-              variant={!category ? "default" : "outline"}
-              size="sm"
-              onClick={() => {
-                setCategory("");
-                updateUrl({ category: "" });
-              }}
-              className="text-sm"
-            >
-              All
-            </Button>
-            {categories.map((cat) => (
+          {categories.length > 0 && (
+            <div className="flex flex-wrap gap-2">
               <Button
-                key={cat.id}
-                variant={category === cat.slug ? "default" : "outline"}
+                variant={!category ? "default" : "outline"}
                 size="sm"
                 onClick={() => {
-                  setCategory(cat.slug);
-                  updateUrl({ category: cat.slug });
+                  setCategory("");
+                  updateUrl({ category: "" });
                 }}
                 className="text-sm"
               >
-                {cat.name} ({cat.postCount})
+                All
               </Button>
-            ))}
-          </div>
-        )}
+              {categories.map((cat) => (
+                <Button
+                  key={cat.id}
+                  variant={category === cat.slug ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => {
+                    setCategory(cat.slug);
+                    updateUrl({ category: cat.slug });
+                  }}
+                  className="text-sm"
+                >
+                  {cat.name} ({cat.postCount})
+                </Button>
+              ))}
+            </div>
+          )}
 
-        {isLoading ? (
-          <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : posts.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <TrendingPostCard
-                key={post.id}
-                post={post}
-                className="h-full"
-                showStats={true}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
-            <p className="text-lg font-medium text-muted-foreground">
-              No posts found
-            </p>
-            <p className="max-w-md text-sm text-muted-foreground">
-              Try adjusting your search or filter criteria to find what you're
-              looking for.
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchQuery("");
-                setCategory("");
-                setTimeRange("7");
-                setSortBy("score");
-                updateUrl({
-                  q: "",
-                  category: "",
-                  timeRange: "7",
-                  sortBy: "score",
-                });
-              }}
-            >
-              Clear filters
-            </Button>
-          </div>
-        )}
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : posts.length > 0 ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {posts.map((post) => (
+                <TrendingPostCard
+                  key={post.id}
+                  post={post}
+                  className="h-full"
+                  showStats={true}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center space-y-4 py-12 text-center">
+              <p className="text-lg font-medium text-muted-foreground">
+                No posts found
+              </p>
+              <p className="max-w-md text-sm text-muted-foreground">
+                Try adjusting your search or filter criteria to find what you're
+                looking for.
+              </p>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setSearchQuery("");
+                  setCategory("");
+                  setTimeRange("7");
+                  setSortBy("score");
+                  updateUrl({
+                    q: "",
+                    category: "",
+                    timeRange: "7",
+                    sortBy: "score",
+                  });
+                }}
+              >
+                Clear filters
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

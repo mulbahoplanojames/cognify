@@ -1,5 +1,5 @@
 import { User } from "@/lib/prisma";
-import { PostStatus } from "./prisma-types";
+import { PostStatus, ReactionType } from "@/types/prisma-types";
 
 export type PostWithAuthor = {
   id: string;
@@ -12,14 +12,16 @@ export type PostWithAuthor = {
   readingTime: number | null;
   status: PostStatus;
   views: number;
-  author: Pick<User, "id" | "name" | "username" | "image">;
+  author: Pick<User, "id" | "name" | "image"> & {
+    username: string | null;
+  };
   _count: {
     comments: number;
     reactions: number;
     bookmarks: number;
   };
   reactions: Array<{
-    type: string;
+    type: ReactionType;
     createdAt: Date;
   }>;
   category?: {
