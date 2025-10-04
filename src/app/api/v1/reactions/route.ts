@@ -1,9 +1,9 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { ReactionType } from "@/types/prisma-types";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import { z, ZodError } from "zod";
-import { ReactionType } from "../../../../../generated/prisma";
+import { z } from "zod";
 
 const toggleReactionSchema = z.object({
   type: z.enum(["LIKE", "CLAP", "INSIGHTFUL"]),
@@ -11,7 +11,12 @@ const toggleReactionSchema = z.object({
   commentId: z.string().optional(),
 });
 
-async function handleRequest(request: NextRequest) {
+const getUserReactionsSchema = z.object({
+  postId: z.string().optional(),
+  commentId: z.string().optional(),
+});
+
+export async function POST(request: NextRequest) {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -21,27 +26,24 @@ async function handleRequest(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log("Request body:", body);
-
     const data = toggleReactionSchema.parse(body);
-    console.log("Parsed data:", data);
 
     if (!data.postId && !data.commentId) {
-      console.error(
-        "Validation failed: Either postId or commentId is required",
-      );
       return NextResponse.json(
         { error: "Either postId or commentId is required" },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
+    const { type, postId, commentId } = data;
+
+    // Check if reaction already exists
     const existingReaction = await prisma.reaction.findFirst({
       where: {
         userId: session.user.id,
-        type: data.type,
-        ...(data.postId && { postId: data.postId }),
-        ...(data.commentId && { commentId: data.commentId }),
+        type,
+        ...(postId && { postId }),
+        ...(commentId && { commentId }),
       },
     });
 
@@ -52,99 +54,40 @@ async function handleRequest(request: NextRequest) {
       });
 
       const count = await getReactionCount(
-        data.type,
-        data.postId,
-        data.commentId,
+        type as ReactionType,
+        postId,
+        commentId
       );
       return NextResponse.json({ added: false, count });
     } else {
       // Add reaction
-      const result = await prisma.reaction.create({
+      await prisma.reaction.create({
         data: {
           userId: session.user.id,
-          type: data.type,
-          ...(data.postId && { postId: data.postId }),
-          ...(data.commentId && { commentId: data.commentId }),
+          type,
+          ...(postId && { postId }),
+          ...(commentId && { commentId }),
         },
       });
 
       const count = await getReactionCount(
-        data.type,
-        data.postId,
-        data.commentId,
+        type as ReactionType,
+        postId,
+        commentId
       );
       return NextResponse.json({ added: true, count });
     }
   } catch (error) {
     console.error("Error toggling reaction:", error);
-    if (error instanceof ZodError) {
+    if (error instanceof z.ZodError) {
       return NextResponse.json(
         { error: "Invalid data", details: error.issues },
-        { status: 400 },
+        { status: 400 }
       );
     }
     return NextResponse.json(
       { error: "Failed to toggle reaction" },
-      { status: 500 },
-    );
-  }
-}
-
-// Handle POST requests
-export async function POST(request: NextRequest) {
-  return handleRequest(request);
-}
-
-// Handle DELETE requests
-export async function DELETE(request: NextRequest) {
-  return handleRequest(request);
-}
-
-// Handle GET requests to fetch user reactions
-export async function GET(request: NextRequest) {
-  try {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
-
-    if (!session?.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const { searchParams } = new URL(request.url);
-    const postId = searchParams.get("postId") || undefined;
-    const commentId = searchParams.get("commentId") || undefined;
-
-    if (!postId && !commentId) {
-      return NextResponse.json(
-        { error: "Either postId or commentId is required" },
-        { status: 400 },
-      );
-    }
-
-    // Get the user's reactions for this post/comment
-    const userReactions = await prisma.reaction.findMany({
-      where: {
-        userId: session.user.id,
-        ...(postId && { postId }),
-        ...(commentId && { commentId }),
-      },
-      select: {
-        type: true,
-      },
-    });
-
-    // Extract just the reaction types
-    const reactionTypes = userReactions.map((r) => r.type);
-
-    return NextResponse.json({
-      reactions: reactionTypes,
-    });
-  } catch (error) {
-    console.error("Error fetching user reactions:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch user reactions" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
@@ -152,7 +95,7 @@ export async function GET(request: NextRequest) {
 const getReactionCount = async (
   type: ReactionType,
   postId?: string,
-  commentId?: string,
+  commentId?: string
 ) => {
   const count = await prisma.reaction.count({
     where: {
@@ -163,3 +106,54 @@ const getReactionCount = async (
   });
   return count;
 };
+
+export async function GET(request: NextRequest) {
+  try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+    if (!session?.user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const queryParams = {
+      postId: searchParams.get("postId") || undefined,
+      commentId: searchParams.get("commentId") || undefined,
+    };
+
+    // Validate query parameters
+    const data = getUserReactionsSchema.parse(queryParams);
+
+    // If both postId and commentId are provided, it's invalid
+    if (data.postId && data.commentId) {
+      return NextResponse.json(
+        { error: "Only one of postId or commentId can be provided" },
+        { status: 400 }
+      );
+    }
+
+    const reactions = await prisma.reaction.findMany({
+      where: {
+        userId: session.user.id,
+        ...(data.postId && { postId: data.postId }),
+        ...(data.commentId && { commentId: data.commentId }),
+      },
+      select: { type: true },
+    });
+
+    return NextResponse.json({ reactions });
+  } catch (error) {
+    console.error("Error fetching user reactions:", error);
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: "Invalid query parameters", details: error.issues },
+        { status: 400 }
+      );
+    }
+    return NextResponse.json(
+      { error: "Failed to fetch user reactions" },
+      { status: 500 }
+    );
+  }
+}
