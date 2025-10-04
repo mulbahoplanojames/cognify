@@ -26,8 +26,8 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { PostStatus } from "../../../../../generated/prisma";
 import { FollowButton } from "@/components/social/follow-button";
+import { PostStatus } from "@/types/prisma-types";
 
 type Skill = {
   id: string;
@@ -283,7 +283,7 @@ export default async function ProfilePage({
             <TabsTrigger value="posts">Posts</TabsTrigger>
             <TabsTrigger value="about">About</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
+            <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
           </TabsList>
 
           <TabsContent value="posts" className="space-y-4">
@@ -408,6 +408,7 @@ export default async function ProfilePage({
                         <Link
                           href={`${project.url}`}
                           className="hover:text-blue-700"
+                          target="_blank"
                         >
                           <CardTitle className="text-lg font-semibold group-hover:text-blue-700">
                             {project.name}
@@ -423,23 +424,14 @@ export default async function ProfilePage({
             </Card>
           </TabsContent>
 
-          <TabsContent value="activity" className="space-y-4">
+          <TabsContent value="bookmarks" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Recent Activity</CardTitle>
+                <CardTitle>Bookmarks</CardTitle>
               </CardHeader>
               <CardContent>
-                <h2>Recent Activity Coming Soon</h2>
+                <h2>Bookmarks Coming Soon</h2>
               </CardContent>
-              <CardFooter>
-                {session.user.id === user.id && (
-                  <Link href={`/profile/${user.name}/edit`} className="w-full">
-                    <Button variant="ghost" className="w-full">
-                      Edit Profile
-                    </Button>
-                  </Link>
-                )}
-              </CardFooter>
             </Card>
           </TabsContent>
         </Tabs>

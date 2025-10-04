@@ -3,7 +3,7 @@ import { z, ZodError } from "zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { CommentStatus } from "../../../../../../generated/prisma";
+import { CommentStatus } from "@/types/prisma-types";
 
 const updateCommentSchema = z.object({
   body: z.string().min(1).max(1000),
@@ -11,9 +11,9 @@ const updateCommentSchema = z.object({
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id: postId } = params;
+  const { id: postId } = await params;
 
   try {
     // First, get all comments for this post

@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { PostStatus } from "../../../../../generated/prisma";
+import { PostStatus } from "@/types/prisma-types";
 
 export async function getContentStats() {
   const [

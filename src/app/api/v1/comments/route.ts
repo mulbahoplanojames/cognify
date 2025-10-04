@@ -3,7 +3,7 @@ import { z, ZodError } from "zod";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { CommentStatus } from "../../../../../generated/prisma";
+import { CommentStatus } from "@/types/prisma-types";
 
 const createCommentSchema = z.object({
   body: z.string().min(1).max(1000),

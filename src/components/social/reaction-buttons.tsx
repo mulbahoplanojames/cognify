@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Heart, Zap, Lightbulb } from "lucide-react";
 import { useSession } from "@/lib/auth-client";
+import { ReactionType } from "@/types/prisma-types";
 import { toast } from "sonner";
-import { ReactionType } from "../../../generated/prisma";
 
 interface ReactionButtonsProps {
   targetId: string;
@@ -31,10 +31,8 @@ export function ReactionButtons({
   const [userReactions, setUserReactions] = useState<ReactionType[]>([]);
 
   useEffect(() => {
-    if (session.data?.session) {
-      fetchReactions();
-    }
-  }, [targetId, session]);
+    fetchReactions();
+  }, [targetId]);
 
   const fetchReactions = async () => {
     try {
@@ -43,8 +41,8 @@ export function ReactionButtons({
       });
 
       const [statsResponse, userResponse] = await Promise.all([
-        fetch(`/api/reactions/stats?${params}`),
-        fetch(`/api/reactions/user?${params}`),
+        fetch(`/api/v1/reactions/stats?${params}`),
+        fetch(`/api/v1/reactions/user?${params}`),
       ]);
 
       if (statsResponse.ok) {
@@ -54,7 +52,11 @@ export function ReactionButtons({
 
       if (userResponse.ok) {
         const userReactionData = await userResponse.json();
-        setUserReactions(userReactionData);
+        // Ensure we're setting an array of ReactionType
+        const reactions = Array.isArray(userReactionData?.reactions)
+          ? userReactionData.reactions
+          : [];
+        setUserReactions(reactions);
       }
     } catch (error) {
       console.error("Error fetching reactions:", error);
@@ -62,7 +64,7 @@ export function ReactionButtons({
   };
 
   const handleReaction = async (type: ReactionType) => {
-    if (!session.data?.session) {
+    if (!session) {
       toast.error("Sign in required", {
         description: "Please sign in to react to posts",
       });
@@ -70,7 +72,7 @@ export function ReactionButtons({
     }
 
     try {
-      const response = await fetch("/api/reactions", {
+      const response = await fetch("/api/v1/reactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -91,9 +93,7 @@ export function ReactionButtons({
         }
       }
     } catch (error) {
-      toast.error("Error", {
-        description: "Failed to update reaction",
-      });
+      toast.error("Failed to update reaction");
     }
   };
 
@@ -102,7 +102,9 @@ export function ReactionButtons({
       {Object.entries(reactionConfig).map(([type, config]) => {
         const reactionType = type as ReactionType;
         const Icon = config.icon;
-        const isActive = userReactions.includes(reactionType);
+        // Ensure we're working with an array before calling includes
+        const isActive =
+          Array.isArray(userReactions) && userReactions.includes(reactionType);
         const count = reactions[reactionType];
 
         return (

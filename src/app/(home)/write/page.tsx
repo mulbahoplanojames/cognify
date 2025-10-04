@@ -35,8 +35,8 @@ import { toast } from "sonner";
 import { Post } from "@/lib/prisma";
 import { useSession } from "@/lib/auth-client";
 import Link from "next/link";
-import { PostStatus } from "../../../../generated/prisma";
 import { useRouter } from "next/navigation";
+import { PostStatus } from "@/types/prisma-types";
 
 export default function WritePage() {
   const router = useRouter();
@@ -217,7 +217,7 @@ export default function WritePage() {
         content: "",
         coverImage: "",
         ogImage: "",
-        status: "DRAFT",
+        status: PostStatus.DRAFT,
         scheduledAt: null,
         publishedAt: null,
         readingTime: 0,
@@ -259,6 +259,7 @@ export default function WritePage() {
 
     updateFormData({
       ...postData,
+      status: postData.status as PostStatus,
       id: post.id,
       excerpt: postData.excerpt || "",
       coverImage: postData.coverImage || "",

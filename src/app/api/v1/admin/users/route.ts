@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
-import { UserRole } from "../../../../../../generated/prisma";
+import { UserRole } from "@/types/prisma-types";
 
 export async function GET(request: NextRequest) {
   try {

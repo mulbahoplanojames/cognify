@@ -1,8 +1,13 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
-export default function CTASection() {
+export default async function CTASection() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <section className="py-24 px-4">
       <div className="container mx-auto text-center">
@@ -16,21 +21,32 @@ export default function CTASection() {
             learners everywhere.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Link href="/posts">
-              <Button
-                size="lg"
-                className="premium-shadow text-lg px-12 py-4 cursor-pointer"
-              >
-                Start Learning Free
-              </Button>
-            </Link>
+            {!session?.user ? (
+              <Link href="/auth/login">
+                <Button
+                  size="lg"
+                  className="premium-shadow text-lg px-12 py-4 cursor-pointer"
+                >
+                  Join Cognify
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/write">
+                <Button
+                  size="lg"
+                  className="premium-shadow text-lg px-12 py-4 cursor-pointer"
+                >
+                  Write a Post
+                </Button>
+              </Link>
+            )}
             <Link href="/write">
               <Button
                 variant="outline"
                 size="lg"
                 className="text-lg px-12 py-4 bg-transparent cursor-pointer"
               >
-                Contribute Content
+                Request a Feature
               </Button>
             </Link>
           </div>

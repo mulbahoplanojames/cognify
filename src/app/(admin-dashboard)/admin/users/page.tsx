@@ -27,8 +27,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Search, Users, Crown, Shield, User } from "lucide-react";
-import { UserRole } from "../../../../../generated/prisma";
 import { toast } from "sonner";
+import { UserRole } from "@/types/prisma-types";
 
 interface AdminUser {
   id: string;

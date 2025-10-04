@@ -1,10 +1,12 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp, TrendingUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 const transitionVariants = {
   item: {
@@ -26,7 +28,10 @@ const transitionVariants = {
   },
 };
 
-export default function HomeHeroSection() {
+export default async function HomeHeroSection() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <>
       <section className="overflow-hidden">
@@ -146,15 +151,27 @@ export default function HomeHeroSection() {
                     key={1}
                     className="bg-foreground/10 rounded-[calc(var(--radius-xl)+0.125rem)] border p-0.5"
                   >
-                    <Button
-                      asChild
-                      size="lg"
-                      className="rounded-xl px-5 text-base"
-                    >
-                      <Link href="#link">
-                        <span className="text-nowrap">Start Learning Free</span>
-                      </Link>
-                    </Button>
+                    {!session?.user ? (
+                      <Button
+                        asChild
+                        size="lg"
+                        className="rounded-xl px-5 text-base"
+                      >
+                        <Link href="/register">
+                          <span className="text-nowrap">Register Now</span>
+                        </Link>
+                      </Button>
+                    ) : (
+                      <Button
+                        asChild
+                        size="lg"
+                        className="rounded-xl px-5 text-base"
+                      >
+                        <Link href="/write">
+                          <span className="text-nowrap">Write a Post</span>
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                   <Button
                     key={2}
@@ -164,7 +181,10 @@ export default function HomeHeroSection() {
                     className="h-10.5 rounded-xl px-5"
                   >
                     <Link href="#link">
-                      <span className="text-nowrap">Explore Open Source</span>
+                      <span className="text-nowrap flex gap-2 items-center">
+                        <span className="mr-2">Explore Trending Posts</span>
+                        <TrendingUp />
+                      </span>
                     </Link>
                   </Button>
                 </AnimatedGroup>
