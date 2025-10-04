@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
-import { TrendingPosts } from "./trending-page";
+import { TrendingPosts } from "@/components/trending/trending-page";
 
 export const metadata: Metadata = {
   title: "Trending Posts",

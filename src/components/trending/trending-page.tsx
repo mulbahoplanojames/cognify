@@ -1,8 +1,7 @@
 "use client";
 
-import { Suspense, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { PostCard } from "@/components/posts/post-card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,7 +12,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Loader2, Search } from "lucide-react";
-import { TrendingPost, SearchParams } from "@/types/post";
+import { SearchParams, TrendingPost } from "@/types/post";
+import { TrendingPostCard } from "@/components/trending/trending-post-card";
 
 type TimeRangeValue = "1" | "7" | "30" | "0";
 type SortByValue = "score" | "newest" | "reactions" | "comments" | "views";
@@ -238,7 +238,7 @@ export function TrendingPosts() {
         ) : posts.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
-              <PostCard
+              <TrendingPostCard
                 key={post.id}
                 post={post}
                 className="h-full"
