@@ -23,7 +23,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
 
   const checkBookmarkStatus = async () => {
     try {
-      const response = await fetch(`/api/bookmarks/check?postId=${postId}`);
+      const response = await fetch(`/api/v1/bookmarks/?postId=${postId}`);
       if (response.ok) {
         const { bookmarked } = await response.json();
         setIsBookmarked(bookmarked);
@@ -43,7 +43,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
 
     setIsLoading(true);
     try {
-      const response = await fetch("/api/bookmarks", {
+      const response = await fetch("/api/v1/bookmarks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ postId }),
@@ -52,7 +52,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
       if (response.ok) {
         const { bookmarked } = await response.json();
         setIsBookmarked(bookmarked);
-        toast.success(` ${bookmarked} ? "Bookmarked!" : "Bookmark removed"`, {
+        toast.success(bookmarked ? "Bookmarked!" : "Bookmark removed", {
           description: bookmarked
             ? "Post saved to your bookmarks"
             : "Post removed from bookmarks",

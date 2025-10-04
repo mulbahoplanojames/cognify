@@ -8,23 +8,6 @@ const toggleBookmarkSchema = z.object({
   postId: z.string().min(5),
 });
 
-// Tasked that is left
-// This endpoint should return an array of bookmarks
-// That includes data in this format
-// [
-//    {
-//      id: 1234,
-//      userId: 1,
-//      postId: 42,
-//      post: {
-//        title: 'Tupac Skakur rise to Popularity',
-//        slug: 'tupac-shakur-rise-to-popularity',
-//        description: 'In this post I'm going to uncover how ....'
-//     }
-// }
-// ]
-//
-
 export async function GET(request: NextRequest) {
   try {
     const session = await auth.api.getSession({
@@ -35,6 +18,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    const { searchParams } = new URL(request.url);
+    const postId = searchParams.get("postId");
+
+    if (postId) {
+      // Check if a specific post is bookmarked
+      const bookmark = await prisma.bookmark.findUnique({
+        where: {
+          userId_postId: {
+            postId,
+            userId: session.user.id,
+          },
+        },
+      });
+
+      return NextResponse.json({ bookmarked: !!bookmark });
+    }
+
+    // If no postId provided, return all bookmarks
     const bookmarks = await prisma.bookmark.findMany({
       where: {
         userId: session.user.id,
@@ -48,7 +49,11 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(bookmarks);
   } catch (error) {
-    return NextResponse.json({ message: "Hello World" });
+    console.error("Error in bookmarks GET:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
   }
 }
 
@@ -94,9 +99,6 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json({ message: "No Post Not Found" });
     }
-
-    return NextResponse.json({ message: "Hello World" }); // I think you can remove this afterwards
-    //
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "An error occurred" });
