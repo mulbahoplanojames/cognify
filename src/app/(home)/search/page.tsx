@@ -85,10 +85,35 @@ export default function SearchPage() {
   // Debounce search input
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-  // Fetch available categories and tags
+  // Fetch initial data
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchInitialData = async () => {
       try {
+        // Fetch recent published posts using the main search endpoint
+        const params = new URLSearchParams({
+          limit: "5",
+          sort: "newest",
+          status: "published", // Make sure we only get published posts
+        });
+
+        const recentPostsRes = await fetch(
+          `/api/v1/search?${params.toString()}`
+        );
+        if (recentPostsRes.ok) {
+          const responseData = await recentPostsRes.json();
+          if (responseData.results && responseData.results.length > 0) {
+            setResults(responseData.results);
+            setPagination((prev) => ({
+              ...prev,
+              totalItems:
+                responseData.meta?.total || responseData.results.length,
+              totalPages: responseData.meta?.totalPages || 1,
+              currentPage: responseData.meta?.currentPage || 1,
+              limit: responseData.meta?.limit || 10,
+            }));
+          }
+        }
+
         // Fetch categories
         const categoriesRes = await fetch("/api/v1/admin/categories");
         if (categoriesRes.ok) {
@@ -103,11 +128,11 @@ export default function SearchPage() {
           setAvailableTags(tagsData);
         }
       } catch (error) {
-        console.error("Failed to fetch data:", error);
+        console.error("Failed to fetch initial data:", error);
       }
     };
 
-    fetchData();
+    fetchInitialData();
   }, []);
 
   // Search when debounced query or filters change
@@ -120,7 +145,11 @@ export default function SearchPage() {
       setHasSearched(true);
       performSearch(debouncedSearchQuery);
     } else if (hasSearched) {
-      setResults([]);
+      // Only clear results if we've performed a search before
+      // Otherwise, we want to keep the initial posts
+      if (results.length > 0) {
+        setResults([]);
+      }
     }
   }, [debouncedSearchQuery, selectedCategories, selectedTags, sortBy]);
 
@@ -184,10 +213,41 @@ export default function SearchPage() {
     }
   };
 
-  const clearSearch = () => {
+  const clearSearch = async () => {
     setSearchQuery("");
-    setResults([]);
+    setSelectedCategories([]);
+    setSelectedTags([]);
+    setSortBy("");
     setHasSearched(false);
+
+    // Fetch recent published posts using the main search endpoint
+    try {
+      const params = new URLSearchParams({
+        limit: "5",
+        sort: "newest",
+        status: "published",
+      });
+
+      const recentPostsRes = await fetch(`/api/v1/search?${params.toString()}`);
+      if (recentPostsRes.ok) {
+        const responseData = await recentPostsRes.json();
+        if (responseData.results && responseData.results.length > 0) {
+          setResults(responseData.results);
+          setPagination({
+            totalItems: responseData.meta?.total || responseData.results.length,
+            totalPages: responseData.meta?.totalPages || 1,
+            currentPage: 1,
+            limit: responseData.meta?.limit || 10,
+          });
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch recent posts:", error);
+    }
+
+    // Fallback to empty state if fetching posts fails
+    setResults([]);
     setPagination({
       currentPage: 1,
       totalPages: 1,
@@ -442,10 +502,19 @@ export default function SearchPage() {
               <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-gray-100 mb-4">
                 <Search className="h-6 w-6 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium  mb-1">Search for content</h3>
-              <p className="text-gray-500">
-                Enter keywords to find articles, guides, and more
+              <h3 className="text-lg font-medium mb-1">No posts found</h3>
+              <p className="text-gray-500 mb-4">
+                We couldn't find any posts to display
               </p>
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  clearSearch();
+                }}
+                className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                View all posts
+              </button>
             </div>
           )}
         </div>
