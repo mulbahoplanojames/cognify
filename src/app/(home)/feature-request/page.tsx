@@ -1,7 +1,24 @@
 import { FeatureRequestForm } from "@/components/feature-request/feature-request-form";
 import HeroSection from "@/components/ui/hero-section";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
-export default function FeatureRequestPage() {
+export const metadata: Metadata = {
+  title: "Feature Request",
+  description: "Request a feature or share feedback",
+};
+
+export default async function FeatureRequestPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) {
+    redirect("/auth/login");
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <HeroSection

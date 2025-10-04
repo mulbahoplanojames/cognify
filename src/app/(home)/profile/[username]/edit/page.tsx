@@ -59,8 +59,12 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export default function EditProfilePage() {
   const session = useSession();
-
   const router = useRouter();
+
+  if (!session.data?.user) {
+    router.push("/auth/login");
+  }
+
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

@@ -28,6 +28,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { FollowButton } from "@/components/social/follow-button";
 import { PostStatus } from "@/types/prisma-types";
+import UserBookmarks from "@/components/profile/user-bookmarks";
 
 type Skill = {
   id: string;
@@ -425,14 +426,7 @@ export default async function ProfilePage({
           </TabsContent>
 
           <TabsContent value="bookmarks" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Bookmarks</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <h2>Bookmarks Coming Soon</h2>
-              </CardContent>
-            </Card>
+            <UserBookmarks />
           </TabsContent>
         </Tabs>
       </div>
