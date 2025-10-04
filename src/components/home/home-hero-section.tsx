@@ -180,7 +180,7 @@ export default async function HomeHeroSection() {
                     variant="ghost"
                     className="h-10.5 rounded-xl px-5"
                   >
-                    <Link href="#link">
+                    <Link href="/trending">
                       <span className="text-nowrap flex gap-2 items-center">
                         <span className="mr-2">Explore Trending Posts</span>
                         <TrendingUp />

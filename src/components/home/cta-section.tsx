@@ -40,7 +40,7 @@ export default async function CTASection() {
                 </Button>
               </Link>
             )}
-            <Link href="/write">
+            <Link href="/feature-request">
               <Button
                 variant="outline"
                 size="lg"
