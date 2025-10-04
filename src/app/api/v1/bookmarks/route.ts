@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ message: "Hello World" }); // I think you can remove this afterwards
+    //
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "An error occurred" });
