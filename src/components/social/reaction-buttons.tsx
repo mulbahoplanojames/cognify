@@ -86,13 +86,21 @@ export function ReactionButtons({
 
         setReactions((prev) => ({ ...prev, [type]: count }));
 
-        if (added) {
-          setUserReactions((prev) => [...prev, type]);
-        } else {
-          setUserReactions((prev) => prev.filter((r) => r !== type));
-        }
+        setUserReactions((prev) => {
+          if (added) {
+            // Add the reaction if it's not already in the array
+            return prev.includes(type) ? prev : [...prev, type];
+          } else {
+            // Remove the reaction if it exists
+            return prev.filter((r) => r !== type);
+          }
+        });
+
+        // Refresh the reactions to ensure consistency
+        fetchReactions();
       }
     } catch (error) {
+      console.error("Error updating reaction:", error);
       toast.error("Failed to update reaction");
     }
   };

@@ -231,8 +231,6 @@ model Reaction {
   post    Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   comment Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, postId, type])
-  @@unique([userId, commentId, type])
   @@map("reactions")
 }
 

@@ -33,7 +33,6 @@ export function CommentSection({ postId }: CommentSectionProps) {
       const response = await fetch(`/api/v1/comments/${postId}`);
       if (response.ok) {
         const data = await response.json();
-        console.log("Comments:", data);
         setComments(data);
       }
     } catch (error) {

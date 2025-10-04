@@ -150,9 +150,9 @@ export async function GET(request: Request) {
         // Get category
         const category = post.categoryId
           ? await prisma.category.findUnique({
-            where: { id: post.categoryId },
-            select: { id: true, name: true, slug: true },
-          })
+              where: { id: post.categoryId },
+              select: { id: true, name: true, slug: true },
+            })
           : null;
 
         //todo: Get tags
@@ -174,10 +174,10 @@ export async function GET(request: Request) {
           slug: post.slug,
           category: category
             ? {
-              id: category.id,
-              name: category.name,
-              slug: category.slug,
-            }
+                id: category.id,
+                name: category.name,
+                slug: category.slug,
+              }
             : null,
           tags: tags.map((tag) => ({
             id: tag.id,
@@ -188,10 +188,10 @@ export async function GET(request: Request) {
           readingTime: post.readingTime,
           author: author
             ? {
-              id: author.id,
-              name: author.name || "Unknown",
-              image: author.image,
-            }
+                id: author.id,
+                name: author.name || "Unknown",
+                image: author.image,
+              }
             : null,
           coverImage: post.coverImage,
         };
@@ -231,11 +231,11 @@ export async function GET(request: Request) {
         details:
           process.env.NODE_ENV === "development"
             ? {
-              stack: errorStack,
-              name: error instanceof Error ? error.name : "UnknownError",
-              code: typedError.code,
-              meta: typedError.meta,
-            }
+                stack: errorStack,
+                name: error instanceof Error ? error.name : "UnknownError",
+                code: typedError.code,
+                meta: typedError.meta,
+              }
             : undefined,
       },
       { status: 500 }

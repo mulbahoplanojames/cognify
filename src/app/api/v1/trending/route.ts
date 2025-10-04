@@ -1,5 +1,4 @@
-import { prisma, type User } from "@/lib/prisma";
-import type { Post } from "@/types/admin";
+import { prisma } from "@/lib/prisma";
 import type { PostWithAuthor } from "@/types/post";
 import { PostStatus } from "@/types/prisma-types";
 import { NextResponse } from "next/server";

@@ -36,11 +36,12 @@ export async function POST(request: NextRequest) {
     }
 
     const { type, postId, commentId } = data;
+    const userId = session.user.id;
 
-    // Check if reaction already exists
+    // First, check if the user already has this reaction
     const existingReaction = await prisma.reaction.findFirst({
       where: {
-        userId: session.user.id,
+        userId,
         type,
         ...(postId && { postId }),
         ...(commentId && { commentId }),
@@ -48,9 +49,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (existingReaction) {
-      // Remove reaction
+      // If reaction exists, delete it
       await prisma.reaction.delete({
-        where: { id: existingReaction.id },
+        where: {
+          id: existingReaction.id,
+        },
       });
 
       const count = await getReactionCount(
@@ -59,11 +62,13 @@ export async function POST(request: NextRequest) {
         commentId
       );
       return NextResponse.json({ added: false, count });
-    } else {
-      // Add reaction
+    }
+
+    // If reaction doesn't exist, create it
+    try {
       await prisma.reaction.create({
         data: {
-          userId: session.user.id,
+          userId,
           type,
           ...(postId && { postId }),
           ...(commentId && { commentId }),
@@ -76,6 +81,9 @@ export async function POST(request: NextRequest) {
         commentId
       );
       return NextResponse.json({ added: true, count });
+    } catch (error) {
+      console.error("Error creating reaction:", error);
+      throw error;
     }
   } catch (error) {
     console.error("Error toggling reaction:", error);

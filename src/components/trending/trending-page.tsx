@@ -138,7 +138,7 @@ export function TrendingPosts() {
         tab="Trending"
         postSearch={false}
       />
-      <div className="container max-w-7xl py-6 mx-auto md:px-6 px-2 lg:py-10">
+      <div className="container max-w-7xl py-10 mx-auto md:px-6 px-2 lg:py-16">
         <div className="mt-8 flex flex-col space-y-6">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div className="flex-1 max-w-md">
