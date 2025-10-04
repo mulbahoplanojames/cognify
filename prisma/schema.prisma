@@ -81,6 +81,7 @@ model User {
   notifications Notification[]
   auditLogs     AuditLog[]
   postVersions  PostVersion[]
+  featureRequests FeatureRequest[]
 
   @@map("user")
 }
@@ -313,11 +314,12 @@ model AuditLog {
 
 
 model FeatureRequest {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(cuid()) @map("_id")
   title       String
   description String
   type        String  
-  email       String?
+  userId      String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

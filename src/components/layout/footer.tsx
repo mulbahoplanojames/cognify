@@ -25,25 +25,19 @@ export default function Footer() {
             <ul className="space-y-2 text-muted-foreground">
               <li>
                 <Link
-                  href="/features"
+                  href="/feature-request"
                   className="hover:text-primary transition-colors"
                 >
-                  Features
+                  Feature Requests
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/pricing"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/enterprise"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Enterprise
                 </Link>
               </li>
@@ -53,26 +47,17 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Resources</h4>
             <ul className="space-y-2 text-muted-foreground">
               <li>
-                <Link
-                  href="/docs"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Documentation
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/support"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Support
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/community"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Community
                 </Link>
               </li>
@@ -90,18 +75,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/careers"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Careers
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/contact"
-                  className="hover:text-primary transition-colors"
-                >
+                <Link href="#" className="hover:text-primary transition-colors">
                   Contact
                 </Link>
               </li>

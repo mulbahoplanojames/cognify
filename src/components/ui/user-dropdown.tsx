@@ -90,6 +90,12 @@ export default function UserDropDown() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href="/feature-request">
+              Feature Requests
+              <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
+            </Link>
+          </DropdownMenuItem>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>

@@ -4,11 +4,20 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+enum FeatureRequestType {
+  FEATURE = "feature",
+  FEEDBACK = "feedback",
+  BUG = "bug",
+}
+
 const featureRequestSchema = z.object({
   title: z.string().min(5).max(100),
   description: z.string().min(10).max(2000),
-  type: z.enum(["feature", "feedback", "bug"]),
-  email: z.string().email().optional().or(z.literal("")),
+  type: z.enum([
+    FeatureRequestType.FEATURE,
+    FeatureRequestType.FEEDBACK,
+    FeatureRequestType.BUG,
+  ]),
 });
 
 export async function POST(request: Request) {
@@ -34,7 +43,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { title, description, type, email } = body.data;
+    const { title, description, type } = body.data;
 
     // Get the user ID if the user is logged in
     const user = await prisma.user.findUnique({
@@ -42,12 +51,16 @@ export async function POST(request: Request) {
       select: { id: true },
     });
 
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
     const featureRequest = await prisma.featureRequest.create({
       data: {
         title,
         description,
-        type,
-        email: email || session.user.email || undefined,
+        type: type as FeatureRequestType,
+        userId: user.id,
       },
     });
 

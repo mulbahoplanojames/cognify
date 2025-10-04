@@ -13,16 +13,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import axios from "axios";
+import { useSession } from "@/lib/auth-client";
 
 type RequestType = "feature" | "feedback" | "bug";
 
 export function FeatureRequestForm() {
+  const session = useSession();
+  const user = session?.data?.user;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     type: "feature" as RequestType,
-    email: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,17 +33,15 @@ export function FeatureRequestForm() {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("/api/v1/feature-requests", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await axios.post("/api/v1/feature-requests", {
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        // userId: user?.id,
       });
 
-      if (!response.ok) {
-        const error = await response.json().catch(() => ({}));
-        throw new Error(error.error || "Failed to submit request");
+      if (response.status !== 201) {
+        throw new Error("Failed to submit request");
       }
 
       toast.success(
@@ -52,7 +53,6 @@ export function FeatureRequestForm() {
         title: "",
         description: "",
         type: "feature",
-        email: "",
       });
     } catch (error) {
       console.error("Error submitting feature request:", error);
@@ -130,23 +130,6 @@ export function FeatureRequestForm() {
           <p className="mt-2 text-sm text-muted-foreground">
             Include any relevant information that would help us understand your
             request better.
-          </p>
-        </div>
-
-        <div>
-          <Label htmlFor="email" className="block mb-2">
-            Email (optional)
-          </Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="your.email@example.com"
-          />
-          <p className="mt-2 text-sm text-muted-foreground">
-            If you'd like us to follow up with you about this request.
           </p>
         </div>
       </div>
