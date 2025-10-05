@@ -8,6 +8,7 @@ import Heading from "@tiptap/extension-heading";
 import Code from "@tiptap/extension-code";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
+import { TableKit } from "@tiptap/extension-table";
 import {
   Details,
   DetailsSummary,
@@ -33,6 +34,14 @@ import {
 import { useState, useEffect } from "react";
 
 import { lowlight } from "lowlight";
+import { CodeBlockButton } from "../tiptap-ui/code-block-button";
+import { BlockquoteButton } from "../tiptap-ui/blockquote-button";
+import {
+  ColorHighlightPopover,
+  ColorHighlightPopoverButton,
+} from "../tiptap-ui/color-highlight-popover";
+import { HeadingDropdownMenu } from "../tiptap-ui/heading-dropdown-menu";
+import { ListDropdownMenu } from "../tiptap-ui/list-dropdown-menu";
 
 interface RichTextEditorProps {
   content: string;
@@ -67,14 +76,10 @@ export function RichTextEditor({
           class: "my-custom-class",
         },
       }),
-      CodeBlockLowlight.configure({
-        lowlight,
-        enableTabIndentation: true,
-        tabSize: 2,
-      }),
       Placeholder.configure({
         placeholder,
       }),
+      TableKit,
       Details.configure({
         persist: true,
         HTMLAttributes: {
@@ -246,16 +251,6 @@ export function RichTextEditor({
         >
           <CodeIcon className="h-4 w-4" />
         </Button>
-        {/* code block */}
-        <Button
-          type="button"
-          variant={editor.isActive("codeBlock") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className="h-8 w-8 p-0"
-        >
-          <SquareDashedBottomCode className="h-4 w-4" />
-        </Button>
 
         <Button
           type="button"
@@ -288,6 +283,43 @@ export function RichTextEditor({
         >
           <ReceiptText className="h-4 w-4" />
         </Button>
+        <CodeBlockButton
+          editor={editor}
+          text="Code"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Code block toggled!")}
+        />
+        <BlockquoteButton
+          editor={editor}
+          text="Quote"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Blockquote toggled!")}
+        />
+        <ColorHighlightPopover
+          editor={editor}
+          hideWhenUnavailable={true}
+          onApplied={({ color, label }) =>
+            console.log(`Applied highlight: ${label} (${color})`)
+          }
+        />
+        <HeadingDropdownMenu
+          editor={editor}
+          levels={[1, 2, 3, 4, 5, 6]}
+          hideWhenUnavailable={true}
+          portal={false}
+          onOpenChange={(isOpen) =>
+            console.log("Dropdown", isOpen ? "opened" : "closed")
+          }
+        />
+        <ListDropdownMenu
+          editor={editor}
+          types={["bulletList", "orderedList", "taskList"]}
+          hideWhenUnavailable={true}
+          portal={false}
+          onOpenChange={(isOpen) => console.log("Dropdown opened:", isOpen)}
+        />
       </div>
 
       {showImageInput && (
