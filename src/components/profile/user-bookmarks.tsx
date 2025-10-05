@@ -38,7 +38,7 @@ export default async function UserBookmarks() {
                 <Card key={bookmark.id} className="bg-card/50 shadow-md group">
                   <CardHeader className="pb-0">
                     <Link
-                      href={`/post/${bookmark.post.slug}`}
+                      href={`/posts/${bookmark.post.slug}`}
                       className="group-hover:text-blue-500"
                     >
                       <h3 className="text-xl font-bold">

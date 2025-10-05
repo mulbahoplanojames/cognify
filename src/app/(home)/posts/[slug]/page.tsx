@@ -191,7 +191,7 @@ export default async function PostPage({
         <div className=" gap-8 mb-12">
           <div>
             {/* Post Content */}
-            <div className="prose prose-lg max-w-none">
+            <div className="prose prose-lg max-w-none dark:prose-invert">
               <div dangerouslySetInnerHTML={{ __html: post.content }} />
             </div>
           </div>
