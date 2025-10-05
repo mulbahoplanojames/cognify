@@ -1,8 +1,4 @@
-import {
-  CommentStatus,
-  type User,
-  type Comment,
-} from "../../../generated/prisma";
+import { CommentStatus, type User, type Comment } from "@prisma/client";
 import { prisma } from "../prisma";
 
 export type CommentWithAuthor = Comment & {

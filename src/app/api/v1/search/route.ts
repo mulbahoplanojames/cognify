@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { Prisma } from "../../../../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 type ErrorWithInfo = Error & {
   code?: string | number;

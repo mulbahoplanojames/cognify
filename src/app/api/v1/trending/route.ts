@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import type { PostWithAuthor } from "@/types/post";
 import { PostStatus } from "@/types/prisma-types";
 import { NextResponse } from "next/server";
-import { Prisma } from "../../../../../generated/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function GET(request: Request) {
   try {
