@@ -9,7 +9,7 @@ export default function AdminDashboardPage() {
         <div>
           <h1 className="text-3xl font-bold">Admin Overview</h1>
           <p className="text-muted-foreground">
-            Monitor your platform's performance and manage operations
+            Monitor your platform&apos;s performance and manage operations
           </p>
         </div>
         {/* KPI Cards */}

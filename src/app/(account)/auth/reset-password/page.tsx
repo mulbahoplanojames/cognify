@@ -1,5 +1,4 @@
 import { ResetPasswordForm } from "@/components/auth/reset-password-form";
-import Link from "next/link";
 import React from "react";
 
 interface ResetPasswordPageProps {

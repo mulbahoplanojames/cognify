@@ -8,6 +8,7 @@ import { Post } from "@/lib/prisma";
 import ContentPostCard from "@/components/admin/content/content-post-card";
 import { toast } from "sonner";
 import ContentStatsCards from "@/components/admin/content/content-stats-cards";
+import { PostStatus } from "@/types/prisma-types";
 
 const mapApiPostToUiPost = (post: Post): Post => ({
   ...post,
@@ -25,13 +26,11 @@ export default function ContentModerationPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState("all");
   const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        setIsLoading(true);
         setError(null);
 
         // Fetch all posts with their authors
@@ -49,8 +48,6 @@ export default function ContentModerationPage() {
         toast.error("Error", {
           description: "Failed to load posts",
         });
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -81,7 +78,7 @@ export default function ContentModerationPage() {
       // Update local state
       setPosts(
         posts.map((p) =>
-          p.id === postId ? { ...p, status: newStatus as any } : p
+          p.id === postId ? { ...p, status: newStatus as PostStatus } : p
         )
       );
 

@@ -36,8 +36,8 @@ export default async function FeatureRequestPage() {
           </h2>
           <p className="text-muted-foreground mb-8">
             Your feedback helps us improve Cognify. Please provide as much
-            detail as possible about the feature you're requesting or the
-            feedback you'd like to share.
+            detail as possible about the feature you&apos;re requesting or the
+            feedback you&apos;d like to share.
           </p>
 
           <FeatureRequestForm />

@@ -89,6 +89,7 @@ export default function AdminUsersPage() {
       toast.error("Error", {
         description: "Failed to fetch users",
       });
+      console.log("Error fetching users:", error);
     } finally {
       setLoading(false);
     }
@@ -119,6 +120,7 @@ export default function AdminUsersPage() {
       toast.error("Error", {
         description: "Failed to update user role",
       });
+      console.log("Error updating user role:", error);
     }
   };
 

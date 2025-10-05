@@ -56,6 +56,7 @@ const profileFormSchema = z.object({
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
+type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
 export default function EditProfilePage() {
   const session = useSession();
@@ -153,7 +154,7 @@ export default function EditProfilePage() {
       appendSkill({
         id: Date.now().toString(),
         name: newSkill.name.trim(),
-        level: newSkill.level as any,
+        level: newSkill.level as SkillLevel,
       });
       setNewSkill({ name: "", level: "Intermediate" });
     }
