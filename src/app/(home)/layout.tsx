@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Cognify Blog",
   description:
     "The premium platform for professionals who demand excellence in content and community.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

@@ -4,6 +4,9 @@ import "../globals.css";
 export const metadata: Metadata = {
   title: "Authentication with Better Auth",
   description: "Authentication with Next.js, Prisma, MongoDB and Tailwind CSS",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 import { AppSidebar } from "@/components/app-sidebar";

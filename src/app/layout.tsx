@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description:
     "The premium platform for professionals who demand excellence in content and community.",
   icons: {
-    icon: "/logo-01.png",
+    icon: "/logo.png",
   },
 };
 
