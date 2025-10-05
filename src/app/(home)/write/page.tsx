@@ -47,7 +47,7 @@ export default function WritePage() {
   const [userPosts, setUserPosts] = useState<Post[]>([]);
 
   if (!session.data?.session) {
-    router.push("/profile");
+    router.push("/");
   }
 
   // Define the form state type

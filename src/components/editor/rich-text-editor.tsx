@@ -4,7 +4,16 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
+import Heading from "@tiptap/extension-heading";
+import Code from "@tiptap/extension-code";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
+import {
+  Details,
+  DetailsSummary,
+  DetailsContent,
+} from "@tiptap/extension-details";
+
 import { Button } from "@/components/ui/button";
 import {
   Bold,
@@ -14,9 +23,16 @@ import {
   Image as ImageIcon,
   Link2,
   Quote,
+  Heading1,
+  Heading2,
+  Heading3,
+  CodeIcon,
+  SquareDashedBottomCode,
+  ReceiptText,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import React from "react";
+
+import { lowlight } from "lowlight";
 
 interface RichTextEditorProps {
   content: string;
@@ -43,8 +59,38 @@ export function RichTextEditor({
         openOnClick: false,
       }),
       Image,
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
+      Code.configure({
+        HTMLAttributes: {
+          class: "my-custom-class",
+        },
+      }),
+      CodeBlockLowlight.configure({
+        lowlight,
+        enableTabIndentation: true,
+        tabSize: 2,
+      }),
       Placeholder.configure({
         placeholder,
+      }),
+      Details.configure({
+        persist: true,
+        HTMLAttributes: {
+          class: "details",
+        },
+      }),
+      DetailsSummary,
+      DetailsContent,
+      Placeholder.configure({
+        includeChildren: true,
+        placeholder: ({ node }) => {
+          if (node.type.name === "detailsSummary") {
+            return "Summary";
+          }
+          return "";
+        },
       }),
     ],
     editorProps: {
@@ -99,7 +145,7 @@ export function RichTextEditor({
 
   return (
     <div className="border rounded-lg overflow-hidden">
-      <div className="border-b p-2 flex flex-wrap gap-1">
+      <div className="border-b p-2 flex flex-wrap gap-1 items-center">
         <Button
           type="button"
           variant={editor.isActive("bold") ? "default" : "ghost"}
@@ -145,6 +191,72 @@ export function RichTextEditor({
         >
           <Quote className="h-4 w-4" />
         </Button>
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
+        {/* headings  */}
+        <Button
+          type="button"
+          variant={
+            editor.isActive("heading", { level: 1 }) ? "default" : "ghost"
+          }
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className="h-8 w-8 p-0"
+        >
+          <Heading1 className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant={
+            editor.isActive("heading", { level: 2 }) ? "default" : "ghost"
+          }
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className="h-8 w-8 p-0"
+        >
+          <Heading2 className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant={
+            editor.isActive("heading", { level: 3 }) ? "default" : "ghost"
+          }
+          size="icon"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+        >
+          <Heading3 className="h-4 w-4" />
+        </Button>
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
+        {/* code  */}
+        <Button
+          type="button"
+          variant={editor.isActive("code") ? "default" : "ghost"}
+          size="icon"
+          onClick={() =>
+            editor.isActive("code")
+              ? editor.chain().focus().unsetCode().run()
+              : editor.chain().focus().setCode().run()
+          }
+          className="h-8 w-8 p-0"
+        >
+          <CodeIcon className="h-4 w-4" />
+        </Button>
+        {/* code block */}
+        <Button
+          type="button"
+          variant={editor.isActive("codeBlock") ? "default" : "ghost"}
+          size="icon"
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className="h-8 w-8 p-0"
+        >
+          <SquareDashedBottomCode className="h-4 w-4" />
+        </Button>
+
         <Button
           type="button"
           variant="ghost"
@@ -162,6 +274,19 @@ export function RichTextEditor({
           className="h-8 w-8 p-0"
         >
           <Link2 className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant={editor.isActive("details") ? "default" : "ghost"}
+          size="icon"
+          onClick={() =>
+            editor.isActive("details")
+              ? editor.chain().focus().unsetDetails().run()
+              : editor.chain().focus().setDetails().run()
+          }
+          className="h-8 w-8 p-0"
+        >
+          <ReceiptText className="h-4 w-4" />
         </Button>
       </div>
 
