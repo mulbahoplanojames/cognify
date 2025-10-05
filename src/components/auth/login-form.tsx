@@ -59,7 +59,7 @@ export function LoginForm() {
           setIsPending(false);
           router.push("/");
         },
-        onError: (context: any) => {
+        onError: (context) => {
           toast.error(context.error?.message ?? "Something went wrong");
           setIsPending(false);
         },

@@ -38,21 +38,21 @@ export async function GET(request: Request) {
       orderBy: { name: "asc" },
     });
 
-    // Get trending posts with filters and sorting
-    let posts = await getTrendingPost(limit, days, searchQuery, category);
+    const posts = await getTrendingPost(limit, days, searchQuery, category);
 
     // Apply sorting
     if (sortBy === "newest") {
       posts.sort(
-        (a: any, b: any) =>
-          new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        (a, b) =>
+          (b.publishedAt ? new Date(b.publishedAt).getTime() : 0) -
+          (a.publishedAt ? new Date(a.publishedAt).getTime() : 0)
       );
     } else if (sortBy === "reactions") {
-      posts.sort((a: any, b: any) => b.reactionCount - a.reactionCount);
+      posts.sort((a, b) => (b?.reactionCount || 0) - (a?.reactionCount || 0));
     } else if (sortBy === "comments") {
-      posts.sort((a: any, b: any) => b.commentCount - a.commentCount);
+      posts.sort((a, b) => (b?.commentCount || 0) - (a?.commentCount || 0));
     } else if (sortBy === "views") {
-      posts.sort((a: any, b: any) => b.viewCount - a.viewCount);
+      posts.sort((a, b) => (b?.viewCount || 0) - (a?.viewCount || 0));
     } // 'score' is the default sorting in getTrendingPosts
 
     return NextResponse.json({

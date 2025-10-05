@@ -15,7 +15,10 @@ export default function ContentOverview() {
         <CardContent>
           {contentPerformance.map((contentPerformance) => {
             return (
-              <div className="flex justify-between items-center space-y-4">
+              <div
+                className="flex justify-between items-center space-y-4"
+                key={contentPerformance.title}
+              >
                 <span className="text-sm">{contentPerformance.title}</span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm flex items-center gap-2">
@@ -45,7 +48,10 @@ export default function ContentOverview() {
           <div className="space-y-4">
             {moderationQueue.map((moderationQueue) => {
               return (
-                <div className="flex justify-between items-center">
+                <div
+                  className="flex justify-between items-center"
+                  key={moderationQueue.title}
+                >
                   <span className="text-sm flex items-center gap-2">
                     <moderationQueue.icon
                       className={`h-4 w-4 text-${moderationQueue.color}`}

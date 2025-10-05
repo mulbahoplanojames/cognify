@@ -5,9 +5,7 @@ import {
   Clock,
   FileText,
   UserPlus,
-  Settings,
   Users,
-  MessageCircle,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";

@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { Prisma } from "../../../../../generated/prisma";
 
 type ErrorWithInfo = Error & {
   code?: string | number;
-  meta?: any;
+  meta?: unknown;
 };
 
 // Define types for the response
@@ -63,7 +64,7 @@ export async function GET(request: Request) {
     const tagIds = params.tags?.split(",").filter(Boolean) || [];
 
     // Build the base where clause
-    const where: any = {
+    const where: Prisma.PostWhereInput = {
       status: "PUBLISHED",
       publishedAt: { lte: new Date() },
     };
@@ -77,26 +78,31 @@ export async function GET(request: Request) {
       ];
     }
 
-    //todo: Add category filter if categories are provided
+    // Add category filter if categories are provided
     if (categoryIds.length > 0) {
       where.category = {
         id: { in: categoryIds },
       };
     }
 
-    //todo: Add tag filter if tags are provided
+    // Add tag filter if tags are provided
     if (tagIds.length > 0) {
       try {
         console.log("Filtering by tag IDs:", tagIds);
-        where.AND = where.AND || [];
-        where.AND.push({
-          // This ensures all specified tags must be present in the post's tagIds array
+        // Create a single condition that requires all tags to be present
+        const tagConditions = {
           AND: tagIds.map((tagId) => ({
             tagIds: {
               has: tagId,
             },
           })),
-        });
+        };
+
+        where.AND = where.AND
+          ? Array.isArray(where.AND)
+            ? [...where.AND, tagConditions]
+            : [where.AND, tagConditions]
+          : [tagConditions];
       } catch (error) {
         console.error("Error setting up tag filters:", error);
         throw error;

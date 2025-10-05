@@ -62,7 +62,6 @@ export function RichTextEditor({
     autofocus: false,
     editable: true,
     injectCSS: true,
-    // @ts-ignore - The type definition might not include this option yet
     immediatelyRender: false,
   });
 

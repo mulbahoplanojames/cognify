@@ -64,7 +64,7 @@ export function RegisterForm() {
           toast.success("You have been registered");
           router.push("/auth/register/success");
         },
-        onError: (context: any) => {
+        onError: (context) => {
           setIsPending(false);
           toast.error(context.error?.message ?? "Something went wrong");
         },

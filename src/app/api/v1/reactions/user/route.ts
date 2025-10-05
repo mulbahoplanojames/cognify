@@ -24,7 +24,8 @@ export async function GET(request: Request) {
       );
     }
 
-    const whereClause: any = { userId };
+    const whereClause: { userId: string; postId?: string; commentId?: string } =
+      { userId };
 
     if (postId) {
       whereClause.postId = postId;

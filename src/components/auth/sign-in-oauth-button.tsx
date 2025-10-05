@@ -30,7 +30,7 @@ export const SignInOauthButton = ({
         onSuccess: () => {
           setIsPending(false);
         },
-        onError: (context: any) => {
+        onError: (context) => {
           setIsPending(false);
           toast.error(context.error?.message ?? "Something went wrong");
         },
