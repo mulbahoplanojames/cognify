@@ -426,7 +426,13 @@ export default async function ProfilePage({
           </TabsContent>
 
           <TabsContent value="bookmarks" className="space-y-4">
-            <UserBookmarks />
+            {session?.user?.name === user.name ? (
+              <UserBookmarks />
+            ) : (
+              <p className="text-center text-muted-foreground">
+                Bookmarks are only visible to the user {user.name}.
+              </p>
+            )}
           </TabsContent>
         </Tabs>
       </div>

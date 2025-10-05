@@ -70,10 +70,10 @@ export function TrendingPostCard({
               </div>
             )}
             <Link
-              href={`/users/${post.author.username}`}
+              href={`/profile/${post.author.name}`}
               className="hover:underline"
             >
-              {post.author.name || post.author.username}
+              {post.author.name}
             </Link>
           </div>
 
