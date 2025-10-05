@@ -1,4 +1,4 @@
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -20,4 +20,4 @@ export type {
   Bookmark,
   Account,
   Session,
-} from "../../generated/prisma";
+} from "@prisma/client";
