@@ -48,7 +48,7 @@ export default async function UserBookmarks() {
                   </CardHeader>
                   <CardContent className="pt-0">
                     <div
-                      className="prose prose-sm max-w-none"
+                      className="prose prose-sm max-w-none dark:prose-invert"
                       dangerouslySetInnerHTML={{
                         __html: bookmark.post.content.slice(0, 200) + " ...",
                       }}
