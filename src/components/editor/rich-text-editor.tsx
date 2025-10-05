@@ -4,45 +4,20 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import Heading from "@tiptap/extension-heading";
-import Code from "@tiptap/extension-code";
-import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import Placeholder from "@tiptap/extension-placeholder";
-import { TableKit } from "@tiptap/extension-table";
-import {
-  Details,
-  DetailsSummary,
-  DetailsContent,
-} from "@tiptap/extension-details";
 
 import { Button } from "@/components/ui/button";
-import {
-  Bold,
-  Italic,
-  List,
-  ListOrdered,
-  Image as ImageIcon,
-  Link2,
-  Quote,
-  Heading1,
-  Heading2,
-  Heading3,
-  CodeIcon,
-  SquareDashedBottomCode,
-  ReceiptText,
-} from "lucide-react";
-import { useState, useEffect } from "react";
 
-import { lowlight } from "lowlight";
+import { useState, useEffect } from "react";
+import { Highlight } from "@tiptap/extension-highlight";
 import { CodeBlockButton } from "../tiptap-ui/code-block-button";
 import { BlockquoteButton } from "../tiptap-ui/blockquote-button";
-import {
-  ColorHighlightPopover,
-  ColorHighlightPopoverButton,
-} from "../tiptap-ui/color-highlight-popover";
+import { ColorHighlightPopover } from "../tiptap-ui/color-highlight-popover";
 import { HeadingDropdownMenu } from "../tiptap-ui/heading-dropdown-menu";
 import { ListDropdownMenu } from "../tiptap-ui/list-dropdown-menu";
 import { MarkButton } from "../tiptap-ui/mark-button";
+import { TextAlignButton } from "../tiptap-ui/text-align-button";
+import { UndoRedoButton } from "../tiptap-ui/undo-redo-button";
 
 interface RichTextEditorProps {
   content: string;
@@ -65,43 +40,18 @@ export function RichTextEditor({
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Highlight.configure({ multicolor: true }),
       Link.configure({
         openOnClick: false,
       }),
       Image,
-      Heading.configure({
-        levels: [1, 2, 3],
-      }),
-      Code.configure({
-        HTMLAttributes: {
-          class: "my-custom-class",
-        },
-      }),
       Placeholder.configure({
         placeholder,
-      }),
-      TableKit,
-      Details.configure({
-        persist: true,
-        HTMLAttributes: {
-          class: "details",
-        },
-      }),
-      DetailsSummary,
-      DetailsContent,
-      Placeholder.configure({
-        includeChildren: true,
-        placeholder: ({ node }) => {
-          if (node.type.name === "detailsSummary") {
-            return "Summary";
-          }
-          return "";
-        },
       }),
     ],
     editorProps: {
       attributes: {
-        class: "prose max-w-none focus:outline-none p-4",
+        class: "prose max-w-none focus:outline-none px-4 py-1",
       },
     },
     onUpdate: ({ editor }) => {
@@ -152,41 +102,22 @@ export function RichTextEditor({
   return (
     <div className="border rounded-lg overflow-hidden">
       <div className="border-b p-2 flex flex-wrap gap-1 items-center">
+        <UndoRedoButton
+          editor={editor}
+          action="undo"
+          hideWhenUnavailable={true}
+          showShortcut={false}
+          onExecuted={() => console.log("Action executed!")}
+        />
+        <UndoRedoButton
+          editor={editor}
+          action="redo"
+          hideWhenUnavailable={true}
+          showShortcut={false}
+          onExecuted={() => console.log("Action executed!")}
+        />
         <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
 
-        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
-        <TextAlignButton
-          editor={editor}
-          align="left"
-          text="Left"
-          hideWhenUnavailable={true}
-          showShortcut={true}
-          onAligned={() => console.log("Text aligned!")}
-        />
-        <TextAlignButton align="center" />
-        <TextAlignButton align="right" />
-        <TextAlignButton align="justify" />
-        <CodeBlockButton
-          editor={editor}
-          text="Code"
-          hideWhenUnavailable={true}
-          showShortcut={true}
-          onToggled={() => console.log("Code block toggled!")}
-        />
-        <BlockquoteButton
-          editor={editor}
-          text="Quote"
-          hideWhenUnavailable={true}
-          showShortcut={true}
-          onToggled={() => console.log("Blockquote toggled!")}
-        />
-        <ColorHighlightPopover
-          editor={editor}
-          hideWhenUnavailable={true}
-          onApplied={({ color, label }) =>
-            console.log(`Applied highlight: ${label} (${color})`)
-          }
-        />
         <HeadingDropdownMenu
           editor={editor}
           levels={[1, 2, 3, 4, 5, 6]}
@@ -203,28 +134,47 @@ export function RichTextEditor({
           portal={false}
           onOpenChange={(isOpen) => console.log("Dropdown opened:", isOpen)}
         />
+        <BlockquoteButton
+          editor={editor}
+          text="Quote"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Blockquote toggled!")}
+        />
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
         <MarkButton
           editor={editor}
           type="bold"
-          text="Bold"
+          hideWhenUnavailable={true}
+          showShortcut={false}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="italic"
           hideWhenUnavailable={true}
           showShortcut={true}
           onToggled={() => console.log("Mark toggled!")}
         />
         <MarkButton
-          type="italic"
-          text="Italic"
+          type="underline"
           hideWhenUnavailable={true}
           showShortcut={true}
           onToggled={() => console.log("Mark toggled!")}
         />
         <MarkButton
           type="strike"
-          text="Strike"
           hideWhenUnavailable={true}
           showShortcut={true}
           onToggled={() => console.log("Mark toggled!")}
         />
+        <ColorHighlightPopover
+          editor={editor}
+          hideWhenUnavailable={true}
+          onApplied={({ color, label }) =>
+            console.log(`Applied highlight: ${label} (${color})`)
+          }
+        />
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
         <MarkButton
           type="code"
           text="Code"
@@ -232,27 +182,25 @@ export function RichTextEditor({
           showShortcut={true}
           onToggled={() => console.log("Mark toggled!")}
         />
-        <MarkButton
-          type="underline"
-          text="Underline"
+        <CodeBlockButton
+          editor={editor}
           hideWhenUnavailable={true}
           showShortcut={true}
-          onToggled={() => console.log("Mark toggled!")}
+          onToggled={() => console.log("Code block toggled!")}
         />
-        <MarkButton
-          type="superscript"
-          text="Superscript"
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
+
+        <TextAlignButton
+          editor={editor}
+          align="left"
           hideWhenUnavailable={true}
           showShortcut={true}
-          onToggled={() => console.log("Mark toggled!")}
+          onAligned={() => console.log("Text aligned!")}
         />
-        <MarkButton
-          type="subscript"
-          text="Subscript"
-          hideWhenUnavailable={true}
-          showShortcut={true}
-          onToggled={() => console.log("Mark toggled!")}
-        />
+        <TextAlignButton align="center" />
+        <TextAlignButton align="right" />
+        <TextAlignButton align="justify" />
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
       </div>
 
       {showImageInput && (
