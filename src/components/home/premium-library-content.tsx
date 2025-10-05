@@ -12,7 +12,7 @@ import Link from "next/link";
 // import { premiumLibrary } from "@/data/home-page";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
-import { PostStatus } from "../../../generated/prisma";
+import { PostStatus } from "@/types/prisma-types";
 
 export default async function PremiumLibraryContentSection() {
   const premiumLibrary = await prisma.post.findMany({

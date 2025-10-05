@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { z } from "zod";
-import { ReactionType } from "../../../../../../../generated/prisma";
+import { ReactionType } from "@/types/prisma-types";
 
 const createReactionSchema = z.object({
   type: z.nativeEnum(ReactionType),
