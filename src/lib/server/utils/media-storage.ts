@@ -1,6 +1,11 @@
-import { cloudinary } from "@/lib/server/utils/cloudinary-config";
+import {
+  v2 as cloudinary,
+  UploadApiErrorResponse,
+  UploadApiResponse,
+} from "cloudinary";
 import { promises as fs } from "fs";
 import path from "path";
+// import { cloudinary as cloudinaryConfig } from "@/lib/server/utils/cloudinary-config";
 
 interface UploadResponse {
   success: boolean;
@@ -11,7 +16,7 @@ interface UploadResponse {
 // Writes media file to public/media directory
 export async function writeToLocalDisk(
   file: File,
-  fileName: string,
+  fileName: string
 ): Promise<UploadResponse> {
   let fileHandle;
   const mediaDir = path.resolve("./public/media");
@@ -19,7 +24,9 @@ export async function writeToLocalDisk(
   try {
     await fs.access(mediaDir);
   } catch (error) {
-    console.log("Media DIR doesn't exist");
+    const errorMessage =
+      error instanceof Error ? error.message : "An unknown error occurred";
+    console.log("Media DIR doesn't exist", errorMessage);
     await fs.mkdir(mediaDir);
     console.log("Created a media DIR");
   }
@@ -39,7 +46,9 @@ export async function writeToLocalDisk(
       url: `/media/${fileName}`,
     };
   } catch (err) {
-    console.error("Error writing to file:", err);
+    const errorMessage =
+      err instanceof Error ? err.message : "An unknown error occurred";
+    console.error("Error writing to file:", errorMessage);
     return {
       success: false,
     };
@@ -52,10 +61,10 @@ export async function writeToLocalDisk(
 }
 
 // Handle media file upload to cloudinary
-interface CloudinaryUploadResult {
-  created_at: string;
-  secure_url: string;
-}
+// interface CloudinaryUploadResult {
+//   created_at: string;
+//   secure_url: string;
+// }
 
 export async function uploadToCloudinary(file: File): Promise<UploadResponse> {
   const arrayBuffer = await file.arrayBuffer();
@@ -66,9 +75,14 @@ export async function uploadToCloudinary(file: File): Promise<UploadResponse> {
       .upload_stream({ resource_type: "image" }, onDone)
       .end(buffer);
 
-    function onDone(error: any, result: CloudinaryUploadResult) {
+    function onDone(
+      error?: UploadApiErrorResponse,
+      result?: UploadApiResponse
+    ) {
       if (error) {
-        return reject({ success: false, error });
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        return reject({ success: false, error: new Error(errorMessage) });
       }
       if (!result || !result.secure_url) {
         return resolve({

@@ -30,7 +30,11 @@ export function FollowButton({ userId, username }: FollowButtonProps) {
         setIsFollowing(following);
       }
     } catch (error) {
-      console.error("Error checking follow status:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      toast.error("Failed to check follow status", {
+        description: errorMessage || "Failed to check follow status",
+      });
     }
   };
 
@@ -58,7 +62,11 @@ export function FollowButton({ userId, username }: FollowButtonProps) {
         );
       }
     } catch (error) {
-      toast.error("Failed to update follow status");
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      toast.error("Failed to update follow status", {
+        description: errorMessage || "Failed to update follow status",
+      });
     } finally {
       setIsLoading(false);
     }

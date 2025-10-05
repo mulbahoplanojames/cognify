@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, X, Filter, ChevronDown, ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import Image from "next/image";
 import Link from "next/link";

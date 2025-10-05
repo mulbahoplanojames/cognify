@@ -11,8 +11,9 @@ const updateRoleSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -25,7 +26,7 @@ export async function PATCH(
     const { role } = updateRoleSchema.parse(body);
 
     const user = await prisma.user.update({
-      where: { id: params.id },
+      where: { id },
       data: { role },
     });
     return NextResponse.json(user);

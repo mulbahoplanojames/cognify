@@ -6,6 +6,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, X, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface FileUploadProps {
   onUpload: (url: string) => void;
@@ -87,11 +88,14 @@ export function FileUpload({
   if (currentImage) {
     return (
       <div className={cn("relative group", className)}>
-        <img
-          src={currentImage || "/placeholder.svg"}
-          alt="Cover image"
-          className="w-full h-48 object-cover rounded-lg border"
-        />
+        <div className="w-full h-48 object-cover rounded-lg border relative overflow-hidden">
+          <Image
+            src={currentImage || "/placeholder.svg"}
+            alt="Cover image"
+            className="w-full h-full object-cover"
+            fill
+          />
+        </div>
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
           <Button
             variant="secondary"

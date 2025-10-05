@@ -5,8 +5,9 @@ import { headers } from "next/headers";
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await context.params;
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -14,8 +15,6 @@ export async function DELETE(
     if (!session?.user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-
-    const { id } = params;
 
     // First, check if the tag has any posts
     const tagWithPosts = await prisma.tag.findUnique({

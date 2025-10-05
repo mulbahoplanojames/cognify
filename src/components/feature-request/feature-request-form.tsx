@@ -20,7 +20,6 @@ type RequestType = "feature" | "feedback" | "bug";
 
 export function FeatureRequestForm() {
   const session = useSession();
-  const user = session?.data?.user;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",

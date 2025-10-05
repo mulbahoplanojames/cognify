@@ -12,6 +12,7 @@ export default function AboutPage() {
           title="About Cognify"
           description="Cognify is your go-to open-source learning hub, loved by students, creators, and learners everywhere. Always free, always open—because knowledge belongs to all of us."
           tab="100% Free & Open Source Platform"
+          postSearch={false}
         />
         <OpenSourceMission />
         <WhatYouWillFindSection />

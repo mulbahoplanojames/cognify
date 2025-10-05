@@ -121,7 +121,9 @@ export function TrendingPosts() {
         setPosts(data.posts);
         setCategories(data.categories);
       } catch (error) {
-        console.error("Error fetching trending posts:", error);
+        const errorMessage =
+          error instanceof Error ? error.message : "An unknown error occurred";
+        console.error("Error fetching trending posts:", errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -249,8 +251,8 @@ export function TrendingPosts() {
                 No posts found
               </p>
               <p className="max-w-md text-sm text-muted-foreground">
-                Try adjusting your search or filter criteria to find what you're
-                looking for.
+                Try adjusting your search or filter criteria to find what
+                you&apos;re looking for.
               </p>
               <Button
                 variant="outline"

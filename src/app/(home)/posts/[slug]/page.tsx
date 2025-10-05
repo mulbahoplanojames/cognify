@@ -19,7 +19,6 @@ import { ShareButtons } from "@/components/social/share-buttons";
 import { ReadingProgress } from "@/components/social/reading-progress";
 import BackButton from "@/components/ui/back-button";
 import { prisma } from "@/lib/prisma";
-import PlaceholderImage from "@/components/ui/placeholder-image";
 import Image from "next/image";
 
 export default async function PostPage({
@@ -185,10 +184,14 @@ export default async function PostPage({
               />
             </div>
           ) : (
-            <PlaceholderImage
-              title={post.title}
-              className="w-full h-64 md:h-96 flex items-center justify-center rounded-lg shadow-lg dark:shadow-2xl"
-            />
+            <div className="w-full h-64 md:h-96 object-cover rounded-lg  shadow-lg dark:shadow-2xl relative">
+              <Image
+                src={"/placeholder.jpg"}
+                alt={post.title}
+                className="w-full h-full object-cover"
+                fill
+              />
+            </div>
           )}
         </div>
 

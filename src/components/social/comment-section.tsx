@@ -36,7 +36,11 @@ export function CommentSection({ postId }: CommentSectionProps) {
         setComments(data);
       }
     } catch (error) {
-      console.error("Error fetching comments:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      toast.error("Error", {
+        description: errorMessage || "Failed to fetch comments",
+      });
     }
   };
 
@@ -63,8 +67,10 @@ export function CommentSection({ postId }: CommentSectionProps) {
         throw new Error("Failed to post comment");
       }
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       toast.error("Error", {
-        description: "Failed to post comment",
+        description: errorMessage || "Failed to post comment",
       });
     } finally {
       setIsLoading(false);
@@ -96,8 +102,10 @@ export function CommentSection({ postId }: CommentSectionProps) {
         throw new Error("Failed to post reply");
       }
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       toast.error("Error", {
-        description: "Failed to post reply",
+        description: errorMessage || "Failed to post reply",
       });
     } finally {
       setIsLoading(false);
@@ -119,8 +127,10 @@ export function CommentSection({ postId }: CommentSectionProps) {
         throw new Error("Failed to delete comment");
       }
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
       toast.error("Error", {
-        description: "Failed to delete comment",
+        description: errorMessage || "Failed to delete comment",
       });
     }
   };

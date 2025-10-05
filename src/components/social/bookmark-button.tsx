@@ -62,6 +62,7 @@ export function BookmarkButton({ postId }: BookmarkButtonProps) {
       toast.error("Error", {
         description: "Failed to update bookmark",
       });
+      console.error("Error updating bookmark:", error);
     } finally {
       setIsLoading(false);
     }
