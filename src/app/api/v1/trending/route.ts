@@ -68,44 +68,44 @@ export async function GET(request: Request) {
   }
 }
 
-interface PostWithMetrics {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string | null;
-  content: string;
-  coverImage: string | null;
-  publishedAt: Date | null;
-  readingTime: number | null;
-  status: PostStatus;
-  views: number;
-  author: {
-    id: string;
-    name: string;
-    image: string | null;
-    username: string | null;
-  };
-  category: {
-    id: string;
-    name: string;
-    slug: string;
-  } | null;
-  tags: Array<{
-    id: string;
-    name: string;
-    slug: string;
-  }>;
-  _count: {
-    comments: number;
-    reactions: number;
-    bookmarks: number;
-  };
-  reactions: Array<{ type: "LIKE" | "CLAP" | "INSIGHTFUL" }>;
-  score?: number;
-  reactionCount?: number;
-  commentCount?: number;
-  viewCount?: number;
-}
+// interface PostWithMetrics {
+//   id: string;
+//   title: string;
+//   slug: string;
+//   excerpt: string | null;
+//   content: string;
+//   coverImage: string | null;
+//   publishedAt: Date | null;
+//   readingTime: number | null;
+//   status: PostStatus;
+//   views: number;
+//   author: {
+//     id: string;
+//     name: string;
+//     image: string | null;
+//     username: string | null;
+//   };
+//   category: {
+//     id: string;
+//     name: string;
+//     slug: string;
+//   } | null;
+//   tags: Array<{
+//     id: string;
+//     name: string;
+//     slug: string;
+//   }>;
+//   _count: {
+//     comments: number;
+//     reactions: number;
+//     bookmarks: number;
+//   };
+//   reactions: Array<{ type: "LIKE" | "CLAP" | "INSIGHTFUL" }>;
+//   score?: number;
+//   reactionCount?: number;
+//   commentCount?: number;
+//   viewCount?: number;
+// }
 
 async function getTrendingPost(
   limit: number = 10,
@@ -172,87 +172,81 @@ async function getTrendingPost(
     orderBy: { publishedAt: "desc" as const },
   });
 
-  // Filter out posts with null authors and calculate scores
-  const postsWithScores = posts
-    .filter((post): post is PostWithAuthor => {
-      if (!post || !post.author || !post.author.name) return false;
+  // First filter out invalid posts
+  const validPosts = posts.filter((post) => {
+    if (!post || !post.author || !post.author.name) return false;
 
-      // Check for all required properties
-      const hasRequiredProperties =
-        "id" in post &&
-        "title" in post &&
-        "slug" in post &&
-        "content" in post &&
-        "publishedAt" in post &&
-        "status" in post &&
-        "views" in post &&
-        "_count" in post &&
-        "reactions" in post;
+    // Check for required properties
+    const hasRequiredProperties =
+      "id" in post &&
+      "title" in post &&
+      "slug" in post &&
+      "content" in post &&
+      "publishedAt" in post &&
+      "status" in post &&
+      "_count" in post &&
+      "reactions" in post;
 
-      if (!hasRequiredProperties) return false;
+    // Validate category if it exists
+    if (post.category) {
+      const isValidCategory =
+        typeof post.category === "object" &&
+        "id" in post.category &&
+        "name" in post.category &&
+        "slug" in post.category;
+      if (!isValidCategory) return false;
+    }
 
-      // Validate category structure if it exists
-      if (post.category !== null && post.category !== undefined) {
-        if (
-          typeof post.category !== "object" ||
-          !("id" in post.category) ||
-          !("name" in post.category) ||
-          !("slug" in post.category)
-        ) {
-          return false;
-        }
-      }
+    // Validate tags if they exist
+    if (post.tags) {
+      const isValidTags =
+        Array.isArray(post.tags) &&
+        post.tags.every(
+          (tag) =>
+            tag &&
+            typeof tag === "object" &&
+            "id" in tag &&
+            "name" in tag &&
+            "slug" in tag
+        );
+      if (!isValidTags) return false;
+    }
 
-      // Validate tags if they exist
-      if ("tags" in post && post.tags) {
-        const isValidTags =
-          Array.isArray(post.tags) &&
-          post.tags.every(
-            (tag) =>
-              tag &&
-              typeof tag === "object" &&
-              "id" in tag &&
-              "name" in tag &&
-              "slug" in tag
-          );
-        if (!isValidTags) return false;
-      }
+    // Validate reactions
+    const validReactionTypes = ["LIKE", "CLAP", "INSIGHTFUL"];
+    const hasValidReactions =
+      Array.isArray(post.reactions) &&
+      post.reactions.every(
+        (r) => r && "type" in r && validReactionTypes.includes(r.type)
+      );
 
-      // Validate reaction types
-      const validReactionTypes = ["LIKE", "CLAP", "INSIGHTFUL"];
-      if (
-        !post.reactions.every(
-          (r) => "type" in r && validReactionTypes.includes(r.type)
-        )
-      ) {
-        return false;
-      }
+    return hasRequiredProperties && hasValidReactions;
+  });
 
-      return true;
-    })
-    .map((post) => {
-      const reactionScore = post._count.reactions * 2;
-      const commentScore = post._count.comments * 3;
-      const viewScore = post.views ? post.views * 0.1 : 0;
-      const bookmarkScore = post._count.bookmarks * 1.5;
+  // Calculate scores for each post
+  const postsWithScores = validPosts.map((post) => {
+    const reactionScore = post._count.reactions * 2;
+    const commentScore = post._count.comments * 3;
+    const viewScore = post.views ? post.views * 0.1 : 0;
+    const bookmarkScore = post._count.bookmarks * 1.5;
 
-      // Calculate time decay (older posts get a lower score)
-      const hoursSincePublished = post.publishedAt
-        ? (Date.now() - new Date(post.publishedAt).getTime()) / (1000 * 60 * 60)
-        : 0;
-      const timeDecay = Math.pow(0.99, hoursSincePublished / 24); // 1% decay per day
+    // Calculate time decay (older posts get a lower score)
+    const hoursSincePublished = post.publishedAt
+      ? (Date.now() - new Date(post.publishedAt).getTime()) / (1000 * 60 * 60)
+      : 0;
+    const timeDecay = Math.pow(0.99, hoursSincePublished / 24); // 1% decay per day
 
-      const score =
-        (reactionScore + commentScore + viewScore + bookmarkScore) * timeDecay;
+    const score =
+      (reactionScore + commentScore + viewScore + bookmarkScore) * timeDecay;
 
-      return {
-        ...post,
-        score,
-        reactionCount: post._count.reactions,
-        commentCount: post._count.comments,
-        viewCount: post.views || 0,
-      };
-    });
+    return {
+      ...post,
+      score,
+      reactionCount: post._count.reactions,
+      commentCount: post._count.comments,
+      viewCount: post.views || 0,
+    };
+  });
 
   // Sort by score in descending order, take the top N posts, and map to PostWithAuthor
   return postsWithScores
@@ -279,6 +273,7 @@ async function getTrendingPost(
           _count: {
             comments: commentCount || 0,
             reactions: reactionCount || 0,
+            bookmarks: _count?.bookmarks || 0,
           },
           views: viewCount,
           reactionCount,
