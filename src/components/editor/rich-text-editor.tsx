@@ -18,6 +18,7 @@ import { ListDropdownMenu } from "../tiptap-ui/list-dropdown-menu";
 import { MarkButton } from "../tiptap-ui/mark-button";
 import { TextAlignButton } from "../tiptap-ui/text-align-button";
 import { UndoRedoButton } from "../tiptap-ui/undo-redo-button";
+import { LinkPopover } from "../tiptap-ui/link-popover";
 
 interface RichTextEditorProps {
   content: string;
@@ -173,6 +174,13 @@ export function RichTextEditor({
           onApplied={({ color, label }) =>
             console.log(`Applied highlight: ${label} (${color})`)
           }
+        />
+        <LinkPopover
+          editor={editor}
+          hideWhenUnavailable={true}
+          autoOpenOnLinkActive={true}
+          onSetLink={() => console.log("Link set!")}
+          onOpenChange={(isOpen) => console.log("Popover opened:", isOpen)}
         />
         <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
         <MarkButton
