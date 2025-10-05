@@ -42,6 +42,7 @@ import {
 } from "../tiptap-ui/color-highlight-popover";
 import { HeadingDropdownMenu } from "../tiptap-ui/heading-dropdown-menu";
 import { ListDropdownMenu } from "../tiptap-ui/list-dropdown-menu";
+import { MarkButton } from "../tiptap-ui/mark-button";
 
 interface RichTextEditorProps {
   content: string;
@@ -151,138 +152,20 @@ export function RichTextEditor({
   return (
     <div className="border rounded-lg overflow-hidden">
       <div className="border-b p-2 flex flex-wrap gap-1 items-center">
-        <Button
-          type="button"
-          variant={editor.isActive("bold") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          className="h-8 w-8 p-0"
-        >
-          <Bold className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("italic") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          className="h-8 w-8 p-0"
-        >
-          <Italic className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("bulletList") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className="h-8 w-8 p-0"
-        >
-          <List className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("orderedList") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className="h-8 w-8 p-0"
-        >
-          <ListOrdered className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("blockquote") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className="h-8 w-8 p-0"
-        >
-          <Quote className="h-4 w-4" />
-        </Button>
         <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
-        {/* headings  */}
-        <Button
-          type="button"
-          variant={
-            editor.isActive("heading", { level: 1 }) ? "default" : "ghost"
-          }
-          size="icon"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 1 }).run()
-          }
-          className="h-8 w-8 p-0"
-        >
-          <Heading1 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={
-            editor.isActive("heading", { level: 2 }) ? "default" : "ghost"
-          }
-          size="icon"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className="h-8 w-8 p-0"
-        >
-          <Heading2 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={
-            editor.isActive("heading", { level: 3 }) ? "default" : "ghost"
-          }
-          size="icon"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
-        >
-          <Heading3 className="h-4 w-4" />
-        </Button>
-        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
-        {/* code  */}
-        <Button
-          type="button"
-          variant={editor.isActive("code") ? "default" : "ghost"}
-          size="icon"
-          onClick={() =>
-            editor.isActive("code")
-              ? editor.chain().focus().unsetCode().run()
-              : editor.chain().focus().setCode().run()
-          }
-          className="h-8 w-8 p-0"
-        >
-          <CodeIcon className="h-4 w-4" />
-        </Button>
 
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => setShowImageInput(!showImageInput)}
-          className="h-8 w-8 p-0"
-        >
-          <ImageIcon className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("link") ? "default" : "ghost"}
-          size="icon"
-          onClick={() => setShowLinkInput(!showLinkInput)}
-          className="h-8 w-8 p-0"
-        >
-          <Link2 className="h-4 w-4" />
-        </Button>
-        <Button
-          type="button"
-          variant={editor.isActive("details") ? "default" : "ghost"}
-          size="icon"
-          onClick={() =>
-            editor.isActive("details")
-              ? editor.chain().focus().unsetDetails().run()
-              : editor.chain().focus().setDetails().run()
-          }
-          className="h-8 w-8 p-0"
-        >
-          <ReceiptText className="h-4 w-4" />
-        </Button>
+        <div className=" border-r-2 border-muted-foreground h-6 w-2 p-0" />
+        <TextAlignButton
+          editor={editor}
+          align="left"
+          text="Left"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onAligned={() => console.log("Text aligned!")}
+        />
+        <TextAlignButton align="center" />
+        <TextAlignButton align="right" />
+        <TextAlignButton align="justify" />
         <CodeBlockButton
           editor={editor}
           text="Code"
@@ -319,6 +202,56 @@ export function RichTextEditor({
           hideWhenUnavailable={true}
           portal={false}
           onOpenChange={(isOpen) => console.log("Dropdown opened:", isOpen)}
+        />
+        <MarkButton
+          editor={editor}
+          type="bold"
+          text="Bold"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="italic"
+          text="Italic"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="strike"
+          text="Strike"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="code"
+          text="Code"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="underline"
+          text="Underline"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="superscript"
+          text="Superscript"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
+        />
+        <MarkButton
+          type="subscript"
+          text="Subscript"
+          hideWhenUnavailable={true}
+          showShortcut={true}
+          onToggled={() => console.log("Mark toggled!")}
         />
       </div>
 

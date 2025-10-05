@@ -41,6 +41,7 @@
     "@tiptap/extension-subscript": "^3.6.5",
     "@tiptap/extension-superscript": "^3.6.5",
     "@tiptap/extension-table": "^3.6.5",
+    "@tiptap/extension-text-align": "^3.6.5",
     "@tiptap/pm": "^3.4.6",
     "@tiptap/react": "^3.4.6",
     "@tiptap/starter-kit": "^3.4.6",
