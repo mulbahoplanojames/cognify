@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import {
   Search,
   Calendar,
@@ -80,7 +79,6 @@ export default function SearchPage() {
     totalItems: 0,
     limit: 10,
   });
-  const router = useRouter();
 
   // Debounce search input
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
@@ -504,7 +502,7 @@ export default function SearchPage() {
               </div>
               <h3 className="text-lg font-medium mb-1">No posts found</h3>
               <p className="text-gray-500 mb-4">
-                We couldn't find any posts to display
+                We couldn&apos;t find any posts to display
               </p>
               <button
                 onClick={() => {

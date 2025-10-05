@@ -7,7 +7,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  CardFooter,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -294,7 +293,7 @@ export default async function ProfilePage({
                   <BookOpen className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                   <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
                   <p className="text-muted-foreground">
-                    This user hasn't published any posts yet.
+                    This user hasn&apos;t published any posts yet.
                   </p>
                 </CardContent>
               </Card>

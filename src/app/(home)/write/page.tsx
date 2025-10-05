@@ -193,7 +193,7 @@ export default function WritePage() {
       const requestData = isUpdate
         ? postData
         : (() => {
-            const { id, ...data } = postData as any;
+            const { ...data } = postData as FormData;
             return data;
           })();
 
@@ -255,7 +255,7 @@ export default function WritePage() {
   // Handle editing an existing post
   const handleEditPost = (post: Post) => {
     // Update form data with the post data (excluding id from the form state)
-    const { views, authorId, ...postData } = post;
+    const { ...postData } = post;
 
     updateFormData({
       ...postData,

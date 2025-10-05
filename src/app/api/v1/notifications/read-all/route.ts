@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
-export async function PATCH(request: NextRequest) {
+export async function PATCH() {
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -25,7 +25,7 @@ export async function PATCH(request: NextRequest) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to retrieve a notification" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

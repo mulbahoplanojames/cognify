@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
       });
       return NextResponse.json({ following: true });
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error toggling follow:", error);
     if (error instanceof ZodError) {
       return NextResponse.json(
@@ -53,8 +53,13 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+    // Type guard to check if it's an Error object
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    // Fallback for any other type of error
     return NextResponse.json(
-      { error: error.message || "Failed to toggle follow" },
+      { error: "An unknown error occurred" },
       { status: 500 }
     );
   }

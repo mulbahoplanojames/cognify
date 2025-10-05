@@ -33,7 +33,7 @@ export async function GET() {
         author: comment.author.name,
       });
       return acc;
-    }, {} as Record<string, any[]>);
+    }, {} as Record<string, unknown[]>);
 
     return NextResponse.json({
       success: true,

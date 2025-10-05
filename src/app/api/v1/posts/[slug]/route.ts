@@ -20,6 +20,8 @@ const updatePostSchema = z.object({
   status: z.nativeEnum(PostStatus).optional(),
 });
 
+type UpdatePostSchema = z.infer<typeof updatePostSchema>;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
@@ -139,7 +141,7 @@ export async function PATCH(
 
     //todo: If status is being updated to PUBLISHED, set publishedAt
     // Create updateData with all fields from data except id
-    const { id: _, ...updateData } = data as any;
+    const { ...updateData } = data as UpdatePostSchema;
 
     if (
       updateData.status === PostStatus.PUBLISHED &&
@@ -162,7 +164,7 @@ export async function PATCH(
     if (data.status && data.status !== currentPost.status) {
       // If changing to PUBLISHED, set publishedAt
       if (data.status === "PUBLISHED") {
-        updateData.publishedAt = new Date();
+        updateData.publishedAt = new Date().toISOString();
       }
       // If changing from PUBLISHED to something else, clear publishedAt
       else if (currentPost.status === "PUBLISHED") {

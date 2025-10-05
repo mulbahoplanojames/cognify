@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { z, ZodError } from "zod";
+import { z } from "zod";
 import { ReactionType } from "../../../../../../../generated/prisma";
 
 const createReactionSchema = z.object({
@@ -11,7 +11,7 @@ const createReactionSchema = z.object({
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> },
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
 
@@ -51,19 +51,19 @@ export async function POST(
       },
     });
 
-    return NextResponse.json({ message: "Success" });
+    return NextResponse.json(reaction);
   } catch (error) {
     console.log(error);
     return NextResponse.json(
       { error: "Failed to update post" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { slug: string } },
+  { params }: { params: { slug: string } }
 ) {
   try {
     const session = await auth.api.getSession({
@@ -101,7 +101,7 @@ export async function DELETE(
     console.error(error);
     return NextResponse.json(
       { error: "Failed to remove reaction." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
