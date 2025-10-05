@@ -16,7 +16,6 @@ import {
   Quote,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import type { Editor } from "@tiptap/core";
 import React from "react";
 
 interface RichTextEditorProps {

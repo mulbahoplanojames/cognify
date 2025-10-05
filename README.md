@@ -35,8 +35,8 @@ This repo serves as a **clean foundation** for building secure, scalable applica
 - @node-rs/argon2: This package is required for password hashing. It is a native package and may not work on all systems. If you encounter any issues, please refer to the [Better Auth documentation](https://better-auth.com/docs).
 - nodemailer: This package is required for email verification and password reset. It is a dependency of [Better Auth](https://better-auth.com).
 - pnpm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-image @tiptap/extension-placeholder
-
 - pnpm add @tiptap/core
+- pnpm install -D @tailwindcss/typography
 
 ---
 
