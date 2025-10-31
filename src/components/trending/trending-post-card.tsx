@@ -24,7 +24,7 @@ export function TrendingPostCard({
         <div className="relative aspect-video overflow-hidden rounded-lg bg-muted">
           <Link href={`/posts/${post.slug}`}>
             <Image
-              src={post.coverImage}
+              src={post.coverImage || "/placeholder.svg"}
               alt={post.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
