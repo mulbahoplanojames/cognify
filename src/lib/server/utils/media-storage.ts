@@ -5,6 +5,7 @@ import {
 } from "cloudinary";
 import { promises as fs } from "fs";
 import path from "path";
+import "@/lib/server/utils/cloudinary-config";
 // import { cloudinary as cloudinaryConfig } from "@/lib/server/utils/cloudinary-config";
 
 interface UploadResponse {
