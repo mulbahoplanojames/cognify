@@ -185,7 +185,7 @@ export default async function PostsPage() {
 
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
-                            src={featuredPost.coverImage || ""}
+                            src={featuredPost.coverImage || "/placeholder.jpg"}
                             alt={featuredPost.title}
                             layout="fill"
                             objectFit="cover"

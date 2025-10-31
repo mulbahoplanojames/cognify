@@ -325,7 +325,7 @@ export default function WritePage() {
             <Send className="h-4 w-4" />
             Submit for Review
           </Button>
-          <Button
+          {/* <Button
             onClick={() => handleSubmit("PUBLISHED")}
             disabled={
               isLoading || !formData.title.trim() || !formData.content.trim()
@@ -334,7 +334,7 @@ export default function WritePage() {
           >
             <Eye className="h-4 w-4" />
             Publish Now
-          </Button>
+          </Button> */}
         </div>
       </div>
 

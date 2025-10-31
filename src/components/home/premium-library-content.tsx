@@ -61,7 +61,7 @@ export default async function PremiumLibraryContentSection() {
                 <Card className="premium-shadow p-0 hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-card to-muted/50">
                   <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
                     <Image
-                      src={featuredArticle[0].coverImage || ""}
+                      src={featuredArticle[0].coverImage || "/placeholder.jpg"}
                       alt={featuredArticle[0].title}
                       layout="fill"
                       objectFit="cover"
@@ -118,9 +118,9 @@ export default async function PremiumLibraryContentSection() {
                   className="hover:shadow-lg transition-all group duration-300 cursor-pointer"
                 >
                   <CardHeader className="pb-3">
-                    <div className="lg:h-36 md:h-56 h-44 bg-red-400 rounded-md overflow-hidden relative">
+                    <div className="lg:h-36 md:h-56 h-44  rounded-md overflow-hidden relative">
                       <Image
-                        src={article.coverImage || ""}
+                        src={article.coverImage || "/placeholder.jpg"}
                         alt={article.title}
                         layout="fill"
                         objectFit="cover"
