@@ -149,7 +149,7 @@ export function TrendingPosts() {
                 <Input
                   type="search"
                   placeholder="Search posts..."
-                  className="pl-10"
+                  className="pl-10 w-full"
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);

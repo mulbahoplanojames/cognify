@@ -57,7 +57,7 @@ export default function SearchHero({
   setSortBy: (sortBy: string) => void;
 }) {
   return (
-    <section className="overflow-hidden mb-10">
+    <section className="overflow-hidden mb-10 relative z-0">
       <div
         aria-hidden
         className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
