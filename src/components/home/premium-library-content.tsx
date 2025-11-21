@@ -39,7 +39,7 @@ export default async function PremiumLibraryContentSection() {
   });
 
   return (
-    <section className="py-24 px-4">
+    <section className="py-24 px-4 z-10">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">Premium Content Library</h2>
@@ -49,7 +49,7 @@ export default async function PremiumLibraryContentSection() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid lg:grid-cols-3 gap-8 mb-12 z-10">
           {/* Featured Premium Article */}
           {(() => {
             const featuredArticle = premiumLibrary.filter(
@@ -58,7 +58,7 @@ export default async function PremiumLibraryContentSection() {
             if (!featuredArticle.length) return null;
             return (
               <div key={featuredArticle[0].id} className="lg:col-span-2">
-                <Card className="premium-shadow p-0 hover:shadow-lg transition-all duration-300 border-0 bg-gradient-to-br from-card to-muted/50">
+                <Card className="premium-shadow p-0 hover:shadow-lg transition-all group duration-300 border-0 bg-gradient-to-br from-card to-muted/50">
                   <div className="h-64 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-t-lg overflow-hidden relative">
                     <Image
                       src={featuredArticle[0].coverImage || "/placeholder.svg"}
@@ -77,9 +77,11 @@ export default async function PremiumLibraryContentSection() {
                       )}
                       <Badge variant="outline">Premium</Badge>
                     </div>
-                    <CardTitle className="text-2xl mb-3">
-                      {featuredArticle[0].title}
-                    </CardTitle>
+                    <Link href={`/posts/${featuredArticle[0].slug}`}>
+                      <CardTitle className="text-2xl mb-3 group-hover:text-blue-600 cursor-pointer">
+                        {featuredArticle[0].title}
+                      </CardTitle>
+                    </Link>
                     <CardDescription className="text-base leading-relaxed">
                       {featuredArticle[0].excerpt}
                     </CardDescription>
@@ -115,7 +117,7 @@ export default async function PremiumLibraryContentSection() {
               .map((article) => (
                 <Card
                   key={article.id}
-                  className="hover:shadow-lg transition-all group duration-300 cursor-pointer"
+                  className="hover:shadow-lg transition-all group duration-300 "
                 >
                   <CardHeader className="pb-3">
                     <div className="lg:h-36 md:h-56 h-44  rounded-md overflow-hidden relative">
@@ -128,7 +130,7 @@ export default async function PremiumLibraryContentSection() {
                       />
                     </div>
                     <Link href={`/posts/${article.slug}`}>
-                      <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600">
+                      <CardTitle className="text-lg line-clamp-2 group-hover:text-blue-600 cursor-pointer">
                         {article.title}
                       </CardTitle>
                     </Link>
@@ -149,7 +151,7 @@ export default async function PremiumLibraryContentSection() {
         </div>
         <div className="flex justify-center">
           <Link href="/posts">
-            <Button className="mt-6">Load More</Button>
+            <Button className="mt-6 cursor-pointer">Load More</Button>
           </Link>
         </div>
       </div>

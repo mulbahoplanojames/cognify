@@ -34,7 +34,7 @@ export default async function HomeHeroSection() {
   });
   return (
     <>
-      <section className="overflow-hidden">
+      <section className="overflow-hidden relative z-0">
         <div
           aria-hidden
           className="absolute inset-0 isolate hidden opacity-65 contain-strict lg:block"
