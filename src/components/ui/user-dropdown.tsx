@@ -96,7 +96,7 @@ export default function UserDropDown() {
               <DropdownMenuShortcut>⌘F</DropdownMenuShortcut>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
+          {/* <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
             <DropdownMenuPortal>
@@ -107,7 +107,7 @@ export default function UserDropDown() {
                 <DropdownMenuItem>More...</DropdownMenuItem>
               </DropdownMenuSubContent>
             </DropdownMenuPortal>
-          </DropdownMenuSub>
+          </DropdownMenuSub> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>GitHub</DropdownMenuItem>

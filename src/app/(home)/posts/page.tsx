@@ -90,8 +90,16 @@ export default async function PostsPage() {
                       <CardHeader className="py-4 ">
                         <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
                           <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center">
-                              <User className="h-4 w-4 text-primary" />
+                            <div className="w-8 h-8 bg-primary/20 rounded-full flex items-center justify-center relative">
+                              <Image
+                                src={
+                                  featuredPost.author.image ||
+                                  "/placeholder.svg"
+                                }
+                                alt={featuredPost.author.name}
+                                className="rounded-full w-full h-full object-cover"
+                                fill
+                              />
                             </div>
                             <span className="font-medium">
                               {featuredPost.author.name}
@@ -185,7 +193,7 @@ export default async function PostsPage() {
 
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
-                            src={featuredPost.ogImage || "/placeholder.svg"}
+                            src={featuredPost.coverImage || "/placeholder.svg"}
                             alt={featuredPost.title}
                             layout="fill"
                             objectFit="cover"
@@ -237,8 +245,14 @@ export default async function PostsPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center">
-                              <User className="h-3 w-3 text-primary" />
+                            <div className="w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center relative overflow-hidden">
+                              <Image
+                                src={post.author.image || "/placeholder.svg"}
+                                alt={post.author.name}
+                                layout="fill"
+                                objectFit="cover"
+                                className="transition-transform duration-300 group-hover:scale-110"
+                              />
                             </div>
                             <span>{post.author.name}</span>
                           </div>

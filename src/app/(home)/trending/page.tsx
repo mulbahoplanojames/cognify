@@ -11,7 +11,7 @@ export default function TrendingPage() {
   return (
     <Suspense
       fallback={
-        <div className="container max-w-7xl py-6 lg:py-10">
+        <div className="container mx-auto max-w-7xl py-6 lg:pb-10 pt-32">
           <div className="space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center justify-between">
               <div className="h-10 w-full max-w-md animate-pulse rounded-md bg-muted" />

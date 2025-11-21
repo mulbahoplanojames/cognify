@@ -91,7 +91,7 @@ export default function SearchPage() {
         const params = new URLSearchParams({
           limit: "5",
           sort: "newest",
-          status: "published", // Make sure we only get published posts
+          status: "published",
         });
 
         const recentPostsRes = await fetch(
