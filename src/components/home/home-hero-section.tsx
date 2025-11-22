@@ -157,7 +157,7 @@ export default async function HomeHeroSection() {
                         size="lg"
                         className="rounded-xl px-5 text-base"
                       >
-                        <Link href="/register">
+                        <Link href="/auth/register">
                           <span className="text-nowrap">Register Now</span>
                         </Link>
                       </Button>
