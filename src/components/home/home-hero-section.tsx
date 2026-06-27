@@ -5,8 +5,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
 const transitionVariants = {
   item: {
@@ -28,10 +26,11 @@ const transitionVariants = {
   },
 };
 
-export default async function HomeHeroSection() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+interface HomeHeroSectionProps {
+  session?: any;
+}
+
+export default function HomeHeroSection({ session }: HomeHeroSectionProps) {
   return (
     <>
       <section className="overflow-hidden relative z-0">

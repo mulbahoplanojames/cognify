@@ -34,7 +34,8 @@ export async function writeToLocalDisk(
 
   try {
     const filePath = path.join(mediaDir, fileName);
-    const content = await file.bytes();
+    const arrayBuffer = await file.arrayBuffer();
+    const content = Buffer.from(arrayBuffer);
     console.log(mediaDir);
 
     fileHandle = await fs.open(filePath, "w");
