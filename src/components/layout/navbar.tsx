@@ -48,7 +48,7 @@ export default function Navbar() {
                 >
                   <span className="size-11 border-slate-900 border-2 rounded-full overflow-hidden relative">
                     <Image
-                      src="/logo-01.png"
+                      src="/logo.png"
                       alt="cognify-logo"
                       className="w-full h-full"
                       fill
