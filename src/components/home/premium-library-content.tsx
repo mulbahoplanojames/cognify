@@ -9,34 +9,14 @@ import { Badge } from "../ui/badge";
 import { Clock, Star, User } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-// import { premiumLibrary } from "@/data/home-page";
 import Image from "next/image";
-import { prisma } from "@/lib/prisma";
-import { PostStatus } from "@/types/prisma-types";
 
-export default async function PremiumLibraryContentSection() {
-  const premiumLibrary = await prisma.post.findMany({
-    where: {
-      status: PostStatus.PUBLISHED,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      author: {
-        select: { id: true, name: true, image: true },
-      },
-      category: {
-        select: { id: true, name: true, slug: true },
-      },
-      tags: {
-        select: { id: true, name: true, slug: true },
-      },
-      _count: {
-        select: { comments: true, reactions: true, bookmarks: true },
-      },
-    },
-  });
+interface PremiumLibraryContentSectionProps {
+  posts: any[];
+}
+
+export default function PremiumLibraryContentSection({ posts }: PremiumLibraryContentSectionProps) {
+  const premiumLibrary = posts;
 
   return (
     <section className="py-24 px-4 z-10">

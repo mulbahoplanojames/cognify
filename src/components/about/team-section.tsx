@@ -1,11 +1,28 @@
 import Image from "next/image";
 import { Card, CardContent } from "../ui/card";
-import { LinkedinIcon, TwitterIcon } from "lucide-react";
+import { LinkedinIcon, TwitterIcon, LucideIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { FaWhatsapp } from "react-icons/fa";
+import { IconType } from "react-icons";
 
-const team = [
+type SocialIcon = IconType | LucideIcon;
+
+interface Social {
+  name: string;
+  link: string;
+  icon: SocialIcon;
+}
+
+interface TeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  image: string;
+  socials: Social[];
+}
+
+const team: TeamMember[] = [
   {
     name: "Oplano James Mulbah",
     role: "Founder & CEO",
@@ -15,17 +32,17 @@ const team = [
       {
         name: "Whatsapp",
         link: "https://wa.me/250791676207",
-        icon: <FaWhatsapp />,
+        icon: FaWhatsapp,
       },
       {
         name: "Linkedin",
         link: "https://www.linkedin.com/in/oplano-james-mulbah/",
-        icon: <LinkedinIcon />,
+        icon: LinkedinIcon,
       },
       {
         name: "Twitter",
         link: "https://twitter.com/JamesOplano",
-        icon: <TwitterIcon />,
+        icon: TwitterIcon,
       },
     ],
   },
@@ -38,17 +55,17 @@ const team = [
       {
         name: "Whatsapp",
         link: "https://wa.me/250792574452",
-        icon: <FaWhatsapp />,
+        icon: FaWhatsapp,
       },
       {
         name: "Linkedin",
         link: "https://www.linkedin.com/in/abdo-junior-7284752b2/",
-        icon: <LinkedinIcon />,
+        icon: LinkedinIcon,
       },
       {
         name: "Twitter",
         link: "https://x.com/juniorab444",
-        icon: <TwitterIcon />,
+        icon: TwitterIcon,
       },
     ],
   },
@@ -61,17 +78,17 @@ const team = [
   //       {
   //         name: "Whatsapp",
   //         link: "https://wa.me/250796136584",
-  //         icon: <FaWhatsapp />,
+  //         icon: FaWhatsapp,
   //       },
   //       {
   //         name: "Linkedin",
   //         link: "https://www.linkedin.com/in/salomon-elisha-0601272a1/",
-  //         icon: <LinkedinIcon />,
+  //         icon: LinkedinIcon,
   //       },
   //       {
   //         name: "Twitter",
   //         link: "https://twitter.com/solomonokeke",
-  //         icon: <TwitterIcon />,
+  //         icon: TwitterIcon,
   //       },
   //     ],
   //   },
@@ -108,13 +125,16 @@ export default function TeamSection() {
                   <p className="text-primary font-medium mb-3">{member.role}</p>
                   <p className="text-muted-foreground">{member.bio}</p>
                   <div className="flex items-center gap-6 mt-4">
-                    {member.socials?.map((social, index) => (
-                      <Button key={index} variant="outline" size="icon" asChild>
-                        <Link href={social.link} target="_blank">
-                          {social.icon}
-                        </Link>
-                      </Button>
-                    ))}
+                    {member.socials?.map((social, index) => {
+                      const Icon = social.icon as any;
+                      return (
+                        <Button key={index} variant="outline" size="icon" asChild>
+                          <Link href={social.link} target="_blank">
+                            <Icon />
+                          </Link>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>

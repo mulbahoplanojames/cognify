@@ -99,6 +99,19 @@ export default async function ProfilePage({
     orderBy: { createdAt: "desc" },
   });
 
+  // Fetch bookmarks
+  const bookmarks = await prisma.bookmark.findMany({
+    where: {
+      userId: user.id,
+    },
+    include: {
+      post: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
   //todo: Default social links if not provided
   const social = {
     website: "",
@@ -426,7 +439,7 @@ export default async function ProfilePage({
 
           <TabsContent value="bookmarks" className="space-y-4">
             {session?.user?.name === user.name ? (
-              <UserBookmarks />
+              <UserBookmarks bookmarks={bookmarks} />
             ) : (
               <p className="text-center text-muted-foreground">
                 Bookmarks are only visible to the user {user.name}.

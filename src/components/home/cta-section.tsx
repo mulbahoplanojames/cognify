@@ -1,13 +1,12 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 
-export default async function CTASection() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+interface CTASectionProps {
+  session?: any;
+}
+
+export default function CTASection({ session }: CTASectionProps) {
   return (
     <section className="py-24 px-4">
       <div className="container mx-auto text-center">

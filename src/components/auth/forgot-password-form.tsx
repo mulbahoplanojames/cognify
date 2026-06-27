@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { forgetPassword } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -40,25 +40,27 @@ export const ForgotPasswordForm = () => {
     // console.log(values);
     const { email } = values;
     if (!email) return toast.error("Please enter your email.");
-    await forgetPassword({
-      email,
-      redirectTo: "/auth/reset-password/",
-      fetchOptions: {
-        onRequest: () => {
-          setIsPending(true);
-        },
-        onResponse: () => {
-          setIsPending(false);
-        },
-        onError: (ctx: { error: Error }) => {
-          toast.error(ctx.error.message);
-        },
-        onSuccess: () => {
-          toast.success("Reset password email sent successfully.");
-          router.push("/auth/forgot-password/success");
-        },
-      },
-    });
+    // TODO: Implement proper forgotPassword with better-auth
+    // await (authClient as any).forgotPassword({
+    //   email,
+    //   redirectTo: "/auth/reset-password/",
+    //   fetchOptions: {
+    //     onRequest: () => {
+    //       setIsPending(true);
+    //     },
+    //     onResponse: () => {
+    //       setIsPending(false);
+    //     },
+    //     onError: (ctx: { error: Error }) => {
+    //       toast.error(ctx.error.message);
+    //     },
+    //     onSuccess: () => {
+    //       toast.success("Reset password email sent successfully.");
+    //       router.push("/auth/forgot-password/success");
+    //     },
+    //   },
+    // });
+    toast.error("Forgot password feature not yet implemented.");
   }
 
   return (

@@ -40,7 +40,7 @@ export const SignInOauthButton = ({
 
   const action = signUp ? "Register" : "Login";
 
-  const icon = provider === "google" ? <FcGoogle /> : <FaGithub />;
+  const Icon = provider === "google" ? FcGoogle : FaGithub as any;
   const providerName = provider === "google" ? "Google" : "GitHub";
 
   return (
@@ -51,7 +51,7 @@ export const SignInOauthButton = ({
       onClick={handleClick}
       disabled={isPending}
     >
-      {icon}
+      <Icon />
       {action} with {providerName}
     </Button>
   );

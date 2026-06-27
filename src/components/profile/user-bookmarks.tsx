@@ -1,27 +1,12 @@
 import React from "react";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 
-export default async function UserBookmarks() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+interface UserBookmarksProps {
+  bookmarks: any[];
+}
 
-  // fetch user bookmark on per posts base on the user id
-  const bookmarks = await prisma.bookmark.findMany({
-    where: {
-      userId: session?.user.id,
-    },
-    include: {
-      post: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
+export default function UserBookmarks({ bookmarks }: UserBookmarksProps) {
 
   return (
     <>

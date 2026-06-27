@@ -12,6 +12,8 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
     const disabled =
       props.value === "" || props.value === undefined || props.disabled;
 
+    const EyeIcon = (showPassword && !disabled ? FaRegEye : FaRegEyeSlash) as any;
+
     return (
       <div className="relative">
         <Input
@@ -28,11 +30,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
           onClick={() => setShowPassword((prev) => !prev)}
           disabled={disabled}
         >
-          {showPassword && !disabled ? (
-            <FaRegEye className="h-4 w-4" aria-hidden="true" />
-          ) : (
-            <FaRegEyeSlash className="h-4 w-4" aria-hidden="true" />
-          )}
+          <EyeIcon className="h-4 w-4" aria-hidden="true" />
           <span className="sr-only">
             {showPassword ? "Hide password" : "Show password"}
           </span>
