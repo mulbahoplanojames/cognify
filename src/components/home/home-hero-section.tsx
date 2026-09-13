@@ -176,7 +176,7 @@ export default function HomeHeroSection({ session }: HomeHeroSectionProps) {
                     key={2}
                     asChild
                     size="lg"
-                    variant="ghost"
+                    variant="outline"
                     className="h-10.5 rounded-xl px-5"
                   >
                     <Link href="/trending">
